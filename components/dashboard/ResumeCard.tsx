@@ -5,6 +5,8 @@ import { FileText, Clock, Trash2, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { deleteResume, duplicateResume } from "@/app/actions";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/toast";
 
 interface ResumeCardProps {
   resume: {
@@ -17,6 +19,8 @@ interface ResumeCardProps {
 export const ResumeCard: React.FC<ResumeCardProps> = ({ resume }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDuplicating, setIsDuplicating] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -29,10 +33,19 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume }) => {
     setIsDeleting(true);
     try {
       await deleteResume(resume.id);
+      toast({
+        title: "Resume deleted",
+        description: "The resume has been permanently deleted.",
+        variant: "default",
+      });
       router.refresh();
     } catch (error) {
       console.error("Failed to delete resume", error);
-      alert("Failed to delete resume");
+      toast({
+        title: "Error",
+        description: "Failed to delete resume. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -45,10 +58,19 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume }) => {
     setIsDuplicating(true);
     try {
       await duplicateResume(resume.id);
+      toast({
+        title: "Resume duplicated",
+        description: "A copy of your resume has been created.",
+        variant: "success",
+      });
       router.refresh();
     } catch (error) {
       console.error("Failed to duplicate resume", error);
-      alert("Failed to duplicate resume");
+      toast({
+        title: "Error",
+        description: "Failed to duplicate resume. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsDuplicating(false);
     }

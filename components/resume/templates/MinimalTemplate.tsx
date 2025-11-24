@@ -2,14 +2,16 @@ import React from 'react';
 import { ResumeData } from '@/types/resume';
 
 interface TemplateProps {
-  data: ResumeData;
+  basics: ResumeData['basics'];
+  work: ResumeData['work'];
+  education: ResumeData['education'];
+  skills: ResumeData['skills'];
+  projects: ResumeData['projects'];
 }
 
-export const MinimalTemplate: React.FC<TemplateProps> = ({ data }) => {
-  const { basics, work, education, skills, projects } = data;
-
+export const MinimalTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
   return (
-    <div className="p-12 bg-white text-gray-900 min-h-[1000px] font-sans tracking-wide">
+    <div className="p-12 bg-white text-gray-900 min-h-[297mm] font-sans tracking-wide print:p-0">
       {/* Header */}
       <header className="text-center mb-10">
         <h1 className="text-3xl font-light uppercase tracking-[0.2em] mb-3">{basics.name}</h1>
@@ -42,7 +44,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = ({ data }) => {
                   </div>
                   <div className="md:col-span-3 md:pl-2">
                      <div className="font-bold text-sm mb-2">{job.position}</div>
-                     <p className="text-sm text-gray-600 leading-relaxed mb-2">{job.summary}</p>
+                     <p className="text-sm text-gray-600 leading-relaxed mb-2 whitespace-pre-wrap">{job.summary}</p>
                      <ul className="list-disc list-inside text-xs text-gray-500 space-y-1">
                         {job.highlights.map((hl, i) => <li key={i}>{hl}</li>)}
                      </ul>
@@ -59,7 +61,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = ({ data }) => {
             <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">Education</h2>
             <div className="space-y-4">
               {education.map((edu, index) => (
-                <div key={index} className="flex justify-between items-end max-w-2xl mx-auto">
+                <div key={index} className="flex justify-between items-end max-w-2xl mx-auto w-full">
                   <div>
                     <div className="font-bold text-sm">{edu.institution}</div>
                     <div className="text-xs text-gray-500">{edu.studyType} in {edu.area}</div>
@@ -94,7 +96,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = ({ data }) => {
                   {projects.map((project, index) => (
                     <div key={index} className="text-center">
                       <div className="font-bold text-sm">{project.name}</div>
-                      <p className="text-xs text-gray-500 mt-1">{project.description}</p>
+                      <p className="text-xs text-gray-500 mt-1 whitespace-pre-wrap">{project.description}</p>
                     </div>
                   ))}
                 </div>
@@ -104,4 +106,6 @@ export const MinimalTemplate: React.FC<TemplateProps> = ({ data }) => {
       </div>
     </div>
   );
-};
+});
+
+MinimalTemplate.displayName = 'MinimalTemplate';

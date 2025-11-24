@@ -9,6 +9,7 @@ import { useResumeStore } from '@/lib/store';
 import { Loader2, Save, Check, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from "@/components/ui/toast";
 
 interface EditorClientProps {
   initialData?: ResumeData;
@@ -23,6 +24,7 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
   const [lastSavedData, setLastSavedData] = useState<string>(JSON.stringify(initialData));
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   // Handle initial data load only once
   useEffect(() => {
@@ -70,14 +72,24 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
         
         if (result.id && resumeId === 'new') {
           router.replace(`/editor/${result.id}`);
+          toast({
+            title: "Resume Saved",
+            description: "Your new resume has been created.",
+            variant: "success",
+          });
         }
       }
     } catch (error) {
       console.error("Failed to save:", error);
+      toast({
+        title: "Auto-save Failed",
+        description: "Could not save your changes. Please check your connection.",
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
-  }, [userId, isDirty, resumeData, resumeId, router]);
+  }, [userId, isDirty, resumeData, resumeId, router, toast]);
 
   // Auto-save effect
   useEffect(() => {

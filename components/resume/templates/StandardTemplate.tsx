@@ -2,14 +2,16 @@ import React from 'react';
 import { ResumeData } from '@/types/resume';
 
 interface TemplateProps {
-  data: ResumeData;
+  basics: ResumeData['basics'];
+  work: ResumeData['work'];
+  education: ResumeData['education'];
+  skills: ResumeData['skills'];
+  projects: ResumeData['projects'];
 }
 
-export const StandardTemplate: React.FC<TemplateProps> = ({ data }) => {
-  const { basics, work, education, skills, projects } = data;
-
+export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
   return (
-    <div className="p-8 bg-white text-left text-gray-900 min-h-[1000px] shadow-md font-serif">
+    <div className="p-8 bg-white text-left text-gray-900 min-h-[297mm] shadow-md font-serif print:shadow-none print:p-0">
       {/* Header */}
       <header className="border-b-2 border-gray-800 pb-4 mb-6">
         <h1 className="text-4xl font-bold uppercase tracking-wide mb-2">{basics.name}</h1>
@@ -26,7 +28,7 @@ export const StandardTemplate: React.FC<TemplateProps> = ({ data }) => {
       {basics.summary && (
         <section className="mb-6">
           <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">Professional Summary</h2>
-          <p className="text-gray-700 leading-relaxed">{basics.summary}</p>
+          <p className="text-gray-700 leading-relaxed text-sm">{basics.summary}</p>
         </section>
       )}
 
@@ -44,7 +46,7 @@ export const StandardTemplate: React.FC<TemplateProps> = ({ data }) => {
                   </span>
                 </div>
                 <div className="text-md font-semibold text-gray-700 mb-1">{job.name}</div>
-                <p className="text-sm text-gray-600 mb-2">{job.summary}</p>
+                <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{job.summary}</p>
                 {job.highlights && job.highlights.length > 0 && (
                   <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                     {job.highlights.map((hl, i) => (
@@ -95,7 +97,7 @@ export const StandardTemplate: React.FC<TemplateProps> = ({ data }) => {
                   </span>
                 </div>
                 {project.url && <div className="text-sm text-blue-600 mb-1">{project.url}</div>}
-                <p className="text-sm text-gray-600 mb-2">{project.description}</p>
+                <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{project.description}</p>
                 {project.keywords && project.keywords.length > 0 && (
                   <div className="text-sm text-gray-500">
                     Technologies: {project.keywords.join(", ")}
@@ -123,4 +125,6 @@ export const StandardTemplate: React.FC<TemplateProps> = ({ data }) => {
       )}
     </div>
   );
-};
+});
+
+StandardTemplate.displayName = 'StandardTemplate';
