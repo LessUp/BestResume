@@ -7,8 +7,10 @@ import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const WorkForm = () => {
-  const { resumeData, addWork, updateWork, removeWork } = useResumeStore();
-  const { work } = resumeData;
+  const work = useResumeStore((state) => state.resumeData.work);
+  const addWork = useResumeStore((state) => state.addWork);
+  const updateWork = useResumeStore((state) => state.updateWork);
+  const removeWork = useResumeStore((state) => state.removeWork);
 
   return (
     <div className="space-y-6">

@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const EducationForm = () => {
-  const { resumeData, addEducation, updateEducation, removeEducation } = useResumeStore();
-  const { education } = resumeData;
+  const education = useResumeStore((state) => state.resumeData.education);
+  const addEducation = useResumeStore((state) => state.addEducation);
+  const updateEducation = useResumeStore((state) => state.updateEducation);
+  const removeEducation = useResumeStore((state) => state.removeEducation);
 
   return (
     <div className="space-y-6">

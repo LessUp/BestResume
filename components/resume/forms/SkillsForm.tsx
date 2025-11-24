@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const SkillsForm = () => {
-  const { resumeData, addSkill, updateSkill, removeSkill } = useResumeStore();
-  const { skills } = resumeData;
+  const skills = useResumeStore((state) => state.resumeData.skills);
+  const addSkill = useResumeStore((state) => state.addSkill);
+  const updateSkill = useResumeStore((state) => state.updateSkill);
+  const removeSkill = useResumeStore((state) => state.removeSkill);
 
   return (
     <div className="space-y-6">

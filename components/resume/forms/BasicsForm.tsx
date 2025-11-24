@@ -5,12 +5,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 export const BasicsForm = () => {
-  const { resumeData, updateBasics } = useResumeStore();
-  const { basics } = resumeData;
+  const basics = useResumeStore((state) => state.resumeData.basics);
+  const updateBasics = useResumeStore((state) => state.updateBasics);
   
   // Local state for immediate feedback
   const [formData, setFormData] = useState(basics);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Sync local state when store changes externally (e.g. initial load or undo)
   useEffect(() => {
