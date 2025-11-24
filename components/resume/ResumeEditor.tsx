@@ -95,12 +95,8 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
        </div>
 
        {/* Preview Area */}
-       <div className={`flex-1 bg-gray-200/50 rounded-xl border overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
-          <div className="absolute inset-0 overflow-y-auto p-8 print:relative print:p-0 print:inset-auto">
-             <div className="print:scale-100 origin-top">
-              <ResumePreview />
-            </div>
-          </div>
+       <div className={`flex-1 bg-gray-100/50 border-l overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
+          <ResumePreview />
        </div>
     </div>
   );

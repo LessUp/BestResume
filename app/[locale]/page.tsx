@@ -28,11 +28,11 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-6">
+      <main className="flex-1 pt-24 lg:pt-32 pb-16 lg:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           
           {/* Hero Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-24 lg:mb-32">
             
             {/* Left Column: Content */}
             <div className="flex flex-col items-start text-left space-y-8">

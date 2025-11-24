@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useResumeStore } from '@/lib/store';
 import { StandardTemplate } from './templates/StandardTemplate';
 import { ModernTemplate } from './templates/ModernTemplate';
@@ -11,6 +11,38 @@ export const ResumePreview = () => {
   const education = useResumeStore(state => state.resumeData.education);
   const skills = useResumeStore(state => state.resumeData.skills);
   const projects = useResumeStore(state => state.resumeData.projects);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (!containerRef.current) return;
+      
+      const containerWidth = containerRef.current.clientWidth;
+      // A4 width is 210mm. At 96dpi ~794px. 
+      // We add some padding (e.g. 32px on each side = 64px total)
+      const targetWidth = 794; 
+      const padding = 48; // Total horizontal padding
+      
+      const availableWidth = Math.max(containerWidth - padding, 0);
+      
+      // Calculate scale, cap at 1.2 to prevent too much pixelation, min 0.3
+      const newScale = Math.min(Math.max(availableWidth / targetWidth, 0.3), 1.2);
+      
+      setScale(newScale);
+    };
+
+    // Initial calc
+    updateScale();
+
+    const observer = new ResizeObserver(updateScale);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const renderTemplate = () => {
     const props = { basics, work, education, skills, projects };
@@ -27,9 +59,23 @@ export const ResumePreview = () => {
   };
   
   return (
-    <div className="h-full bg-gray-100 p-8 overflow-y-auto rounded-lg border shadow-inner flex justify-center print:p-0 print:bg-white print:shadow-none print:border-none print:block print:overflow-visible">
-      <div className="w-[210mm] min-h-[297mm] bg-white shadow-2xl origin-top scale-[0.6] md:scale-[0.7] lg:scale-[0.8] xl:scale-100 transition-transform print:shadow-none print:scale-100 print:w-full">
-        {renderTemplate()}
+    <div 
+      ref={containerRef}
+      className="h-full w-full bg-gray-100/50 flex justify-center overflow-y-auto overflow-x-hidden scrollbar-hide print:bg-white print:block print:overflow-visible"
+    >
+      <div 
+        style={{ 
+          transform: `scale(${scale})`,
+          marginBottom: `${(scale * 40)}px`,
+          marginTop: '2rem'
+        }}
+        className="origin-top transition-transform duration-100 ease-out print:scale-100 print:m-0 print:w-full"
+      >
+        <div 
+          className="w-[210mm] min-h-[297mm] bg-white shadow-2xl print:shadow-none"
+        >
+          {renderTemplate()}
+        </div>
       </div>
     </div>
   );
