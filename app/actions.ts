@@ -1,0 +1,104 @@
+"use server";
+
+import { auth } from "@/auth";
+import { PrismaClient } from "@prisma/client";
+import { ResumeData } from "@/types/resume";
+import { revalidatePath } from "next/cache";
+
+const prisma = new PrismaClient();
+
+export async function saveResume(data: ResumeData, title: string, id?: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  const content = JSON.stringify(data);
+
+  if (id) {
+    // Update existing resume
+    // Verify ownership
+    const existing = await prisma.resume.findUnique({
+      where: { id },
+    });
+
+    if (!existing || existing.userId !== user.id) {
+      throw new Error("Resume not found or unauthorized");
+    }
+
+    await prisma.resume.update({
+      where: { id },
+      data: {
+        content,
+        title,
+      },
+    });
+    revalidatePath('/dashboard');
+    return { success: true, id };
+  } else {
+    // Create new resume
+    const newResume = await prisma.resume.create({
+      data: {
+        userId: user.id,
+        title,
+        content,
+      },
+    });
+    revalidatePath('/dashboard');
+    return { success: true, id: newResume.id };
+  }
+}
+
+export async function getResumes() {
+  const session = await auth();
+  if (!session?.user?.email) return [];
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) return [];
+
+  const resumes = await prisma.resume.findMany({
+    where: { userId: user.id },
+    orderBy: { updatedAt: 'desc' },
+    select: {
+      id: true,
+      title: true,
+      updatedAt: true,
+      // We don't select content here to save bandwidth on listing
+    }
+  });
+
+  return resumes;
+}
+
+export async function getResume(id: string) {
+  const session = await auth();
+  if (!session?.user?.email) return null;
+
+  const resume = await prisma.resume.findUnique({
+    where: { id },
+  });
+
+  // Simple ownership check via email lookup -> user id
+  // A more optimized way would be to store userId in session
+  const user = await prisma.user.findUnique({
+     where: { email: session.user.email }
+  });
+
+  if (!resume || !user || resume.userId !== user.id) {
+    return null;
+  }
+
+  return {
+    ...resume,
+    data: JSON.parse(resume.content) as ResumeData
+  };
+}

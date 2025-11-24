@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+@media print {
+  @page {
+    margin: 0;
+    size: auto;
+  }
+
+  body {
+    background: white;
+  }
+
+  /* Hide everything by default */
+  body > * {
+    display: none;
+  }
+
+  /* Only show the editor page content */
+  body > div:first-child { /* Next.js root div */
+    display: block;
+  }
+  
+  /* Override ResumeEditor layout */
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .print\:block {
+    display: block !important;
+  }
+  
+  .print\:p-0 {
+    padding: 0 !important;
+  }
+  
+  .print\:absolute {
+    position: absolute !important;
+  }
+  
+  .print\:inset-0 {
+    inset: 0 !important;
+  }
+  
+  .print\:overflow-visible {
+    overflow: visible !important;
+  }
+  
+  .print\:scale-100 {
+    transform: scale(1) !important;
+  }
+
+  /* Ensure background colors are printed */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
