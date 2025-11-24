@@ -28,7 +28,11 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="flex items-center bg-gray-100 rounded-full p-1 border border-gray-200 shadow-sm">
+    <div className="flex items-center gap-2">
+      <span className="text-xs text-gray-500 hidden sm:inline">
+        {locale === 'zh' ? '语言' : 'Language'}
+      </span>
+      <div className="flex items-center bg-gray-100 rounded-full p-1 border border-gray-200 shadow-sm">
         <button
             onClick={() => switchLanguage('zh')}
             className={cn(
@@ -51,6 +55,7 @@ export default function LanguageSwitcher() {
         >
             EN
         </button>
+      </div>
     </div>
   );
 }

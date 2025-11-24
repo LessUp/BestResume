@@ -35,6 +35,12 @@ export default async function Dashboard({
           </div>
           <div className="flex items-center gap-4">
              <LanguageSwitcher />
+             <Link
+               href={`/${locale}/settings`}
+               className="text-sm text-gray-500 hover:text-gray-900"
+             >
+               {t('settings')}
+             </Link>
              <div className="text-sm text-gray-600">
                {t('loggedInAs')} <span className="font-semibold">{session.user.email}</span>
              </div>

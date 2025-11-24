@@ -4,7 +4,31 @@
     "subtitle": "in Minutes",
     "description": "Professional templates, easy customization, and AI-powered suggestions. Build a resume that gets you hired.",
     "getStarted": "Get Started",
-    "viewTemplates": "View Templates"
+    "viewTemplates": "View Templates",
+    "badge": "AI-powered resume builder",
+    "trust": {
+        "noCard": "No credit card required",
+        "freeTemplates": "Free templates included"
+    },
+    "atsScore": {
+        "label": "ATS score",
+        "value": "98%"
+    },
+    "aiOptimize": {
+        "label": "AI optimize",
+        "status": "Active"
+    },
+    "footerNote": "Crafted for job seekers.",
+    "features": {
+        "ats": "ATS Friendly",
+        "atsDesc": "Ensure your resume passes applicant tracking systems.",
+        "ai": "AI Powered",
+        "aiDesc": "Get professional writing suggestions and optimizations.",
+        "templates": "Pro Templates",
+        "templatesDesc": "Beautiful templates designed by recruitment experts.",
+        "realtime": "Real-time Preview",
+        "realtimeDesc": "What you see is what you get, edit instantly."
+    }
   },
   "Dashboard": {
     "title": "My Resumes",
@@ -13,7 +37,8 @@
     "createNew": "Create New",
     "noResumes": "No resumes yet",
     "noResumesDesc": "Create your first resume to get started",
-    "createResume": "Create Resume"
+    "createResume": "Create Resume",
+    "settings": "Settings"
   },
   "Common": {
     "loading": "Loading...",
@@ -62,5 +87,12 @@
     "modernDesc": "Two-column layout with a bold sidebar and accent colors.",
     "minimalName": "Minimalist",
     "minimalDesc": "Clean, typography-focused layout with lots of whitespace."
+  },
+  "Settings": {
+    "title": "Settings",
+    "subtitle": "Control language and basic preferences.",
+    "languageSectionTitle": "Interface language",
+    "languageSectionDesc": "Switch the entire app between Chinese and English.",
+    "languageHint": "Changes apply immediately, no refresh needed."
   }
 }

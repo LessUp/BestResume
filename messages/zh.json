@@ -4,7 +4,31 @@
     "subtitle": "仅需几分钟",
     "description": "专业模板，轻松定制，AI智能建议。制作一份助您求职成功的简历。",
     "getStarted": "开始制作",
-    "viewTemplates": "查看模板"
+    "viewTemplates": "查看模板",
+    "badge": "AI 智能简历助手",
+    "trust": {
+        "noCard": "无需信用卡",
+        "freeTemplates": "内置精美模板"
+    },
+    "atsScore": {
+        "label": "ATS 评分",
+        "value": "98分"
+    },
+    "aiOptimize": {
+        "label": "AI 优化",
+        "status": "已开启"
+    },
+    "footerNote": "专为求职者打造。",
+    "features": {
+        "ats": "ATS 友好",
+        "atsDesc": "确保您的简历能顺利通过筛选系统。",
+        "ai": "AI 智能辅助",
+        "aiDesc": "获得专业的写作建议和内容优化。",
+        "templates": "专业模板",
+        "templatesDesc": "由招聘专家设计的精美简历模板。",
+        "realtime": "实时预览",
+        "realtimeDesc": "所见即所得，随时调整布局和内容。"
+    }
   },
   "Dashboard": {
     "title": "我的简历",
@@ -13,7 +37,8 @@
     "createNew": "新建简历",
     "noResumes": "暂无简历",
     "noResumesDesc": "创建您的第一份简历以开始",
-    "createResume": "创建简历"
+    "createResume": "创建简历",
+    "settings": "设置"
   },
   "Common": {
     "loading": "加载中...",
@@ -62,5 +87,12 @@
     "modernDesc": "左右两栏布局，左侧深色信息栏，更突出个人品牌。",
     "minimalName": "极简模板",
     "minimalDesc": "留白充足、强调排版和文字内容的简约样式。"
+  },
+  "Settings": {
+    "title": "设置",
+    "subtitle": "管理语言和基础偏好。",
+    "languageSectionTitle": "界面语言",
+    "languageSectionDesc": "在中文和英文之间切换整个应用的显示语言。",
+    "languageHint": "切换后会立即生效，无需刷新页面。"
   }
 }

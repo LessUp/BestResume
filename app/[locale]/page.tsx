@@ -3,75 +3,202 @@
 import Link from "next/link";
 import { useTranslations, useLocale } from 'next-intl';
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { FileText, Sparkles } from "lucide-react";
+import { FileText, Sparkles, ArrowRight, CheckCircle2, Layout, Zap, Bot } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const t = useTranslations('HomePage');
   const locale = useLocale();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white relative overflow-hidden selection:bg-blue-100">
-      {/* Background Gradients */}
-      <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)] opacity-5" />
-      <div className="absolute top-0 z-[-2] h-screen w-screen bg-[radial-gradient(100%_50%_at_50%_0%,rgba(0,163,255,0.05)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]" />
-
-      {/* Header */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-            <FileText className="h-5 w-5" />
+    <div className="min-h-screen flex flex-col bg-white text-gray-900">
+      
+      {/* Navbar */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+              <FileText className="h-5 w-5" />
+            </div>
+            <span className="text-xl font-bold tracking-tight">BestResume</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-gray-900">BestResume</span>
+          <div className="flex items-center gap-4">
+             <LanguageSwitcher />
+          </div>
         </div>
-        <LanguageSwitcher />
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-6 pt-20 pb-32 max-w-5xl mx-auto">
-        <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-800 mb-8 animate-fade-in-up">
-          <Sparkles className="mr-2 h-3.5 w-3.5" />
-          <span className="font-medium">AI-Powered Resume Builder</span>
-        </div>
-        
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gray-900 mb-8 max-w-4xl leading-[1.1]">
-          {t('title')} <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">
-            {t('subtitle')}
-          </span>
-        </h1>
-        
-        <p className="text-xl text-gray-600 mb-12 max-w-2xl leading-relaxed">
-          {t('description')}
-        </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
-          <Link 
-            href={`/${locale}/editor/demo`}
-            className="w-full sm:w-auto rounded-full bg-gray-900 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-gray-800 hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2 group"
-          >
-            {t('getStarted')}
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </Link>
-          <Link 
-            href={`/${locale}/templates`} 
-            className="w-full sm:w-auto rounded-full bg-white px-8 py-4 text-lg font-semibold text-gray-900 shadow-md ring-1 ring-gray-200 hover:bg-gray-50 hover:ring-gray-300 transition-all duration-200"
-          >
-            {t('viewTemplates')}
-          </Link>
-        </div>
+      <main className="flex-1 pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-6">
+          
+          {/* Hero Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
+            
+            {/* Left Column: Content */}
+            <div className="flex flex-col items-start text-left space-y-8">
+              
+              {/* Badge */}
+              <div className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700 animate-fade-in-up">
+                <Sparkles className="mr-2 h-4 w-4 text-blue-600" />
+                {t('badge')}
+              </div>
 
-        {/* Stats or Trust indicators (Optional, just placeholders for look) */}
-        <div className="mt-24 pt-8 border-t border-gray-100 grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-           {/* Can add logos here later */}
+              {/* Main Headline */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-gray-900">
+                {t('title')} <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+                  {t('subtitle')}
+                </span>
+              </h1>
+
+              {/* Description */}
+              <p className="text-xl text-gray-600 leading-relaxed max-w-lg">
+                {t('description')}
+              </p>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-4 pt-4">
+                <Link href={`/${locale}/editor/demo`} className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full h-14 px-8 text-lg font-semibold rounded-full shadow-xl shadow-blue-600/20 hover:scale-105 transition-all duration-300 bg-blue-600 hover:bg-blue-700">
+                    {t('getStarted')}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href={`/${locale}/templates`} className="w-full sm:w-auto">
+                  <Button variant="outline" size="lg" className="w-full h-14 px-8 text-lg font-semibold rounded-full border-2 hover:bg-gray-50 hover:text-gray-900 transition-all duration-300">
+                    {t('viewTemplates')}
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Trust/Stats text */}
+              <div className="flex items-center gap-2 text-sm text-gray-500 pt-4">
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <span>{t('trust.noCard')}</span>
+                <span className="mx-2">•</span>
+                <CheckCircle2 className="h-4 w-4 text-green-500" />
+                <span>{t('trust.freeTemplates')}</span>
+              </div>
+            </div>
+
+            {/* Right Column: Visual Mockup */}
+            <div className="relative lg:h-[600px] w-full flex items-center justify-center p-8 bg-gray-50 rounded-3xl border border-gray-100 shadow-2xl overflow-hidden">
+               {/* Abstract Decorative Blobs */}
+               <div className="absolute top-0 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
+               <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
+               
+               {/* Resume Mockup Card */}
+               <div className="relative w-full max-w-md aspect-[1/1.414] bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col gap-4 scale-95 hover:scale-100 transition-transform duration-500 cursor-default select-none">
+                  {/* Mockup Header */}
+                  <div className="flex gap-4 pb-6 border-b border-gray-100">
+                    <div className="h-16 w-16 rounded-full bg-gray-100 animate-pulse" />
+                    <div className="space-y-2 flex-1 pt-2">
+                      <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse" />
+                      <div className="h-3 w-1/2 bg-gray-100 rounded animate-pulse" />
+                    </div>
+                  </div>
+                  
+                  {/* Mockup Content Blocks */}
+                  <div className="space-y-6 pt-2">
+                     {/* Experience */}
+                     <div className="space-y-3">
+                        <div className="h-3 w-1/4 bg-blue-100 rounded" />
+                        <div className="space-y-2 pl-2 border-l-2 border-gray-100">
+                           <div className="h-2.5 w-full bg-gray-50 rounded" />
+                           <div className="h-2.5 w-5/6 bg-gray-50 rounded" />
+                           <div className="h-2.5 w-4/6 bg-gray-50 rounded" />
+                        </div>
+                     </div>
+                     
+                     {/* Education */}
+                     <div className="space-y-3">
+                        <div className="h-3 w-1/4 bg-blue-100 rounded" />
+                        <div className="space-y-2 pl-2 border-l-2 border-gray-100">
+                           <div className="h-2.5 w-full bg-gray-50 rounded" />
+                           <div className="h-2.5 w-2/3 bg-gray-50 rounded" />
+                        </div>
+                     </div>
+
+                     {/* Skills */}
+                     <div className="flex gap-2 flex-wrap">
+                        {[1,2,3,4,5].map(i => (
+                          <div key={i} className="h-6 w-16 bg-gray-100 rounded-md" />
+                        ))}
+                     </div>
+                  </div>
+
+                  {/* Floating UI Elements on top of mockup */}
+                  <div className="absolute -right-4 top-1/4 bg-white p-3 rounded-lg shadow-lg border border-gray-100 flex items-center gap-3 animate-bounce-slow">
+                    <div className="bg-green-100 p-2 rounded-md text-green-600">
+                      <CheckCircle2 className="h-5 w-5" />
+                    </div>
+                    <div className="text-xs font-medium text-gray-600">
+                      {t('atsScore.label')} <br/> <span className="text-lg font-bold text-gray-900">{t('atsScore.value')}</span>
+                    </div>
+                  </div>
+
+                  <div className="absolute -left-4 bottom-1/4 bg-white p-3 rounded-lg shadow-lg border border-gray-100 flex items-center gap-3 animate-bounce-slow animation-delay-2000">
+                    <div className="bg-blue-100 p-2 rounded-md text-blue-600">
+                      <Zap className="h-5 w-5" />
+                    </div>
+                    <div className="text-xs font-medium text-gray-600">
+                      {t('aiOptimize.label')} <br/> <span className="text-sm font-bold text-gray-900">{t('aiOptimize.status')}</span>
+                    </div>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+             <FeatureCard 
+               icon={<Layout className="h-6 w-6 text-blue-600" />}
+               title={t('features.ats')}
+               desc={t('features.atsDesc')}
+             />
+             <FeatureCard 
+               icon={<Bot className="h-6 w-6 text-purple-600" />}
+               title={t('features.ai')}
+               desc={t('features.aiDesc')}
+             />
+             <FeatureCard 
+               icon={<FileText className="h-6 w-6 text-indigo-600" />}
+               title={t('features.templates')}
+               desc={t('features.templatesDesc')}
+             />
+             <FeatureCard 
+               icon={<Zap className="h-6 w-6 text-amber-500" />}
+               title={t('features.realtime')}
+               desc={t('features.realtimeDesc')}
+             />
+          </div>
+          
         </div>
       </main>
 
-      {/* Footer Simple */}
-      <footer className="py-8 text-center text-sm text-gray-400">
-        <p>© {new Date().getFullYear()} BestResume. All rights reserved.</p>
+      <footer className="border-t border-gray-100 py-12 bg-gray-50/50">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-2 opacity-50 grayscale hover:grayscale-0 transition-all">
+            <FileText className="h-5 w-5" />
+            <span className="font-bold">BestResume</span>
+          </div>
+          <p className="text-sm text-gray-500">
+            © {new Date().getFullYear()} BestResume. {t('footerNote')}
+          </p>
+        </div>
       </footer>
+    </div>
+  );
+}
+
+function FeatureCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+  return (
+    <div className="p-6 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg hover:bg-white transition-all duration-300 group">
+      <div className="h-12 w-12 bg-white rounded-xl border border-gray-200 flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 transition-transform">
+        {icon}
+      </div>
+      <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-500 leading-relaxed text-sm">{desc}</p>
     </div>
   );
 }
