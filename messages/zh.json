@@ -1,0 +1,24 @@
+{
+  "HomePage": {
+    "title": "打造您的完美简历",
+    "subtitle": "仅需几分钟",
+    "description": "专业模板，轻松定制，AI智能建议。制作一份助您求职成功的简历。",
+    "getStarted": "开始制作",
+    "viewTemplates": "查看模板"
+  },
+  "Dashboard": {
+    "title": "我的简历",
+    "subtitle": "管理您的简历版本",
+    "loggedInAs": "当前登录",
+    "createNew": "新建简历",
+    "noResumes": "暂无简历",
+    "noResumesDesc": "创建您的第一份简历以开始",
+    "createResume": "创建简历"
+  },
+  "Common": {
+    "loading": "加载中...",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑"
+  }
+}

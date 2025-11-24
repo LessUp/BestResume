@@ -1,0 +1,24 @@
+{
+  "HomePage": {
+    "title": "Create Your Perfect Resume",
+    "subtitle": "in Minutes",
+    "description": "Professional templates, easy customization, and AI-powered suggestions. Build a resume that gets you hired.",
+    "getStarted": "Get Started",
+    "viewTemplates": "View Templates"
+  },
+  "Dashboard": {
+    "title": "My Resumes",
+    "subtitle": "Manage your resume versions",
+    "loggedInAs": "Logged in as",
+    "createNew": "Create New",
+    "noResumes": "No resumes yet",
+    "noResumesDesc": "Create your first resume to get started",
+    "createResume": "Create Resume"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit"
+  }
+}
