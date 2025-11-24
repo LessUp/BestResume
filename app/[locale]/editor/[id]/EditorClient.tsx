@@ -10,14 +10,17 @@ import { Loader2, Save, Check, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useToast } from "@/components/ui/toast";
+import { useTranslations } from 'next-intl';
 
 interface EditorClientProps {
   initialData?: ResumeData;
   resumeId?: string;
   userId?: string;
+  locale: string;
+  initialTemplateId?: string;
 }
 
-export default function EditorClient({ initialData, resumeId, userId }: EditorClientProps) {
+export default function EditorClient({ initialData, resumeId, userId, locale, initialTemplateId }: EditorClientProps) {
   const { resumeData } = useResumeStore();
   const [saving, setSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -25,6 +28,7 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
   const [showMobilePreview, setShowMobilePreview] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const tEditor = useTranslations('Editor');
 
   // Handle initial data load only once
   useEffect(() => {
@@ -71,10 +75,10 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
         setIsDirty(false);
         
         if (result.id && resumeId === 'new') {
-          router.replace(`/editor/${result.id}`);
+          router.replace(`/${locale}/editor/${result.id}`);
           toast({
-            title: "Resume Saved",
-            description: "Your new resume has been created.",
+            title: tEditor('resumeSavedTitle'),
+            description: tEditor('resumeSavedDescription'),
             variant: "success",
           });
         }
@@ -82,14 +86,14 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
     } catch (error) {
       console.error("Failed to save:", error);
       toast({
-        title: "Auto-save Failed",
-        description: "Could not save your changes. Please check your connection.",
+        title: tEditor('autoSaveFailedTitle'),
+        description: tEditor('autoSaveFailedDescription'),
         variant: "destructive",
       });
     } finally {
       setSaving(false);
     }
-  }, [userId, isDirty, resumeData, resumeId, router, toast]);
+  }, [userId, isDirty, resumeData, resumeId, router, toast, locale, tEditor]);
 
   // Auto-save effect
   useEffect(() => {
@@ -110,27 +114,27 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
     <div className="min-h-screen flex flex-col bg-gray-50">
       <header className="h-16 border-b bg-white px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 print:hidden shadow-sm">
         <div className="flex items-center gap-4">
-          <Link href="/dashboard">
-            <Button variant="ghost" size="icon" title="Back to Dashboard">
+          <Link href={`/${locale}/dashboard`}>
+            <Button variant="ghost" size="icon" title={tEditor('backToDashboard')}>
               <ArrowLeft className="h-5 w-5 text-gray-500" />
             </Button>
           </Link>
           <div className="flex flex-col">
             <div className="font-bold text-lg text-gray-900 leading-tight">
-              {resumeData.basics.name || 'Untitled'}
+              {resumeData.basics.name || tEditor('untitled')}
             </div>
             <div className="text-xs text-gray-500 flex items-center gap-2">
                {saving ? (
                  <span className="text-blue-600 flex items-center gap-1">
-                   <Loader2 className="h-3 w-3 animate-spin" /> Saving...
+                   <Loader2 className="h-3 w-3 animate-spin" /> {tEditor('saving')}
                  </span>
                ) : isDirty ? (
-                 <span className="text-orange-600">Unsaved changes</span>
-               ) : (
-                 <span className="text-green-600 flex items-center gap-1">
-                   <Check className="h-3 w-3" /> Saved
-                 </span>
-               )}
+                 <span className="text-orange-600">{tEditor('unsavedChanges')}</span>
+                ) : (
+                  <span className="text-green-600 flex items-center gap-1">
+                    <Check className="h-3 w-3" /> {tEditor('saved')}
+                  </span>
+                )}
             </div>
           </div>
         </div>
@@ -143,11 +147,11 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
             onClick={() => setShowMobilePreview(!showMobilePreview)}
           >
             {showMobilePreview ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
-            {showMobilePreview ? 'Edit' : 'Preview'}
+            {showMobilePreview ? tEditor('edit') : tEditor('preview')}
           </Button>
 
           <Button variant="outline" size="sm" onClick={handleExport}>
-            Export PDF
+            {tEditor('exportPDF')}
           </Button>
         </div>
       </header>
@@ -155,6 +159,7 @@ export default function EditorClient({ initialData, resumeId, userId }: EditorCl
         <ResumeEditor 
           initialData={initialData} 
           mobilePreviewOpen={showMobilePreview}
+          initialTemplateId={initialTemplateId}
         />
       </main>
     </div>

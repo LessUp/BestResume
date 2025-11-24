@@ -3,9 +3,15 @@ import { getResume } from "@/app/actions";
 import EditorClient from "./EditorClient";
 import { ResumeData } from "@/types/resume";
 
-export default async function EditorPage({ params }: { params: { id: string } }) {
+interface EditorPageProps {
+  params: { locale: string; id: string };
+  searchParams?: { template?: string };
+}
+
+export default async function EditorPage({ params, searchParams }: EditorPageProps) {
   const session = await auth();
   let initialData: ResumeData | undefined = undefined;
+  const initialTemplateId = typeof searchParams?.template === 'string' ? searchParams.template : undefined;
   
   if (params.id !== 'new' && params.id !== 'demo') {
     const resume = await getResume(params.id);
@@ -19,6 +25,8 @@ export default async function EditorPage({ params }: { params: { id: string } })
       initialData={initialData} 
       resumeId={params.id} 
       userId={session?.user?.id}
+      locale={params.locale}
+      initialTemplateId={initialTemplateId}
     />
   );
 }

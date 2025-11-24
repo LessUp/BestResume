@@ -14,17 +14,20 @@ import { User, Briefcase, GraduationCap, Layers, FolderGit2, LayoutTemplate } fr
 interface ResumeEditorProps {
   initialData?: ResumeData;
   mobilePreviewOpen?: boolean;
+  initialTemplateId?: string;
 }
 
-export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobilePreviewOpen = false }) => {
+export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobilePreviewOpen = false, initialTemplateId }) => {
   const [activeSection, setActiveSection] = useState('basics'); // Default to basics
-  const { setResumeData } = useResumeStore();
+  const { setResumeData, setTemplateId } = useResumeStore();
 
   useEffect(() => {
     if (initialData) {
       setResumeData(initialData);
+    } else if (initialTemplateId) {
+      setTemplateId(initialTemplateId);
     }
-  }, [initialData, setResumeData]);
+  }, [initialData, initialTemplateId, setResumeData, setTemplateId]);
 
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-6 p-6 bg-gray-50">

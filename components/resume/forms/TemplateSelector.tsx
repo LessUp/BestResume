@@ -2,37 +2,39 @@ import React from 'react';
 import { useResumeStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
 import { LayoutTemplate, CheckCircle2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const templates = [
   {
     id: 'standard',
-    name: 'Standard',
-    description: 'Classic and professional. Good for ATS.',
+    nameKey: 'standardName',
+    descKey: 'standardDesc',
     color: 'bg-gray-100'
   },
   {
     id: 'modern',
-    name: 'Modern',
-    description: 'Two-column layout with a dark sidebar.',
+    nameKey: 'modernName',
+    descKey: 'modernDesc',
     color: 'bg-slate-900'
   },
   {
     id: 'minimal',
-    name: 'Minimalist',
-    description: 'Clean, whitespace-heavy, typography focused.',
+    nameKey: 'minimalName',
+    descKey: 'minimalDesc',
     color: 'bg-white border'
   }
 ];
 
 export const TemplateSelector = () => {
   const { resumeData, setTemplateId } = useResumeStore();
+  const t = useTranslations('Templates');
   const currentId = resumeData.meta.templateId;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 mb-6">
         <LayoutTemplate className="h-6 w-6 text-blue-600" />
-        <h2 className="text-lg font-semibold">Choose Template</h2>
+        <h2 className="text-lg font-semibold">{t('title')}</h2>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
@@ -50,8 +52,8 @@ export const TemplateSelector = () => {
               <div className={cn("w-16 h-20 rounded border shadow-sm flex-shrink-0", template.color)}></div>
               
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900">{template.name}</h3>
-                <p className="text-sm text-gray-500 mt-1">{template.description}</p>
+                <h3 className="font-bold text-gray-900">{t(template.nameKey)}</h3>
+                <p className="text-sm text-gray-500 mt-1">{t(template.descKey)}</p>
               </div>
 
               {currentId === template.id && (

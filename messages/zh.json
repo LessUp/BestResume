@@ -19,6 +19,48 @@
     "loading": "加载中...",
     "save": "保存",
     "delete": "删除",
-    "edit": "编辑"
+    "edit": "编辑",
+    "duplicate": "复制",
+    "updated": "更新于",
+    "deleteConfirm": "您确定要删除这份简历吗？此操作无法撤销。",
+    "resumeDeleted": "简历已删除",
+    "resumeDuplicated": "简历已复制",
+    "error": "错误",
+    "success": "成功"
+  },
+  "Auth": {
+    "title": "登录到您的账户",
+    "subtitle": "也可以直接输入新的邮箱和密码自动注册（演示模式）",
+    "email": "邮箱地址",
+    "password": "密码",
+    "signIn": "登录",
+    "signingIn": "正在登录..."
+  },
+  "Editor": {
+    "backToDashboard": "返回我的简历",
+    "untitled": "未命名",
+    "saving": "正在保存...",
+    "unsavedChanges": "有未保存的更改",
+    "saved": "已保存",
+    "edit": "编辑",
+    "preview": "预览",
+    "exportPDF": "导出 PDF",
+    "resumeSavedTitle": "简历已保存",
+    "resumeSavedDescription": "您的新简历已创建。",
+    "autoSaveFailedTitle": "自动保存失败",
+    "autoSaveFailedDescription": "无法保存更改，请检查网络连接。"
+  },
+  "Templates": {
+    "title": "选择简历模板",
+    "subtitle": "根据职位类型和个人风格选择合适的版式。",
+    "tryDemo": "体验示例简历",
+    "previewPlaceholder": "模板的真实效果请在右侧预览中查看",
+    "useTemplate": "使用此模板",
+    "standardName": "标准模板",
+    "standardDesc": "经典、适合 ATS 的通用排版。",
+    "modernName": "现代模板",
+    "modernDesc": "左右两栏布局，左侧深色信息栏，更突出个人品牌。",
+    "minimalName": "极简模板",
+    "minimalDesc": "留白充足、强调排版和文字内容的简约样式。"
   }
 }
