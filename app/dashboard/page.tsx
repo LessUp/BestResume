@@ -2,8 +2,9 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { getResumes } from "@/app/actions";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText, Clock } from "lucide-react";
+import { Plus, FileText } from "lucide-react";
 import { redirect } from "next/navigation";
+import { ResumeCard } from "@/components/dashboard/ResumeCard";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -46,23 +47,7 @@ export default async function Dashboard() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {resumes.map((resume) => (
-              <Link key={resume.id} href={`/editor/${resume.id}`} className="block group">
-                <div className="bg-white p-6 rounded-lg border shadow-sm hover:shadow-md hover:border-blue-500 transition-all h-full flex flex-col">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="p-3 bg-blue-50 text-blue-600 rounded-lg">
-                      <FileText className="h-6 w-6" />
-                    </div>
-                    {/* Future: Add Delete/Duplicate actions here */}
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 truncate">
-                    {resume.title}
-                  </h3>
-                  <div className="mt-auto flex items-center text-sm text-gray-500">
-                    <Clock className="h-3 w-3 mr-1" />
-                    Updated {new Date(resume.updatedAt).toLocaleDateString()}
-                  </div>
-                </div>
-              </Link>
+              <ResumeCard key={resume.id} resume={resume} />
             ))}
           </div>
         )}

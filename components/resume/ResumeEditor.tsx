@@ -13,9 +13,10 @@ import { User, Briefcase, GraduationCap, Layers, FolderGit2, LayoutTemplate } fr
 
 interface ResumeEditorProps {
   initialData?: ResumeData;
+  mobilePreviewOpen?: boolean;
 }
 
-export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData }) => {
+export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobilePreviewOpen = false }) => {
   const [activeSection, setActiveSection] = useState('basics'); // Default to basics
   const { setResumeData } = useResumeStore();
 
@@ -28,7 +29,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData }) => {
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-6 p-6 bg-gray-50">
        {/* Sidebar Navigation */}
-       <aside className="w-full lg:w-64 flex-shrink-0 print:hidden">
+       <aside className={`w-full lg:w-64 flex-shrink-0 print:hidden ${mobilePreviewOpen ? 'hidden lg:block' : 'block'}`}>
          <div className="bg-white rounded-lg shadow-sm p-4 space-y-2 sticky top-4">
             <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">Design</h3>
             <Button 
@@ -81,7 +82,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData }) => {
        </aside>
 
        {/* Form Area */}
-       <div className="flex-1 max-w-2xl overflow-y-auto pb-20 print:hidden">
+       <div className={`flex-1 max-w-2xl overflow-y-auto pb-20 print:hidden ${mobilePreviewOpen ? 'hidden xl:block' : 'block'}`}>
           {activeSection === 'templates' && <TemplateSelector />}
           {activeSection === 'basics' && <BasicsForm />}
           {activeSection === 'work' && <WorkForm />}
@@ -91,7 +92,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData }) => {
        </div>
 
        {/* Preview Area */}
-       <div className="hidden xl:block flex-1 bg-gray-200/50 rounded-xl border overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible">
+       <div className={`flex-1 bg-gray-200/50 rounded-xl border overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
           <div className="absolute inset-0 overflow-y-auto p-8 print:relative print:p-0 print:inset-auto">
              <div className="print:scale-100 origin-top">
               <ResumePreview />

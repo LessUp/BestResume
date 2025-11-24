@@ -102,3 +102,65 @@ export async function getResume(id: string) {
     data: JSON.parse(resume.content) as ResumeData
   };
 }
+
+export async function deleteResume(id: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  const existing = await prisma.resume.findUnique({
+    where: { id },
+  });
+
+  if (!existing || existing.userId !== user.id) {
+    throw new Error("Resume not found or unauthorized");
+  }
+
+  await prisma.resume.delete({
+    where: { id },
+  });
+
+  revalidatePath('/dashboard');
+  return { success: true };
+}
+
+export async function duplicateResume(id: string) {
+  const session = await auth();
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  const existing = await prisma.resume.findUnique({
+    where: { id },
+  });
+
+  if (!existing || existing.userId !== user.id) {
+    throw new Error("Resume not found or unauthorized");
+  }
+
+  const newTitle = `${existing.title} (Copy)`;
+  
+  const newResume = await prisma.resume.create({
+    data: {
+      userId: user.id,
+      title: newTitle,
+      content: existing.content,
+    },
+  });
+
+  revalidatePath('/dashboard');
+  return { success: true, id: newResume.id };
+}
