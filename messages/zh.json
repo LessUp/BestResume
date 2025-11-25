@@ -5,7 +5,31 @@
     "description": "专业模板，轻松定制，AI智能建议。制作一份助您求职成功的简历。",
     "getStarted": "开始制作",
     "viewTemplates": "查看模板",
+    "nav": {
+      "signIn": "登录",
+      "startFree": "免费开始"
+    },
     "badge": "AI 智能简历助手",
+    "ribbons": {
+      "layout": {
+        "title": "自适应排版",
+        "desc": "网格与字体自动匹配每一款桌面分辨率。"
+      },
+      "speed": {
+        "title": "所见即所得",
+        "desc": "拖拽、编辑同步展示像素级间距。"
+      },
+      "ai": {
+        "title": "AI 指导",
+        "desc": "提示帮你写出精炼且量化的要点。"
+      }
+    },
+    "metrics": {
+      "users": "活跃用户",
+      "resumes": "已创建简历",
+      "downloads": "PDF 导出",
+      "satisfaction": "满意度"
+    },
     "trust": {
       "noCard": "无需信用卡",
       "freeTemplates": "内置精美模板"
@@ -19,6 +43,81 @@
       "status": "已开启"
     },
     "footerNote": "专为求职者打造。",
+    "highlights": {
+      "blueprint": {
+        "title": "桌面优先蓝图",
+        "desc": "参考顶级简历站点的自适应网格预设，让宽屏对齐始终利落。"
+      },
+      "ats": {
+        "title": "ATS 友好层级",
+        "desc": "语义顺序、易读对比度和舒适留白，对招聘官和机器都友好。"
+      },
+      "preview": {
+        "title": "多分辨率预览",
+        "desc": "导出前即可并排预览 1440p、2K、4K 的布局效果。"
+      },
+      "story": {
+        "title": "故事化模块",
+        "desc": "精心挑选的影响力、领导力与作品集区块，随取随用。"
+      }
+    },
+    "desktopFit": {
+      "badge": "响应式工作室",
+      "title": "在每台桌面都保持精致",
+      "desc": "借鉴优秀简历站的经验：充足留白、自适应列宽、精调字体比例，在大屏上也能自然呼吸。",
+      "chip1": "4K 友好网格",
+      "chip2": "自动字体体系",
+      "chip3": "智能行距"
+    },
+    "preview": {
+      "responsive": "桌面布局预览",
+      "skills": "技能矩阵",
+      "results": "成果亮点"
+    },
+    "workflow": {
+      "title": "三步完成上架级简历",
+      "subtitle": "规划、撰写、导出，全程响应式预览与最终效果一致。",
+      "plan": {
+        "title": "规划结构",
+        "desc": "按职位推荐版块，拖拽重排时间距自动保持整齐。",
+        "note": "栅格自动吸附"
+      },
+      "write": {
+        "title": "智能写作",
+        "desc": "行内优化动词、数据与关键词，符合目标岗位要求。",
+        "note": "语境感知建议"
+      },
+      "export": {
+        "title": "随处呈现",
+        "desc": "一键导出 ATS 友好 PDF，或分享在任何屏幕都清晰的在线链接。",
+        "note": "像素级输出"
+      }
+    },
+    "templatesSection": {
+      "label": "模板",
+      "title": "始终贴合屏幕的模板",
+      "subtitle": "选择喜欢的样式，继续编辑，布局会自动适配桌面显示。",
+      "modern": {
+        "label": "Radiant 光谱",
+        "desc": "双栏布局搭配渐变强调，突出可量化成果。",
+        "badge": "热门"
+      },
+      "minimal": {
+        "label": "Nordic 北欧",
+        "desc": "极简排版、充足留白与柔和配色，突出关键信息。",
+        "badge": "上新"
+      },
+      "focus": {
+        "label": "Focus 专注",
+        "desc": "单栏叙事结构，突出案例、作品集与职业亮点。",
+        "badge": "ATS 适配"
+      }
+    },
+    "ctaSection": {
+      "title": "让你的简历在任何屏幕都体面呈现",
+      "subtitle": "免费开始，发布一份在所有桌面分辨率下都清晰的简历。",
+      "primary": "立即开始打造"
+    },
     "features": {
       "ats": "ATS 友好",
       "atsDesc": "确保您的简历能顺利通过筛选系统。",
