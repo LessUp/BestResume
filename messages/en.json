@@ -5,7 +5,31 @@
     "description": "Professional templates, easy customization, and AI-powered suggestions. Build a resume that gets you hired.",
     "getStarted": "Get Started",
     "viewTemplates": "View Templates",
+    "nav": {
+      "signIn": "Sign In",
+      "startFree": "Start for Free"
+    },
     "badge": "AI-powered resume builder",
+    "ribbons": {
+      "layout": {
+        "title": "Responsive by default",
+        "desc": "Grid and typography auto-scale to every desktop resolution."
+      },
+      "speed": {
+        "title": "Live preview",
+        "desc": "See pixel-perfect spacing as you type and drag sections."
+      },
+      "ai": {
+        "title": "Guided by AI",
+        "desc": "Smart prompts keep bullets concise and measurable."
+      }
+    },
+    "metrics": {
+      "users": "Active users",
+      "resumes": "Resumes built",
+      "downloads": "PDF exports",
+      "satisfaction": "Satisfaction"
+    },
     "trust": {
       "noCard": "No credit card required",
       "freeTemplates": "Free templates included"
@@ -19,6 +43,81 @@
       "status": "Active"
     },
     "footerNote": "Crafted for job seekers.",
+    "highlights": {
+      "blueprint": {
+        "title": "Desktop-first blueprint",
+        "desc": "Adaptive grid presets inspired by top resume builders keep alignment crisp on wide monitors."
+      },
+      "ats": {
+        "title": "ATS safe hierarchy",
+        "desc": "Semantic ordering, readable contrasts, and balanced spacing that recruiters and scanners love."
+      },
+      "preview": {
+        "title": "Multi-resolution preview",
+        "desc": "Preview 1440p, 2K, and 4K layouts side by side before exporting."
+      },
+      "story": {
+        "title": "Story-focused sections",
+        "desc": "Curated blocks for impact metrics, leadership, and portfolio links ready to drop in."
+      }
+    },
+    "desktopFit": {
+      "badge": "Responsive studio",
+      "title": "Pixel-perfect on every desktop",
+      "desc": "Borrowed from best-in-class resume sites: generous whitespace, adaptive columns, and carefully tuned typography that scale effortlessly on large screens.",
+      "chip1": "4K-ready grids",
+      "chip2": "Auto typography",
+      "chip3": "Smart spacing"
+    },
+    "preview": {
+      "responsive": "Desktop layout preview",
+      "skills": "Skill stack",
+      "results": "Impact highlights"
+    },
+    "workflow": {
+      "title": "Launch-ready in three steps",
+      "subtitle": "Plan, write, and export with a responsive preview that mirrors the final download.",
+      "plan": {
+        "title": "Plan your story",
+        "desc": "Use guided sections tailored to your role. Reorder blocks instantly while spacing stays intact.",
+        "note": "Snap-to-grid layout"
+      },
+      "write": {
+        "title": "Write with AI",
+        "desc": "Inline improvements surface the right verbs, metrics, and keywords for the roles you target.",
+        "note": "Context-aware suggestions"
+      },
+      "export": {
+        "title": "Deliver everywhere",
+        "desc": "Export ATS-friendly PDFs and share responsive web links that look crisp on any screen.",
+        "note": "Pixel-perfect output"
+      }
+    },
+    "templatesSection": {
+      "label": "Templates",
+      "title": "Templates that flex with you",
+      "subtitle": "Choose a style, keep editing live, and let the layout adapt to your monitor automatically.",
+      "modern": {
+        "label": "Radiant",
+        "desc": "Dual-column layout with gradient accents, perfect for showcasing measurable impact.",
+        "badge": "Popular"
+      },
+      "minimal": {
+        "label": "Nordic",
+        "desc": "Minimalist typography, generous spacing, and a calm palette for focused reading.",
+        "badge": "New"
+      },
+      "focus": {
+        "label": "Focus",
+        "desc": "Single-column narrative that prioritizes case studies, portfolios, and career highlights.",
+        "badge": "ATS safe"
+      }
+    },
+    "ctaSection": {
+      "title": "Ready to look polished on any screen?",
+      "subtitle": "Start free and publish a resume that adapts beautifully to every desktop resolution.",
+      "primary": "Start building now"
+    },
     "features": {
       "ats": "ATS Friendly",
       "atsDesc": "Ensure your resume passes applicant tracking systems.",
