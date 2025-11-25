@@ -1,11 +1,9 @@
 "use server";
 
 import { auth } from "@/auth";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import { ResumeData } from "@/types/resume";
 import { revalidatePath } from "next/cache";
-
-const prisma = new PrismaClient();
 
 export async function saveResume(data: ResumeData, title: string, id?: string) {
   const session = await auth();

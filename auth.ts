@@ -1,10 +1,8 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/prisma';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -23,34 +21,40 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
-        // Check if user exists
-        let user = await prisma.user.findUnique({
+        // 查找用户
+        const user = await prisma.user.findUnique({
           where: { email },
         });
 
-        if (!user) {
-          // For demo purposes: Auto-register if user doesn't exist
-          // In production, you'd want a separate registration flow
-          const hashedPassword = await bcrypt.hash(password, 10);
-          user = await prisma.user.create({
-            data: {
-              email,
-              password: hashedPassword,
-              name: email.split('@')[0],
-            },
-          });
-        } else {
-          // Verify password
-          if (!user.password) return null;
-          const isValid = await bcrypt.compare(password, user.password);
-          if (!isValid) return null;
+        if (!user || !user.password) {
+          return null;
         }
+
+        // 验证密码
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) return null;
+
+        // 更新最后登录时间
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLoginAt: new Date() },
+        });
+
+        // 记录登录日志
+        await prisma.activityLog.create({
+          data: {
+            userId: user.id,
+            action: "LOGIN",
+          },
+        });
 
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          isMember: user.isMember, // Pass membership status to session
+          image: user.image,
+          role: user.role,
+          isMember: user.isMember,
         };
       },
     }),

@@ -9987,3 +9987,6 @@ node_modules/jsx-ast-utils/LICENSE.md
 node_modules/jsx-ast-utils/README.md
 node_modules/jsx-ast-utils/.github/FUNDING.yml
 node_modules
+
+# Local Netlify folder
+.netlify

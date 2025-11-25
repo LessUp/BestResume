@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 import { getResumes } from "@/app/actions";
+import { getUserStats, getCurrentUser } from "@/app/actions/user";
 import { Button } from "@/components/ui/button";
-import { Plus, FileText } from "lucide-react";
+import { Plus, FileText, Eye, Download, TrendingUp, Search, Filter } from "lucide-react";
 import { redirect } from "next/navigation";
 import { ResumeCard } from "@/components/dashboard/ResumeCard";
 import { getTranslations } from 'next-intl/server';
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { Navbar } from "@/components/layout/Navbar";
+import { Card, CardContent } from "@/components/ui/card";
 
 type ResumeListItem = Awaited<ReturnType<typeof getResumes>>[number];
 
@@ -23,52 +25,132 @@ export default async function Dashboard({
     redirect(`/${locale}/auth/signin`);
   }
 
-  const resumes = await getResumes();
+  const [resumes, stats, user] = await Promise.all([
+    getResumes(),
+    getUserStats(),
+    getCurrentUser(),
+  ]);
+
+  const statsCards = [
+    { 
+      label: t('totalResumes'), 
+      value: stats?.totalResumes || 0, 
+      icon: FileText,
+      color: "blue" 
+    },
+    { 
+      label: t('totalViews'), 
+      value: stats?.totalViews || 0, 
+      icon: Eye,
+      color: "green" 
+    },
+    { 
+      label: t('totalDownloads'), 
+      value: stats?.totalDownloads || 0, 
+      icon: Download,
+      color: "purple" 
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-5xl mx-auto">
-        <header className="flex justify-between items-center mb-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+      <Navbar user={session.user} locale={locale} />
+      
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-            <p className="text-gray-500 mt-1">{t('subtitle')}</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              {t('welcomeBack')}, {user?.name?.split(' ')[0] || t('user')}!
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{t('subtitle')}</p>
           </div>
-          <div className="flex items-center gap-4">
-             <LanguageSwitcher />
-             <Link
-               href={`/${locale}/settings`}
-               className="text-sm text-gray-500 hover:text-gray-900"
-             >
-               {t('settings')}
-             </Link>
-             <div className="text-sm text-gray-600">
-               {t('loggedInAs')} <span className="font-semibold">{session.user.email}</span>
-             </div>
-             <Link href={`/${locale}/editor/new`}>
-               <Button className="gap-2">
-                 <Plus className="h-4 w-4" /> {t('createNew')}
-               </Button>
-             </Link>
-          </div>
-        </header>
+          <Link href={`/${locale}/editor/new`}>
+            <Button size="lg" className="gap-2 w-full sm:w-auto">
+              <Plus className="h-5 w-5" />
+              {t('createNew')}
+            </Button>
+          </Link>
+        </div>
 
-        {resumes.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-lg border border-dashed">
-            <FileText className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900">{t('noResumes')}</h3>
-            <p className="text-gray-500 mb-6">{t('noResumesDesc')}</p>
-            <Link href={`/${locale}/editor/new`}>
-              <Button variant="outline">{t('createResume')}</Button>
-            </Link>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          {statsCards.map((stat, index) => (
+            <Card key={index} className="bg-white dark:bg-gray-900 border-0 shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {stat.label}
+                    </p>
+                    <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">
+                      {stat.value}
+                    </p>
+                  </div>
+                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${
+                    stat.color === 'blue' ? 'bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400' :
+                    stat.color === 'green' ? 'bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400' :
+                    'bg-purple-100 text-purple-600 dark:bg-purple-950 dark:text-purple-400'
+                  }`}>
+                    <stat.icon className="h-6 w-6" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Resumes Section */}
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+          {/* Section Header */}
+          <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {t('myResumes')} ({resumes.length})
+              </h2>
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1 sm:flex-none">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder={t('searchPlaceholder')}
+                    className="w-full sm:w-64 h-10 pl-10 pr-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Filter className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t('filter')}</span>
+                </Button>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resumes.map((resume: ResumeListItem) => (
-              <ResumeCard key={resume.id} resume={resume} locale={locale} />
-            ))}
+
+          {/* Resumes Grid */}
+          <div className="p-6">
+            {resumes.length === 0 ? (
+              <div className="text-center py-16">
+                <div className="mx-auto h-16 w-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                  <FileText className="h-8 w-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t('noResumes')}</h3>
+                <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">{t('noResumesDesc')}</p>
+                <Link href={`/${locale}/editor/new`}>
+                  <Button className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    {t('createResume')}
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {resumes.map((resume: ResumeListItem) => (
+                  <ResumeCard key={resume.id} resume={resume} locale={locale} />
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
