@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useLocale, useTranslations } from 'next-intl';
-import { FileText, Eye, EyeOff, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { FileText, Eye, EyeOff, ArrowLeft, CheckCircle2, X, Sparkles, Shield, Zap } from "lucide-react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -50,122 +50,154 @@ export default function SignIn() {
     }
   };
 
+  const features = [
+    { icon: Shield, text: "安全的账户保护" },
+    { icon: Sparkles, text: "AI驱动的简历优化" },
+    { icon: Zap, text: "快速创建专业简历" },
+  ];
+
   return (
-    <div className="min-h-screen flex bg-gray-50 dark:bg-gray-950">
-      {/* 左侧品牌区域 */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-700 p-12 flex-col justify-between">
-        <div>
-          <Link href={`/${locale}`} className="flex items-center gap-2 text-white">
-            <div className="h-10 w-10 bg-white/20 rounded-xl flex items-center justify-center">
+    <div className="min-h-screen flex">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
+          {/* Logo */}
+          <Link href={`/${locale}`} className="flex items-center gap-3 text-white">
+            <div className="h-11 w-11 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
               <FileText className="h-6 w-6" />
             </div>
             <span className="text-2xl font-bold">BestResume</span>
           </Link>
-        </div>
-        
-        <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-white leading-tight">
-            {t('welcomeBack')}
-          </h1>
-          <p className="text-xl text-blue-100">
-            {t('signinHeroDesc')}
-          </p>
-          
-          <div className="grid grid-cols-2 gap-4 pt-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-              <div className="text-3xl font-bold text-white">10K+</div>
-              <div className="text-blue-200 text-sm">{t('resumesCreated')}</div>
+
+          {/* Main Content */}
+          <div className="space-y-8">
+            <div>
+              <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
+                {t('welcomeBack')}
+              </h1>
+              <p className="text-xl text-blue-100 leading-relaxed">
+                {t('signinHeroDesc')}
+              </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-              <div className="text-3xl font-bold text-white">95%</div>
-              <div className="text-blue-200 text-sm">{t('satisfactionRate')}</div>
+
+            {/* Features */}
+            <div className="space-y-4">
+              {features.map((feature, i) => (
+                <div key={i} className="flex items-center gap-3 text-white/90">
+                  <div className="h-10 w-10 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center">
+                    <feature.icon className="h-5 w-5" />
+                  </div>
+                  <span className="text-lg">{feature.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5">
+                <div className="text-3xl font-bold text-white">10K+</div>
+                <div className="text-blue-200 text-sm mt-1">{t('resumesCreated')}</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5">
+                <div className="text-3xl font-bold text-white">95%</div>
+                <div className="text-blue-200 text-sm mt-1">{t('satisfactionRate')}</div>
+              </div>
             </div>
           </div>
+
+          {/* Footer */}
+          <p className="text-blue-200 text-sm">
+            © {new Date().getFullYear()} BestResume. All rights reserved.
+          </p>
         </div>
-        
-        <p className="text-blue-200 text-sm">
-          © {new Date().getFullYear()} BestResume. All rights reserved.
-        </p>
       </div>
 
-      {/* 右侧表单区域 */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      {/* Right Panel - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-gray-50">
         <div className="w-full max-w-md space-y-8">
+          {/* Mobile Back Link */}
           <div className="lg:hidden">
-            <Link href={`/${locale}`} className="flex items-center gap-2 text-gray-900 dark:text-white mb-8">
+            <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
               <ArrowLeft className="h-5 w-5" />
-              {t('backToHome')}
+              <span>{t('backToHome')}</span>
             </Link>
           </div>
-          
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {t('signIn')}
-            </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
+
+          {/* Header */}
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-gray-900">{t('signIn')}</h2>
+            <p className="mt-3 text-gray-600">
               {t('noAccount')}{" "}
-              <Link href={`/${locale}/auth/signup`} className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link href={`/${locale}/auth/signup`} className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
                 {t('createAccount')}
               </Link>
             </p>
           </div>
 
+          {/* Success Message */}
           {showSuccess && (
-            <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
-              <span className="text-green-700 dark:text-green-400 text-sm">{t('registrationSuccess')}</span>
+            <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm flex items-start gap-3 animate-fade-in">
+              <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-green-600" />
+              <span>{t('registrationSuccess')}</span>
             </div>
           )}
 
+          {/* Error Message */}
           {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
-              {error}
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm flex items-start gap-3">
+              <X className="h-5 w-5 flex-shrink-0 mt-0.5" />
+              <span>{error}</span>
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Form */}
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="email">{t('email')}</Label>
+                <Label htmlFor="email" className="text-gray-700 font-medium">{t('email')}</Label>
                 <Input
                   id="email"
-                  name="email"
                   type="email"
                   autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-1 h-12"
+                  className="mt-2 h-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                   placeholder={t('emailPlaceholder')}
                 />
               </div>
-              
+
               <div>
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">{t('password')}</Label>
+                  <Label htmlFor="password" className="text-gray-700 font-medium">{t('password')}</Label>
                   <Link 
                     href={`/${locale}/auth/forgot-password`}
-                    className="text-sm text-blue-600 hover:text-blue-700"
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                   >
                     {t('forgotPassword')}
                   </Link>
                 </div>
-                <div className="relative mt-1">
+                <div className="relative mt-2">
                   <Input
                     id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 pr-10"
+                    className="h-12 pr-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                     placeholder={t('passwordPlaceholder')}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -176,24 +208,32 @@ export default function SignIn() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full h-12 text-base font-semibold"
+              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/25 disabled:opacity-50"
             >
-              {loading ? t('signingIn') : t('signIn')}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  {t('signingIn')}
+                </span>
+              ) : (
+                t('signIn')
+              )}
             </Button>
           </form>
 
-          {/* 分割线和第三方登录 */}
+          {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-200 dark:border-gray-800" />
+              <div className="w-full border-t border-gray-200" />
             </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-gray-50 dark:bg-gray-950 px-4 text-gray-500">{t('orContinueWith')}</span>
+            <div className="relative flex justify-center">
+              <span className="bg-gray-50 px-4 text-sm text-gray-500">{t('orContinueWith')}</span>
             </div>
           </div>
 
+          {/* Social Login */}
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline" className="h-12" type="button" disabled>
+            <Button variant="outline" className="h-12 bg-white hover:bg-gray-50" type="button" disabled>
               <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -202,7 +242,7 @@ export default function SignIn() {
               </svg>
               Google
             </Button>
-            <Button variant="outline" className="h-12" type="button" disabled>
+            <Button variant="outline" className="h-12 bg-white hover:bg-gray-50" type="button" disabled>
               <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
               </svg>
