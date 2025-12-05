@@ -15,11 +15,11 @@ type ResumeListItem = Awaited<ReturnType<typeof getResumes>>[number];
 export default async function Dashboard({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
   const session = await auth();
   const t = await getTranslations('Dashboard');
-  const { locale } = await params;
+  const { locale } = params;
   
   if (!session?.user) {
     redirect(`/${locale}/auth/signin`);
@@ -72,6 +72,44 @@ export default async function Dashboard({
             </Button>
           </Link>
         </div>
+
+        {/* Email verification & membership banners */}
+        {user && (!user.emailVerified || !user.isMember) && (
+          <div className="mb-8 space-y-3">
+            {!user.emailVerified && (
+              <div className="flex items-start gap-3 p-4 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-700/60 dark:bg-amber-950/40">
+                <div className="h-9 w-9 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center text-amber-700 dark:text-amber-300">
+                  <FileText className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-amber-900 dark:text-amber-100">{t('verifyEmailTitle')}</p>
+                  <p className="text-xs text-amber-800 dark:text-amber-200 mt-1">{t('verifyEmailDesc')}</p>
+                </div>
+              </div>
+            )}
+
+            {!user.isMember && (
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-800/70 dark:bg-blue-950/40">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="h-9 w-9 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-300">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-blue-900 dark:text-blue-100">{t('membershipTitle')}</p>
+                    <p className="text-xs text-blue-800 dark:text-blue-200 mt-1">{t('membershipDesc')}</p>
+                  </div>
+                </div>
+                <div className="flex-shrink-0">
+                  <Link href={`/${locale}/settings`}>
+                    <Button variant="outline" size="sm" className="w-full">
+                      {t('membershipCta')}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">

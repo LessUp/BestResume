@@ -154,7 +154,12 @@
     "totalViews": "总浏览量",
     "totalDownloads": "总下载量",
     "searchPlaceholder": "搜索简历...",
-    "filter": "筛选"
+    "filter": "筛选",
+    "verifyEmailTitle": "验证您的邮箱",
+    "verifyEmailDesc": "完成邮箱验证以提升账户安全，避免无法找回账户。",
+    "membershipTitle": "当前为免费版",
+    "membershipDesc": "升级后可解锁更多简历数量和高级功能（即将上线）。",
+    "membershipCta": "管理订阅"
   },
   "Common": {
     "loading": "加载中...",

@@ -154,7 +154,12 @@
     "totalViews": "Total Views",
     "totalDownloads": "Total Downloads",
     "searchPlaceholder": "Search resumes...",
-    "filter": "Filter"
+    "filter": "Filter",
+    "verifyEmailTitle": "Verify your email",
+    "verifyEmailDesc": "Verify your email to keep your account secure and make password recovery easier.",
+    "membershipTitle": "You're on the free plan",
+    "membershipDesc": "Upgrade to unlock more resume slots and advanced features (coming soon).",
+    "membershipCta": "Manage plan"
   },
   "Common": {
     "loading": "Loading...",

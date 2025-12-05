@@ -11,6 +11,7 @@ export interface UserProfile {
   name: string | null;
   email: string;
   image: string | null;
+  emailVerified: Date | null;
   bio: string | null;
   phone: string | null;
   location: string | null;
@@ -39,6 +40,7 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
       name: true,
       email: true,
       image: true,
+      emailVerified: true,
       bio: true,
       phone: true,
       location: true,

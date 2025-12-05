@@ -37,7 +37,7 @@ export async function saveResume(data: ResumeData, title: string, id?: string) {
         title,
       },
     });
-    revalidatePath('/dashboard');
+    revalidatePath('/[locale]/dashboard');
     return { success: true, id };
   } else {
     // Create new resume
@@ -48,7 +48,7 @@ export async function saveResume(data: ResumeData, title: string, id?: string) {
         content,
       },
     });
-    revalidatePath('/dashboard');
+    revalidatePath('/[locale]/dashboard');
     return { success: true, id: newResume.id };
   }
 }
@@ -125,7 +125,7 @@ export async function deleteResume(id: string) {
     where: { id },
   });
 
-  revalidatePath('/dashboard');
+  revalidatePath('/[locale]/dashboard');
   return { success: true };
 }
 
@@ -159,6 +159,6 @@ export async function duplicateResume(id: string) {
     },
   });
 
-  revalidatePath('/dashboard');
+  revalidatePath('/[locale]/dashboard');
   return { success: true, id: newResume.id };
 }
