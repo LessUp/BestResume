@@ -372,7 +372,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="absolute right-4 top-4 sm:right-6 sm:top-6 bg-white rounded-2xl border border-slate-100 shadow-lg px-4 py-3 flex items-center gap-3 animate-float">
+                <div className="absolute right-4 top-4 sm:right-6 sm:top-6 bg-white rounded-2xl border border-slate-100 shadow-lg px-4 py-3 hidden sm:flex items-center gap-3 animate-float">
                   <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                     <CheckCircle2 className="h-5 w-5" />
                   </div>
@@ -382,7 +382,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="absolute left-4 bottom-4 sm:left-6 sm:bottom-6 bg-white rounded-2xl border border-slate-100 shadow-lg px-4 py-3 flex items-center gap-3 animate-float delay-1000">
+                <div className="absolute left-4 bottom-4 sm:left-6 sm:bottom-6 bg-white rounded-2xl border border-slate-100 shadow-lg px-4 py-3 hidden sm:flex items-center gap-3 animate-float delay-1000">
                   <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
                     <Zap className="h-5 w-5" />
                   </div>

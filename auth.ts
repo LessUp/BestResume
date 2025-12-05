@@ -60,11 +60,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        return {
+          ...token,
+          role: (user as any).role,
+          isMember: (user as any).isMember,
+        };
+      }
+      return token;
+    },
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
         // We need to fetch the user to get the latest isMember status
         // or trust the token if we put it there. Let's keep it simple.
+      }
+      if (session.user) {
+        (session.user as any).role = (token as any).role;
+        (session.user as any).isMember = (token as any).isMember;
       }
       return session;
     },
