@@ -23,7 +23,7 @@ export default function ForgotPassword() {
     setLoading(true);
     
     try {
-      await requestPasswordReset(email);
+      await requestPasswordReset(email, locale);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : t('resetFailed'));

@@ -215,7 +215,16 @@
     "forgotPasswordDesc": "Enter your email and we'll send you a reset link",
     "sending": "Sending...",
     "sendResetLink": "Send Reset Link",
-    "resetFailed": "Failed to send, please try again"
+    "resetFailed": "Failed to send, please try again",
+    "resetPasswordTitle": "Reset your password",
+    "resetPasswordDesc": "Choose a new password for your account.",
+    "resetPasswordButton": "Reset Password",
+    "resetPasswordSuccess": "Password updated. You can now sign in.",
+    "resetPasswordFailed": "Failed to reset your password. The link may be invalid or expired.",
+    "verifyingEmail": "Verifying your email...",
+    "emailVerifiedTitle": "Email verified",
+    "emailVerifiedDesc": "Your email has been successfully verified. You can now sign in.",
+    "emailVerifyFailed": "Email verification failed. The link may be invalid or expired."
   },
   "Editor": {
     "backToDashboard": "Back to Dashboard",
