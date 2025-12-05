@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { sendEmail } from "@/lib/email";
 
 // 用户注册
 export async function registerUser(data: {
@@ -46,7 +47,7 @@ export async function registerUser(data: {
 }
 
 // 请求密码重置
-export async function requestPasswordReset(email: string) {
+export async function requestPasswordReset(email: string, locale: string) {
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -68,9 +69,20 @@ export async function requestPasswordReset(email: string) {
     },
   });
 
-  // TODO: 发送重置邮件
-  // 在实际生产环境中，需要集成邮件服务
-  console.log(`Password reset token for ${email}: ${token}`);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const resetUrl = `${baseUrl}/${locale}/auth/reset-password?token=${token}`;
+
+  const isZh = locale.startsWith("zh");
+  const subject = isZh ? "重置您的 BestResume 密码" : "Reset your BestResume password";
+  const text = isZh
+    ? `您请求重置 BestResume 账户密码，请点击以下链接完成重置（1 小时内有效）：\n${resetUrl}`
+    : `You requested to reset your BestResume account password. Click the link below to continue (valid for 1 hour):\n${resetUrl}`;
+
+  await sendEmail({
+    to: email,
+    subject,
+    text,
+  });
 
   return { success: true, message: "如果邮箱存在，重置链接已发送" };
 }
@@ -124,7 +136,7 @@ export async function resetPassword(data: { token: string; newPassword: string }
 }
 
 // 验证邮箱（生成验证令牌）
-export async function sendVerificationEmail(email: string) {
+export async function sendVerificationEmail(email: string, locale: string) {
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -149,8 +161,20 @@ export async function sendVerificationEmail(email: string) {
     },
   });
 
-  // TODO: 发送验证邮件
-  console.log(`Verification token for ${email}: ${token}`);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const verifyUrl = `${baseUrl}/${locale}/auth/verify-email?token=${token}`;
+
+  const isZh = locale.startsWith("zh");
+  const subject = isZh ? "验证您的 BestResume 邮箱" : "Verify your BestResume email";
+  const text = isZh
+    ? `请点击以下链接验证您的邮箱（24 小时内有效）：\n${verifyUrl}`
+    : `Please click the link below to verify your email address (valid for 24 hours):\n${verifyUrl}`;
+
+  await sendEmail({
+    to: email,
+    subject,
+    text,
+  });
 
   return { success: true, message: "验证邮件已发送" };
 }
