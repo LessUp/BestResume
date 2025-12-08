@@ -52,11 +52,11 @@
   - Update TypeScript types for session object
   - _Requirements: 4.1, 4.2, 4.3_
 
-- [-] 2.2 Write property test for session population
+- [x] 2.2 Write property test for session population
   - **Property 6: Authentication populates session**
   - **Validates: Requirements 4.1**
 
-- [ ] 2.3 Write property test for JWT and session consistency
+- [x] 2.3 Write property test for JWT and session consistency
   - **Property 7: JWT and session consistency**
   - **Validates: Requirements 4.2, 4.3**
 
@@ -74,7 +74,7 @@
   - Use getRequestContext helper in app/actions/user.ts
   - _Requirements: 12.1, 12.2_
 
-- [ ] 2.6 Write property test for activity log context
+- [x] 2.6 Write property test for activity log context
   - **Property 18: Logs include request context**
   - **Validates: Requirements 12.1, 12.2**
 
@@ -96,11 +96,11 @@
   - Modify verifyEmail to hash provided token before lookup
   - _Requirements: 11.2, 11.3_
 
-- [ ] 2.10 Write property test for token hashing in storage
+- [x] 2.10 Write property test for token hashing in storage
   - **Property 16: Tokens are hashed in storage**
   - **Validates: Requirements 11.1, 11.2**
 
-- [ ] 2.11 Write property test for token validation using hashing
+- [x] 2.11 Write property test for token validation using hashing
   - **Property 17: Token validation uses hashing**
   - **Validates: Requirements 11.3**
 
@@ -120,11 +120,11 @@
   - Provide navigation to login page
   - _Requirements: 6.2, 6.3_
 
-- [ ] 2.14 Write property test for password reset round-trip
+- [x] 2.14 Write property test for password reset round-trip
   - **Property 9: Password reset round-trip**
   - **Validates: Requirements 5.3, 5.6**
 
-- [ ] 2.15 Write property test for email verification round-trip
+- [-] 2.15 Write property test for email verification round-trip
   - **Property 11: Email verification round-trip**
   - **Validates: Requirements 6.3**
 
