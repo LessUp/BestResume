@@ -146,11 +146,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-50 text-gray-900">
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
             ? "bg-white/90 backdrop-blur-xl shadow-sm border-b border-slate-200"
             : "bg-transparent"
-        }`}
+          }`}
       >
         <nav ref={navRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -372,9 +371,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="absolute right-4 top-4 sm:right-6 sm:top-6 bg-white rounded-2xl border border-slate-100 shadow-lg px-4 py-3 hidden sm:flex items-center gap-3 animate-float">
-                  <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                    <CheckCircle2 className="h-5 w-5" />
+                <div className="absolute right-2 top-2 sm:right-4 sm:top-4 md:right-6 md:top-6 lg:right-8 lg:top-8 bg-white rounded-2xl border border-slate-100 shadow-lg px-3 py-2 sm:px-4 sm:py-3 hidden sm:flex items-center gap-2 sm:gap-3 animate-float">
+                  <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                   <div>
                     <p className="text-xs text-slate-500">{t("aiOptimize.label")}</p>
@@ -382,9 +381,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="absolute left-4 bottom-4 sm:left-6 sm:bottom-6 bg-white rounded-2xl border border-slate-100 shadow-lg px-4 py-3 hidden sm:flex items-center gap-3 animate-float delay-1000">
-                  <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                    <Zap className="h-5 w-5" />
+                <div className="absolute left-2 bottom-2 sm:left-4 sm:bottom-4 md:left-6 md:bottom-6 lg:left-8 lg:bottom-8 bg-white rounded-2xl border border-slate-100 shadow-lg px-3 py-2 sm:px-4 sm:py-3 hidden sm:flex items-center gap-2 sm:gap-3 animate-float delay-1000">
+                  <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
                   </div>
                   <div>
                     <p className="text-xs text-slate-500">{t("atsScore.label")}</p>
