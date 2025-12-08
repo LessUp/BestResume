@@ -39,20 +39,20 @@
   - **Property 5: Floating elements remain visible**
   - **Validates: Requirements 3.1, 3.4**
 
-- [ ] 2. Phase 2: Authentication and Session Management
+- [-] 2. Phase 2: Authentication and Session Management
   - Enhance NextAuth configuration for session state
   - Create password reset and email verification pages
   - Implement token hashing for security
   - Add request context to activity logs
   - _Requirements: 4.1, 4.2, 4.3, 5.1, 5.3, 5.6, 6.1, 6.3, 12.1, 12.2_
 
-- [ ] 2.1 Update NextAuth callbacks to include role and isMember in session
+- [x] 2.1 Update NextAuth callbacks to include role and isMember in session
   - Modify jwt callback to include role and isMember from user object
   - Modify session callback to add role and isMember to session.user
   - Update TypeScript types for session object
   - _Requirements: 4.1, 4.2, 4.3_
 
-- [ ] 2.2 Write property test for session population
+- [-] 2.2 Write property test for session population
   - **Property 6: Authentication populates session**
   - **Validates: Requirements 4.1**
 
@@ -60,14 +60,14 @@
   - **Property 7: JWT and session consistency**
   - **Validates: Requirements 4.2, 4.3**
 
-- [ ] 2.4 Create request context extraction helper
+- [x] 2.4 Create request context extraction helper
   - Create `lib/request-context.ts` with getRequestContext function
   - Extract IP address from x-forwarded-for or x-real-ip headers
   - Extract user agent from headers
   - Handle cases where headers are unavailable
   - _Requirements: 12.1, 12.2_
 
-- [ ] 2.5 Update activity log creation to include request context
+- [x] 2.5 Update activity log creation to include request context
   - Update all ActivityLog.create calls to include ipAddress and userAgent
   - Use getRequestContext helper in auth.ts
   - Use getRequestContext helper in app/actions/auth.ts
@@ -78,19 +78,19 @@
   - **Property 18: Logs include request context**
   - **Validates: Requirements 12.1, 12.2**
 
-- [ ] 2.7 Implement token hashing utilities
+- [x] 2.7 Implement token hashing utilities
   - Create `lib/token-hash.ts` with hashToken and verifyToken functions
   - Use crypto.createHash('sha256') for hashing
   - Ensure functions handle both plain and hashed tokens for migration
   - _Requirements: 11.1, 11.2, 11.3_
 
-- [ ] 2.8 Update password reset flow to use hashed tokens
+- [x] 2.8 Update password reset flow to use hashed tokens
   - Modify requestPasswordReset to hash token before storing
   - Store plain token in email, hashed token in database
   - Modify resetPassword to hash provided token before lookup
   - _Requirements: 11.1, 11.3_
 
-- [ ] 2.9 Update email verification flow to use hashed tokens
+- [x] 2.9 Update email verification flow to use hashed tokens
   - Modify sendVerificationEmail to hash token before storing
   - Store plain token in email, hashed token in database
   - Modify verifyEmail to hash provided token before lookup
@@ -104,7 +104,7 @@
   - **Property 17: Token validation uses hashing**
   - **Validates: Requirements 11.3**
 
-- [ ] 2.12 Create password reset page component
+- [x] 2.12 Create password reset page component
   - Create `app/[locale]/auth/reset-password/page.tsx`
   - Add form for new password input
   - Extract token from searchParams
@@ -112,7 +112,7 @@
   - Display success/error messages
   - _Requirements: 5.2, 5.3_
 
-- [ ] 2.13 Create email verification page component
+- [x] 2.13 Create email verification page component
   - Create `app/[locale]/auth/verify-email/page.tsx`
   - Extract token from searchParams
   - Automatically call verifyEmail on mount

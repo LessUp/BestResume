@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { getRequestContext } from "@/lib/request-context";
 
 // 用户资料类型
 export interface UserProfile {
@@ -94,11 +95,14 @@ export async function updateUserProfile(data: {
     where: { email: session.user.email },
   });
   if (user) {
+    const context = await getRequestContext();
     await prisma.activityLog.create({
       data: {
         userId: user.id,
         action: "UPDATE_PROFILE",
         details: JSON.stringify(data),
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
       },
     });
   }
@@ -163,10 +167,13 @@ export async function changePassword(data: {
   });
 
   // 记录活动日志
+  const context = await getRequestContext();
   await prisma.activityLog.create({
     data: {
       userId: user.id,
       action: "CHANGE_PASSWORD",
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
     },
   });
 

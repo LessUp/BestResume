@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
+import { getRequestContext } from '@/lib/request-context';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -41,10 +42,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         // 记录登录日志
+        const context = await getRequestContext();
         await prisma.activityLog.create({
           data: {
             userId: user.id,
             action: "LOGIN",
+            ipAddress: context.ipAddress,
+            userAgent: context.userAgent,
           },
         });
 
@@ -64,8 +68,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         return {
           ...token,
-          role: (user as any).role,
-          isMember: (user as any).isMember,
+          role: user.role,
+          isMember: user.isMember,
         };
       }
       return token;
@@ -73,12 +77,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
-        // We need to fetch the user to get the latest isMember status
-        // or trust the token if we put it there. Let's keep it simple.
-      }
-      if (session.user) {
-        (session.user as any).role = (token as any).role;
-        (session.user as any).isMember = (token as any).isMember;
+        session.user.role = token.role;
+        session.user.isMember = token.isMember;
       }
       return session;
     },

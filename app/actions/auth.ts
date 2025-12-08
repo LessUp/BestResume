@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { sendEmail } from "@/lib/email";
+import { getRequestContext } from "@/lib/request-context";
+import { hashToken, generateToken } from "@/lib/token-hash";
 
 // 用户注册
 export async function registerUser(data: {
@@ -36,10 +38,13 @@ export async function registerUser(data: {
   });
 
   // 记录活动日志
+  const context = await getRequestContext();
   await prisma.activityLog.create({
     data: {
       userId: user.id,
       action: "REGISTER",
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
     },
   });
 
@@ -58,19 +63,20 @@ export async function requestPasswordReset(email: string, locale: string) {
   }
 
   // 生成重置令牌
-  const token = crypto.randomBytes(32).toString("hex");
+  const plainToken = generateToken();
+  const hashedToken = hashToken(plainToken);
   const expiresAt = new Date(Date.now() + 3600000); // 1小时后过期
 
   await prisma.passwordReset.create({
     data: {
       userId: user.id,
-      token,
+      token: hashedToken,
       expiresAt,
     },
   });
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const resetUrl = `${baseUrl}/${locale}/auth/reset-password?token=${token}`;
+  const resetUrl = `${baseUrl}/${locale}/auth/reset-password?token=${plainToken}`;
 
   const isZh = locale.startsWith("zh");
   const subject = isZh ? "重置您的 BestResume 密码" : "Reset your BestResume password";
@@ -89,8 +95,11 @@ export async function requestPasswordReset(email: string, locale: string) {
 
 // 重置密码
 export async function resetPassword(data: { token: string; newPassword: string }) {
+  // Hash the provided token to compare with stored hash
+  const hashedToken = hashToken(data.token);
+
   const resetRecord = await prisma.passwordReset.findUnique({
-    where: { token: data.token },
+    where: { token: hashedToken },
     include: { user: true },
   });
 
@@ -125,10 +134,13 @@ export async function resetPassword(data: { token: string; newPassword: string }
   });
 
   // 记录活动日志
+  const context = await getRequestContext();
   await prisma.activityLog.create({
     data: {
       userId: resetRecord.userId,
       action: "RESET_PASSWORD",
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
     },
   });
 
@@ -150,19 +162,20 @@ export async function sendVerificationEmail(email: string, locale: string) {
   }
 
   // 生成验证令牌
-  const token = crypto.randomBytes(32).toString("hex");
+  const plainToken = generateToken();
+  const hashedToken = hashToken(plainToken);
   const expires = new Date(Date.now() + 86400000); // 24小时后过期
 
   await prisma.verificationToken.create({
     data: {
       identifier: email,
-      token,
+      token: hashedToken,
       expires,
     },
   });
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const verifyUrl = `${baseUrl}/${locale}/auth/verify-email?token=${token}`;
+  const verifyUrl = `${baseUrl}/${locale}/auth/verify-email?token=${plainToken}`;
 
   const isZh = locale.startsWith("zh");
   const subject = isZh ? "验证您的 BestResume 邮箱" : "Verify your BestResume email";
@@ -181,8 +194,11 @@ export async function sendVerificationEmail(email: string, locale: string) {
 
 // 确认邮箱验证
 export async function verifyEmail(token: string) {
+  // Hash the provided token to compare with stored hash
+  const hashedToken = hashToken(token);
+
   const verificationRecord = await prisma.verificationToken.findUnique({
-    where: { token },
+    where: { token: hashedToken },
   });
 
   if (!verificationRecord) {
