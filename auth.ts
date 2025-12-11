@@ -4,6 +4,14 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { getRequestContext } from '@/lib/request-context';
+import { RateLimiter } from '@/lib/rate-limit';
+
+// Create rate limiter instance
+const loginRateLimiter = new RateLimiter({
+  maxAttempts: parseInt(process.env.MAX_LOGIN_ATTEMPTS || '5'),
+  windowMs: parseInt(process.env.LOGIN_WINDOW_MS || '900000'), // 15 minutes default
+  blockDurationMs: parseInt(process.env.LOGIN_BLOCK_DURATION_MS || '900000'), // 15 minutes default
+});
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -22,18 +30,78 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
+        // Get request context for rate limiting
+        const context = await getRequestContext();
+        const identifier = context.ipAddress;
+
+        // Check rate limit before proceeding
+        const { allowed, retryAfter } = await loginRateLimiter.checkLimit(identifier);
+        if (!allowed) {
+          console.warn(`Rate limit exceeded for IP: ${identifier}, retry after ${retryAfter}s`);
+          return null;
+        }
+
         // 查找用户
         const user = await prisma.user.findUnique({
           where: { email },
         });
 
         if (!user || !user.password) {
+          // Record failed attempt
+          await loginRateLimiter.recordAttempt(identifier, false);
+
+          // Log failed login attempt
+          const attemptCount = loginRateLimiter.getAttemptCount(identifier);
+          const isHighRisk = attemptCount >= 3;
+
+          if (user) {
+            await prisma.activityLog.create({
+              data: {
+                userId: user.id,
+                action: "FAILED_LOGIN",
+                ipAddress: context.ipAddress,
+                userAgent: context.userAgent,
+                details: JSON.stringify({
+                  reason: "invalid_password",
+                  attemptCount,
+                  highRisk: isHighRisk,
+                }),
+              },
+            });
+          }
+
           return null;
         }
 
         // 验证密码
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return null;
+        if (!isValid) {
+          // Record failed attempt
+          await loginRateLimiter.recordAttempt(identifier, false);
+
+          // Log failed login attempt with high-risk marker
+          const attemptCount = loginRateLimiter.getAttemptCount(identifier);
+          const isHighRisk = attemptCount >= 3;
+
+          await prisma.activityLog.create({
+            data: {
+              userId: user.id,
+              action: "FAILED_LOGIN",
+              ipAddress: context.ipAddress,
+              userAgent: context.userAgent,
+              details: JSON.stringify({
+                reason: "invalid_password",
+                attemptCount,
+                highRisk: isHighRisk,
+              }),
+            },
+          });
+
+          return null;
+        }
+
+        // Record successful attempt (clears rate limit)
+        await loginRateLimiter.recordAttempt(identifier, true);
 
         // 更新最后登录时间
         await prisma.user.update({
@@ -42,7 +110,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         // 记录登录日志
-        const context = await getRequestContext();
         await prisma.activityLog.create({
           data: {
             userId: user.id,

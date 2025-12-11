@@ -170,13 +170,13 @@
   - Add inline form validation for input errors
   - _Requirements: 7.1_
 
-- [ ] 4. Phase 4: Security Enhancements - Rate Limiting
+- [-] 4. Phase 4: Security Enhancements - Rate Limiting
   - Implement rate limiting system
   - Integrate rate limiting into authentication flow
   - Add high-risk markers to activity logs
   - _Requirements: 10.1, 10.2, 10.4_
 
-- [ ] 4.1 Create rate limiter class
+- [x] 4.1 Create rate limiter class
   - Create `lib/rate-limit.ts` with RateLimiter class
   - Implement in-memory store for rate limit tracking
   - Implement checkLimit method to verify if identifier is blocked
@@ -185,11 +185,11 @@
   - Support configuration via constructor (maxAttempts, windowMs, blockDurationMs)
   - _Requirements: 10.1_
 
-- [ ] 4.2 Write property test for rate limiting
+- [x] 4.2 Write property test for rate limiting
   - **Property 14: Failed logins trigger blocking**
   - **Validates: Requirements 10.1**
 
-- [ ] 4.3 Integrate rate limiting into authentication flow
+- [x] 4.3 Integrate rate limiting into authentication flow
   - Create rate limiter instance in auth.ts
   - Check rate limit before password verification in authorize callback
   - Record failed attempts after invalid password
@@ -197,17 +197,17 @@
   - Return appropriate error when rate limited
   - _Requirements: 10.1_
 
-- [ ] 4.4 Add high-risk markers to failed login activity logs
+- [x] 4.4 Add high-risk markers to failed login activity logs
   - Update ActivityLog creation for failed logins to include details field
   - Add "high-risk" marker when multiple failures detected
   - Include attempt count in log details
   - _Requirements: 10.2, 10.4_
 
-- [ ] 4.5 Write property test for failed login logging
+- [x] 4.5 Write property test for failed login logging
   - **Property 15: Failed logins are logged**
   - **Validates: Requirements 10.2, 10.4**
 
-- [ ] 4.6 Add environment variable configuration for rate limiting
+- [-] 4.6 Add environment variable configuration for rate limiting
   - Add MAX_LOGIN_ATTEMPTS to .env.example
   - Add LOGIN_WINDOW_MS to .env.example
   - Add LOGIN_BLOCK_DURATION_MS to .env.example
