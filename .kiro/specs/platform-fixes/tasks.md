@@ -39,7 +39,7 @@
   - **Property 5: Floating elements remain visible**
   - **Validates: Requirements 3.1, 3.4**
 
-- [-] 2. Phase 2: Authentication and Session Management
+- [x] 2. Phase 2: Authentication and Session Management
   - Enhance NextAuth configuration for session state
   - Create password reset and email verification pages
   - Implement token hashing for security
@@ -47,7 +47,7 @@
   - _Requirements: 4.1, 4.2, 4.3, 5.1, 5.3, 5.6, 6.1, 6.3, 12.1, 12.2_
 
 - [x] 2.1 Update NextAuth callbacks to include role and isMember in session
-  - Modify jwt callback to include role and isMember from user object
+  - Modify jwt callback to include ..............................role and isMember from user object
   - Modify session callback to add role and isMember to session.user
   - Update TypeScript types for session object
   - _Requirements: 4.1, 4.2, 4.3_
@@ -124,26 +124,26 @@
   - **Property 9: Password reset round-trip**
   - **Validates: Requirements 5.3, 5.6**
 
-- [-] 2.15 Write property test for email verification round-trip
+- [x] 2.15 Write property test for email verification round-trip
   - **Property 11: Email verification round-trip**
   - **Validates: Requirements 6.3**
 
-- [ ] 3. Checkpoint - Ensure all tests pass
+- [x] 3. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 3. Phase 3: Error Handling and Localization
+- [x] 3. Phase 3: Error Handling and Localization
   - Create localized error handling system
   - Update server actions to use localized errors
   - Update frontend to display localized errors
   - _Requirements: 7.1, 7.3, 7.4_
 
-- [ ] 3.1 Create LocalizedError class and error message helper
+- [x] 3.1 Create LocalizedError class and error message helper
   - Create `lib/errors.ts` with LocalizedError class
   - Create getErrorMessage function with zh and en translations
   - Define common error message keys (unauthorized, invalidToken, etc.)
   - _Requirements: 7.1_
 
-- [ ] 3.2 Update authentication server actions to use localized errors
+- [x] 3.2 Update authentication server actions to use localized errors
   - Update registerUser to throw LocalizedError
   - Update requestPasswordReset to throw LocalizedError
   - Update resetPassword to throw LocalizedError
@@ -152,7 +152,7 @@
   - Pass locale parameter to error constructors
   - _Requirements: 7.3_
 
-- [ ] 3.3 Update user server actions to use localized errors
+- [x] 3.3 Update user server actions to use localized errors
   - Update updateUserProfile to throw LocalizedError
   - Update updateUserPreferences to throw LocalizedError
   - Update changePassword to throw LocalizedError
@@ -160,11 +160,11 @@
   - Update deleteAccount to throw LocalizedError
   - _Requirements: 7.4_
 
-- [ ] 3.4 Write property test for error localization
+- [x] 3.4 Write property test for error localization
   - **Property 12: Errors are localized**
   - **Validates: Requirements 7.1, 7.3, 7.4**
 
-- [ ] 3.5 Update frontend components to display localized errors
+- [x] 3.5 Update frontend components to display localized errors
   - Update auth pages to catch and display LocalizedError messages
   - Add toast notification system for transient errors
   - Add inline form validation for input errors

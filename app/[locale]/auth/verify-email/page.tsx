@@ -27,17 +27,18 @@ export default function VerifyEmail() {
       }
 
       try {
-        await verifyEmail(token);
+        await verifyEmail(token, locale);
         setSuccess(true);
         setLoading(false);
       } catch (err: any) {
+        // LocalizedError already has the localized message
         setError(err.message || t('verificationFailed') || "Failed to verify email");
         setLoading(false);
       }
     };
 
     verify();
-  }, [token, t]);
+  }, [token, locale, t]);
 
   return (
     <div className="min-h-screen flex">

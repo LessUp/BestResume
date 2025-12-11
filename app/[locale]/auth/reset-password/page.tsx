@@ -52,12 +52,13 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      await resetPassword({ token, newPassword });
+      await resetPassword({ token, newPassword }, locale);
       setSuccess(true);
       setTimeout(() => {
         router.push(`/${locale}/auth/signin`);
       }, 2000);
     } catch (err: any) {
+      // LocalizedError already has the localized message
       setError(err.message || t('resetFailed') || "Failed to reset password");
       setLoading(false);
     }

@@ -15,19 +15,19 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { 
-  updateUserProfile, 
-  updateUserPreferences, 
+import {
+  updateUserProfile,
+  updateUserPreferences,
   changePassword,
   deleteAccount,
-  type UserProfile 
+  type UserProfile
 } from "@/app/actions/user";
-import { 
-  User, 
-  Shield, 
-  Settings, 
-  Bell, 
-  CreditCard, 
+import {
+  User,
+  Shield,
+  Settings,
+  Bell,
+  CreditCard,
   ArrowLeft,
   Camera,
   Save,
@@ -79,10 +79,11 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
     setError("");
     setSuccess("");
     try {
-      await updateUserProfile({ name, bio, phone, location, website, company, jobTitle });
+      await updateUserProfile({ name, bio, phone, location, website, company, jobTitle }, locale);
       setSuccess(t('profileSaved'));
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
+      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('saveFailed'));
     } finally {
       setSaving(false);
@@ -98,18 +99,19 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
       setError(t('passwordTooShort'));
       return;
     }
-    
+
     setSaving(true);
     setError("");
     setSuccess("");
     try {
-      await changePassword({ currentPassword, newPassword });
+      await changePassword({ currentPassword, newPassword }, locale);
       setSuccess(t('passwordChanged'));
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
+      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('passwordChangeFailed'));
     } finally {
       setSaving(false);
@@ -121,10 +123,11 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
     setError("");
     setSuccess("");
     try {
-      await updateUserPreferences({ theme, language });
+      await updateUserPreferences({ theme, language }, locale);
       setSuccess(t('preferencesSaved'));
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
+      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('saveFailed'));
     } finally {
       setSaving(false);
@@ -133,12 +136,13 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
 
   const handleDeleteAccount = async () => {
     if (deleteConfirm !== "DELETE") return;
-    
+
     setSaving(true);
     try {
-      await deleteAccount();
+      await deleteAccount(locale);
       await signOut({ callbackUrl: `/${locale}` });
     } catch (err) {
+      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('deleteFailed'));
       setSaving(false);
     }
@@ -157,7 +161,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
       <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link 
+            <Link
               href={`/${locale}/dashboard`}
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
@@ -196,11 +200,10 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      activeTab === tab.id
-                        ? "bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
-                        : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                    }`}
+                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab.id
+                      ? "bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
+                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                      }`}
                   >
                     <tab.icon className="h-4 w-4" />
                     {tab.label}
@@ -427,8 +430,8 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                     <CardDescription>{t('dangerZoneDesc')}</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       className="text-red-600 border-red-200 hover:bg-red-50"
                       onClick={() => setShowDeleteDialog(true)}
                     >

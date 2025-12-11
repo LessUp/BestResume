@@ -6,25 +6,29 @@ import crypto from "crypto";
 import { sendEmail } from "@/lib/email";
 import { getRequestContext } from "@/lib/request-context";
 import { hashToken, generateToken } from "@/lib/token-hash";
+import { LocalizedError } from "@/lib/errors";
 
 // 用户注册
-export async function registerUser(data: {
-  email: string;
-  password: string;
-  name?: string;
-}) {
+export async function registerUser(
+  data: {
+    email: string;
+    password: string;
+    name?: string;
+  },
+  locale: string = "en"
+) {
   // 检查邮箱是否已存在
   const existingUser = await prisma.user.findUnique({
     where: { email: data.email },
   });
 
   if (existingUser) {
-    throw new Error("该邮箱已被注册");
+    throw new LocalizedError("emailExists", locale);
   }
 
   // 密码强度检查
   if (data.password.length < 8) {
-    throw new Error("密码长度至少8位");
+    throw new LocalizedError("passwordTooShort", locale);
   }
 
   // 创建用户
@@ -94,7 +98,10 @@ export async function requestPasswordReset(email: string, locale: string) {
 }
 
 // 重置密码
-export async function resetPassword(data: { token: string; newPassword: string }) {
+export async function resetPassword(
+  data: { token: string; newPassword: string },
+  locale: string = "en"
+) {
   // Hash the provided token to compare with stored hash
   const hashedToken = hashToken(data.token);
 
@@ -104,20 +111,20 @@ export async function resetPassword(data: { token: string; newPassword: string }
   });
 
   if (!resetRecord) {
-    throw new Error("无效的重置链接");
+    throw new LocalizedError("invalidToken", locale);
   }
 
   if (resetRecord.used) {
-    throw new Error("该重置链接已被使用");
+    throw new LocalizedError("tokenUsed", locale);
   }
 
   if (new Date() > resetRecord.expiresAt) {
-    throw new Error("重置链接已过期");
+    throw new LocalizedError("expiredToken", locale);
   }
 
   // 密码强度检查
   if (data.newPassword.length < 8) {
-    throw new Error("密码长度至少8位");
+    throw new LocalizedError("passwordTooShort", locale);
   }
 
   // 更新密码
@@ -154,7 +161,7 @@ export async function sendVerificationEmail(email: string, locale: string) {
   });
 
   if (!user) {
-    throw new Error("用户不存在");
+    throw new LocalizedError("userNotFound", locale);
   }
 
   if (user.emailVerified) {
@@ -193,7 +200,7 @@ export async function sendVerificationEmail(email: string, locale: string) {
 }
 
 // 确认邮箱验证
-export async function verifyEmail(token: string) {
+export async function verifyEmail(token: string, locale: string = "en") {
   // Hash the provided token to compare with stored hash
   const hashedToken = hashToken(token);
 
@@ -202,11 +209,11 @@ export async function verifyEmail(token: string) {
   });
 
   if (!verificationRecord) {
-    throw new Error("无效的验证链接");
+    throw new LocalizedError("invalidToken", locale);
   }
 
   if (new Date() > verificationRecord.expires) {
-    throw new Error("验证链接已过期");
+    throw new LocalizedError("expiredToken", locale);
   }
 
   // 更新用户邮箱验证状态
@@ -217,7 +224,7 @@ export async function verifyEmail(token: string) {
 
   // 删除验证令牌
   await prisma.verificationToken.delete({
-    where: { token },
+    where: { token: hashedToken },
   });
 
   return { success: true };

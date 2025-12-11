@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { getRequestContext } from "@/lib/request-context";
+import { LocalizedError } from "@/lib/errors";
 
 // 用户资料类型
 export interface UserProfile {
@@ -63,18 +64,21 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
 }
 
 // 更新用户资料
-export async function updateUserProfile(data: {
-  name?: string;
-  bio?: string;
-  phone?: string;
-  location?: string;
-  website?: string;
-  company?: string;
-  jobTitle?: string;
-}) {
+export async function updateUserProfile(
+  data: {
+    name?: string;
+    bio?: string;
+    phone?: string;
+    location?: string;
+    website?: string;
+    company?: string;
+    jobTitle?: string;
+  },
+  locale: string = "en"
+) {
   const session = await auth();
   if (!session?.user?.email) {
-    throw new Error("未授权");
+    throw new LocalizedError("unauthorized", locale);
   }
 
   await prisma.user.update({
@@ -112,14 +116,17 @@ export async function updateUserProfile(data: {
 }
 
 // 更新用户偏好设置
-export async function updateUserPreferences(data: {
-  theme?: string;
-  language?: string;
-  timezone?: string;
-}) {
+export async function updateUserPreferences(
+  data: {
+    theme?: string;
+    language?: string;
+    timezone?: string;
+  },
+  locale: string = "en"
+) {
   const session = await auth();
   if (!session?.user?.email) {
-    throw new Error("未授权");
+    throw new LocalizedError("unauthorized", locale);
   }
 
   await prisma.user.update({
@@ -136,13 +143,16 @@ export async function updateUserPreferences(data: {
 }
 
 // 修改密码
-export async function changePassword(data: {
-  currentPassword: string;
-  newPassword: string;
-}) {
+export async function changePassword(
+  data: {
+    currentPassword: string;
+    newPassword: string;
+  },
+  locale: string = "en"
+) {
   const session = await auth();
   if (!session?.user?.email) {
-    throw new Error("未授权");
+    throw new LocalizedError("unauthorized", locale);
   }
 
   const user = await prisma.user.findUnique({
@@ -150,13 +160,13 @@ export async function changePassword(data: {
   });
 
   if (!user || !user.password) {
-    throw new Error("用户不存在或未设置密码");
+    throw new LocalizedError("userNotFound", locale);
   }
 
   // 验证当前密码
   const isValid = await bcrypt.compare(data.currentPassword, user.password);
   if (!isValid) {
-    throw new Error("当前密码不正确");
+    throw new LocalizedError("invalidPassword", locale);
   }
 
   // 更新密码
@@ -181,10 +191,10 @@ export async function changePassword(data: {
 }
 
 // 更新头像
-export async function updateAvatar(imageUrl: string) {
+export async function updateAvatar(imageUrl: string, locale: string = "en") {
   const session = await auth();
   if (!session?.user?.email) {
-    throw new Error("未授权");
+    throw new LocalizedError("unauthorized", locale);
   }
 
   await prisma.user.update({
@@ -252,17 +262,17 @@ export async function getUserActivityLogs(limit = 10) {
 }
 
 // 删除账号
-export async function deleteAccount() {
+export async function deleteAccount(locale: string = "en") {
   const session = await auth();
   if (!session?.user?.email) {
-    throw new Error("未授权");
+    throw new LocalizedError("unauthorized", locale);
   }
 
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
   });
 
-  if (!user) throw new Error("用户不存在");
+  if (!user) throw new LocalizedError("userNotFound", locale);
 
   // 删除用户及其所有相关数据（级联删除已在schema中定义）
   await prisma.user.delete({

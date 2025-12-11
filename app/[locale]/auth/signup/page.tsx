@@ -47,9 +47,10 @@ export default function SignUp() {
 
     setLoading(true);
     try {
-      await registerUser({ email, password, name });
+      await registerUser({ email, password, name }, locale);
       router.push(`/${locale}/auth/signin?registered=true`);
     } catch (err) {
+      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('registrationFailed'));
     } finally {
       setLoading(false);
