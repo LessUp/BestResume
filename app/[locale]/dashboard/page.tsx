@@ -15,12 +15,12 @@ type ResumeListItem = Awaited<ReturnType<typeof getResumes>>[number];
 export default async function Dashboard({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   const session = await auth();
   const t = await getTranslations('Dashboard');
-  const { locale } = params;
-  
+  const { locale } = await params;
+
   if (!session?.user) {
     redirect(`/${locale}/auth/signin`);
   }
@@ -32,30 +32,30 @@ export default async function Dashboard({
   ]);
 
   const statsCards = [
-    { 
-      label: t('totalResumes'), 
-      value: stats?.totalResumes || 0, 
+    {
+      label: t('totalResumes'),
+      value: stats?.totalResumes || 0,
       icon: FileText,
-      color: "blue" 
+      color: "blue"
     },
-    { 
-      label: t('totalViews'), 
-      value: stats?.totalViews || 0, 
+    {
+      label: t('totalViews'),
+      value: stats?.totalViews || 0,
       icon: Eye,
-      color: "green" 
+      color: "green"
     },
-    { 
-      label: t('totalDownloads'), 
-      value: stats?.totalDownloads || 0, 
+    {
+      label: t('totalDownloads'),
+      value: stats?.totalDownloads || 0,
       icon: Download,
-      color: "purple" 
+      color: "purple"
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Navbar user={session.user} locale={locale} />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
@@ -125,11 +125,10 @@ export default async function Dashboard({
                       {stat.value}
                     </p>
                   </div>
-                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${
-                    stat.color === 'blue' ? 'bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400' :
-                    stat.color === 'green' ? 'bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400' :
-                    'bg-purple-100 text-purple-600 dark:bg-purple-950 dark:text-purple-400'
-                  }`}>
+                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${stat.color === 'blue' ? 'bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-400' :
+                      stat.color === 'green' ? 'bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400' :
+                        'bg-purple-100 text-purple-600 dark:bg-purple-950 dark:text-purple-400'
+                    }`}>
                     <stat.icon className="h-6 w-6" />
                   </div>
                 </div>

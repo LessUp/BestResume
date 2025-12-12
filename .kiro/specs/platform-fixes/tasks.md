@@ -207,40 +207,40 @@
   - **Property 15: Failed logins are logged**
   - **Validates: Requirements 10.2, 10.4**
 
-- [-] 4.6 Add environment variable configuration for rate limiting
+- [ ] 4.6 Add environment variable configuration for rate limiting
   - Add MAX_LOGIN_ATTEMPTS to .env.example
   - Add LOGIN_WINDOW_MS to .env.example
   - Add LOGIN_BLOCK_DURATION_MS to .env.example
   - Update rate limiter to read from environment variables with defaults
   - _Requirements: 10.1_
 
-- [ ] 5. Phase 5: Type Safety and Cache Fixes
+- [x] 5. Phase 5: Type Safety and Cache Fixes
   - Fix params type declarations in page components
   - Update revalidatePath calls to use correct patterns
   - Verify TypeScript compilation
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 9.1, 9.4_
 
-- [ ] 5.1 Fix params type declarations in layout files
+- [x] 5.1 Fix params type declarations in layout files
   - Update `app/[locale]/layout.tsx` to declare params as `{ locale: string }`
   - Remove await on params object
   - Verify TypeScript compilation succeeds
   - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-- [ ] 5.2 Fix params type declarations in page files
+- [x] 5.2 Fix params type declarations in page files
   - Update `app/[locale]/dashboard/page.tsx` to declare params as `{ locale: string }`
   - Remove await on params object
   - Check other page files for similar issues
   - Verify TypeScript compilation succeeds
   - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-- [ ] 5.3 Update revalidatePath calls for locale-aware routes
+- [x] 5.3 Update revalidatePath calls for locale-aware routes
   - Update `app/actions.ts` to use pattern `/[locale]/dashboard` or dynamic locale
   - Verify revalidatePath is called after resume modifications
   - Verify revalidatePath is called after user settings updates
   - Test cache invalidation works correctly
   - _Requirements: 9.1, 9.4_
 
-- [ ] 5.4 Write property test for cache revalidation
+- [x] 5.4 Write property test for cache revalidation
   - **Property 13: Data changes trigger revalidation**
   - **Validates: Requirements 9.1, 9.4**
 

@@ -111,7 +111,7 @@ export async function updateUserProfile(
     });
   }
 
-  revalidatePath("/settings");
+  revalidatePath('/[locale]/settings', 'page');
   return { success: true };
 }
 
@@ -138,7 +138,7 @@ export async function updateUserPreferences(
     },
   });
 
-  revalidatePath("/settings");
+  revalidatePath('/[locale]/settings', 'page');
   return { success: true };
 }
 
@@ -202,7 +202,7 @@ export async function updateAvatar(imageUrl: string, locale: string = "en") {
     data: { image: imageUrl },
   });
 
-  revalidatePath("/settings");
+  revalidatePath('/[locale]/settings', 'page');
   return { success: true };
 }
 

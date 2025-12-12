@@ -37,7 +37,7 @@ export async function saveResume(data: ResumeData, title: string, id?: string) {
         title,
       },
     });
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/dashboard', 'page');
     return { success: true, id };
   } else {
     // Create new resume
@@ -48,7 +48,7 @@ export async function saveResume(data: ResumeData, title: string, id?: string) {
         content,
       },
     });
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/dashboard', 'page');
     return { success: true, id: newResume.id };
   }
 }
@@ -88,7 +88,7 @@ export async function getResume(id: string) {
   // Simple ownership check via email lookup -> user id
   // A more optimized way would be to store userId in session
   const user = await prisma.user.findUnique({
-     where: { email: session.user.email }
+    where: { email: session.user.email }
   });
 
   if (!resume || !user || resume.userId !== user.id) {
@@ -125,7 +125,7 @@ export async function deleteResume(id: string) {
     where: { id },
   });
 
-  revalidatePath('/[locale]/dashboard');
+  revalidatePath('/[locale]/dashboard', 'page');
   return { success: true };
 }
 
@@ -150,7 +150,7 @@ export async function duplicateResume(id: string) {
   }
 
   const newTitle = `${existing.title} (Copy)`;
-  
+
   const newResume = await prisma.resume.create({
     data: {
       userId: user.id,
@@ -159,6 +159,6 @@ export async function duplicateResume(id: string) {
     },
   });
 
-  revalidatePath('/[locale]/dashboard');
+  revalidatePath('/[locale]/dashboard', 'page');
   return { success: true, id: newResume.id };
 }

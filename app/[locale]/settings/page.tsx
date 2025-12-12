@@ -7,10 +7,10 @@ import { SettingsClient } from "@/components/settings/SettingsClient";
 export default async function SettingsPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   const session = await auth();
-  const { locale } = params;
+  const { locale } = await params;
 
   if (!session?.user) {
     redirect(`/${locale}/auth/signin`);
