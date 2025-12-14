@@ -16,6 +16,11 @@ jobs:
 
     env:
       NEXT_TELEMETRY_DISABLED: 1
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bestresume_ci?schema=public
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/bestresume_ci?schema=public
+      NEXTAUTH_SECRET: test-secret-key-for-ci-only
+      NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
 
     steps:
       - name: Checkout repository
@@ -32,6 +37,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Test
+        run: npm run test
 
       - name: Build
         run: npm run build
