@@ -15,11 +15,11 @@ type ResumeListItem = Awaited<ReturnType<typeof getResumes>>[number];
 export default async function Dashboard({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
   const session = await auth();
   const t = await getTranslations('Dashboard');
-  const { locale } = await params;
+  const { locale } = params;
 
   if (!session?.user) {
     redirect(`/${locale}/auth/signin`);
