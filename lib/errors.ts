@@ -9,11 +9,14 @@ export type ErrorMessageKey =
     | "expiredToken"
     | "tokenUsed"
     | "emailExists"
+    | "registrationFailed"
+    | "sendEmailFailed"
     | "passwordTooShort"
     | "userNotFound"
     | "invalidCredentials"
     | "emailNotVerified"
     | "emailAlreadyVerified"
+    | "emailVerifyFailed"
     | "invalidPassword"
     | "passwordMismatch"
     | "updateFailed"
@@ -22,6 +25,7 @@ export type ErrorMessageKey =
     | "resumeSaveFailed"
     | "resumeDeleteFailed"
     | "resumeDuplicateFailed"
+    | "resetPasswordFailed"
     | "unknownError";
 
 type Locale = "zh" | "en";
@@ -33,11 +37,14 @@ const errorMessages: Record<Locale, Record<ErrorMessageKey, string>> = {
         expiredToken: "令牌已过期",
         tokenUsed: "该令牌已被使用",
         emailExists: "该邮箱已被注册",
+        registrationFailed: "注册失败，请稍后重试。",
+        sendEmailFailed: "发送失败，请稍后重试",
         passwordTooShort: "密码长度至少8位",
         userNotFound: "用户不存在",
         invalidCredentials: "邮箱或密码不正确",
         emailNotVerified: "邮箱未验证",
         emailAlreadyVerified: "邮箱已验证",
+        emailVerifyFailed: "邮箱验证失败，链接可能无效或已过期。",
         invalidPassword: "当前密码不正确",
         passwordMismatch: "两次输入的密码不一致",
         updateFailed: "更新失败",
@@ -46,6 +53,7 @@ const errorMessages: Record<Locale, Record<ErrorMessageKey, string>> = {
         resumeSaveFailed: "保存简历失败，请稍后重试。",
         resumeDeleteFailed: "删除简历失败，请稍后重试。",
         resumeDuplicateFailed: "复制简历失败，请稍后重试。",
+        resetPasswordFailed: "密码重置失败，链接可能无效或已过期。",
         unknownError: "发生未知错误",
     },
     en: {
@@ -54,11 +62,14 @@ const errorMessages: Record<Locale, Record<ErrorMessageKey, string>> = {
         expiredToken: "Token expired",
         tokenUsed: "Token has already been used",
         emailExists: "Email already registered",
+        registrationFailed: "Registration failed. Please try again.",
+        sendEmailFailed: "Failed to send, please try again",
         passwordTooShort: "Password must be at least 8 characters",
         userNotFound: "User not found",
         invalidCredentials: "Invalid email or password",
         emailNotVerified: "Email not verified",
         emailAlreadyVerified: "Email already verified",
+        emailVerifyFailed: "Email verification failed. The link may be invalid or expired.",
         invalidPassword: "Current password is incorrect",
         passwordMismatch: "Passwords do not match",
         updateFailed: "Update failed",
@@ -67,6 +78,7 @@ const errorMessages: Record<Locale, Record<ErrorMessageKey, string>> = {
         resumeSaveFailed: "Failed to save resume. Please try again.",
         resumeDeleteFailed: "Failed to delete resume. Please try again.",
         resumeDuplicateFailed: "Failed to duplicate resume. Please try again.",
+        resetPasswordFailed: "Failed to reset your password. The link may be invalid or expired.",
         unknownError: "An unknown error occurred",
     },
 };

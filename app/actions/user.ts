@@ -76,43 +76,49 @@ export async function updateUserProfile(
   },
   locale: string = "en"
 ) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new LocalizedError("unauthorized", locale);
-  }
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
 
-  await prisma.user.update({
-    where: { email: session.user.email },
-    data: {
-      name: data.name,
-      bio: data.bio,
-      phone: data.phone,
-      location: data.location,
-      website: data.website,
-      company: data.company,
-      jobTitle: data.jobTitle,
-    },
-  });
-
-  // 记录活动日志
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-  if (user) {
-    const context = await getRequestContext();
-    await prisma.activityLog.create({
+    await prisma.user.update({
+      where: { email: session.user.email },
       data: {
-        userId: user.id,
-        action: "UPDATE_PROFILE",
-        details: JSON.stringify(data),
-        ipAddress: context.ipAddress,
-        userAgent: context.userAgent,
+        name: data.name,
+        bio: data.bio,
+        phone: data.phone,
+        location: data.location,
+        website: data.website,
+        company: data.company,
+        jobTitle: data.jobTitle,
       },
     });
-  }
 
-  revalidatePath('/[locale]/settings', 'page');
-  return { success: true };
+    // 记录活动日志
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+    if (user) {
+      const context = await getRequestContext();
+      await prisma.activityLog.create({
+        data: {
+          userId: user.id,
+          action: "UPDATE_PROFILE",
+          details: JSON.stringify(data),
+          ipAddress: context.ipAddress,
+          userAgent: context.userAgent,
+        },
+      });
+    }
+
+    revalidatePath('/[locale]/settings', 'page');
+    return { success: true };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("updateUserProfile failed", error);
+    throw new LocalizedError("updateFailed", locale);
+  }
 }
 
 // 更新用户偏好设置
@@ -124,22 +130,28 @@ export async function updateUserPreferences(
   },
   locale: string = "en"
 ) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new LocalizedError("unauthorized", locale);
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
+
+    await prisma.user.update({
+      where: { email: session.user.email },
+      data: {
+        theme: data.theme,
+        language: data.language,
+        timezone: data.timezone,
+      },
+    });
+
+    revalidatePath('/[locale]/settings', 'page');
+    return { success: true };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("updateUserPreferences failed", error);
+    throw new LocalizedError("updateFailed", locale);
   }
-
-  await prisma.user.update({
-    where: { email: session.user.email },
-    data: {
-      theme: data.theme,
-      language: data.language,
-      timezone: data.timezone,
-    },
-  });
-
-  revalidatePath('/[locale]/settings', 'page');
-  return { success: true };
 }
 
 // 修改密码
@@ -150,60 +162,72 @@ export async function changePassword(
   },
   locale: string = "en"
 ) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new LocalizedError("unauthorized", locale);
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user || !user.password) {
+      throw new LocalizedError("userNotFound", locale);
+    }
+
+    // 验证当前密码
+    const isValid = await bcrypt.compare(data.currentPassword, user.password);
+    if (!isValid) {
+      throw new LocalizedError("invalidPassword", locale);
+    }
+
+    // 更新密码
+    const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+    await prisma.user.update({
+      where: { email: session.user.email },
+      data: { password: hashedPassword },
+    });
+
+    // 记录活动日志
+    const context = await getRequestContext();
+    await prisma.activityLog.create({
+      data: {
+        userId: user.id,
+        action: "CHANGE_PASSWORD",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("changePassword failed", error);
+    throw new LocalizedError("updateFailed", locale);
   }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user || !user.password) {
-    throw new LocalizedError("userNotFound", locale);
-  }
-
-  // 验证当前密码
-  const isValid = await bcrypt.compare(data.currentPassword, user.password);
-  if (!isValid) {
-    throw new LocalizedError("invalidPassword", locale);
-  }
-
-  // 更新密码
-  const hashedPassword = await bcrypt.hash(data.newPassword, 10);
-  await prisma.user.update({
-    where: { email: session.user.email },
-    data: { password: hashedPassword },
-  });
-
-  // 记录活动日志
-  const context = await getRequestContext();
-  await prisma.activityLog.create({
-    data: {
-      userId: user.id,
-      action: "CHANGE_PASSWORD",
-      ipAddress: context.ipAddress,
-      userAgent: context.userAgent,
-    },
-  });
-
-  return { success: true };
 }
 
 // 更新头像
 export async function updateAvatar(imageUrl: string, locale: string = "en") {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new LocalizedError("unauthorized", locale);
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
+
+    await prisma.user.update({
+      where: { email: session.user.email },
+      data: { image: imageUrl },
+    });
+
+    revalidatePath('/[locale]/settings', 'page');
+    return { success: true };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("updateAvatar failed", error);
+    throw new LocalizedError("updateFailed", locale);
   }
-
-  await prisma.user.update({
-    where: { email: session.user.email },
-    data: { image: imageUrl },
-  });
-
-  revalidatePath('/[locale]/settings', 'page');
-  return { success: true };
 }
 
 // 获取用户统计数据
@@ -263,21 +287,27 @@ export async function getUserActivityLogs(limit = 10) {
 
 // 删除账号
 export async function deleteAccount(locale: string = "en") {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new LocalizedError("unauthorized", locale);
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) throw new LocalizedError("userNotFound", locale);
+
+    // 删除用户及其所有相关数据（级联删除已在schema中定义）
+    await prisma.user.delete({
+      where: { id: user.id },
+    });
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("deleteAccount failed", error);
+    throw new LocalizedError("deleteFailed", locale);
   }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) throw new LocalizedError("userNotFound", locale);
-
-  // 删除用户及其所有相关数据（级联删除已在schema中定义）
-  await prisma.user.delete({
-    where: { id: user.id },
-  });
-
-  return { success: true };
 }
