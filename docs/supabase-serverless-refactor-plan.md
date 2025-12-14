@@ -53,7 +53,7 @@
 
 ### 3.2 环境变量管理
 
-- 本地：`.env.local`（不提交）
+- 本地：优先使用 `.env`（Prisma CLI 默认读取，不提交）；如需本地覆盖可再使用 `.env.local`
 - CI：使用占位值或 CI Postgres service
 - 生产：在 Netlify/Vercel 配置 Secrets
 
@@ -114,7 +114,8 @@ alter default privileges for role postgres in schema public grant all on sequenc
 
 ### 4.4 配置本地环境变量（必做）
 
-- 复制 `.env.example` 为 `.env.local`
+- 复制 `.env.example` 为 `.env`（不提交）
+- （可选）如你希望区分 Next.js 本地配置，再复制一份为 `.env.local`
 - 填写以下变量：
   - `DATABASE_URL`：使用 **Transaction pooler（6543）**，并确保包含 `pgbouncer=true`
   - `DIRECT_URL`：使用 **Session pooler（5432）**
