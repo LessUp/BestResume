@@ -51,9 +51,9 @@ export default function SignIn() {
   };
 
   const features = [
-    { icon: Shield, text: "安全的账户保护" },
-    { icon: Sparkles, text: "AI驱动的简历优化" },
-    { icon: Zap, text: "快速创建专业简历" },
+    { icon: Shield, text: t('signinFeatureSecure') },
+    { icon: Sparkles, text: t('signinFeatureAI') },
+    { icon: Zap, text: t('signinFeatureFast') },
   ];
 
   return (

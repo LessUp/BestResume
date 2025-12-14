@@ -65,9 +65,9 @@ export default function SignUp() {
   );
 
   const features = [
-    { icon: Shield, text: "ATS友好的简历模板" },
-    { icon: Sparkles, text: "AI智能内容优化" },
-    { icon: Zap, text: "一键导出PDF" },
+    { icon: Shield, text: t('signupFeatureAts') },
+    { icon: Sparkles, text: t('signupFeatureAI') },
+    { icon: Zap, text: t('signupFeatureExportPdf') },
   ];
 
   return (

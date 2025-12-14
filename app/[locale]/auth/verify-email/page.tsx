@@ -21,7 +21,7 @@ export default function VerifyEmail() {
   useEffect(() => {
     const verify = async () => {
       if (!token) {
-        setError(t('invalidVerificationLink') || "Invalid verification link");
+        setError(t('invalidVerificationLink'));
         setLoading(false);
         return;
       }
@@ -32,7 +32,7 @@ export default function VerifyEmail() {
         setLoading(false);
       } catch (err: any) {
         // LocalizedError already has the localized message
-        setError(err.message || t('verificationFailed') || "Failed to verify email");
+        setError(err instanceof Error ? err.message : t('emailVerifyFailed'));
         setLoading(false);
       }
     };
@@ -60,10 +60,10 @@ export default function VerifyEmail() {
           <div className="space-y-8">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-                {t('verifyYourEmail') || "Verify Your Email"}
+                {t('verifyYourEmail')}
               </h1>
               <p className="text-xl text-blue-100 leading-relaxed">
-                {t('verifyEmailDesc') || "Confirm your email address to activate your account"}
+                {t('verifyEmailDesc')}
               </p>
             </div>
           </div>
@@ -78,13 +78,13 @@ export default function VerifyEmail() {
       <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-gray-50">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900">{t('emailVerification') || "Email Verification"}</h2>
+            <h2 className="text-3xl font-bold text-gray-900">{t('emailVerification')}</h2>
           </div>
 
           {loading && (
             <div className="p-8 bg-white border border-gray-200 rounded-xl text-center space-y-4">
               <Loader2 className="h-12 w-12 text-blue-600 animate-spin mx-auto" />
-              <p className="text-gray-600">{t('verifying') || "Verifying your email..."}</p>
+              <p className="text-gray-600">{t('verifyingEmail')}</p>
             </div>
           )}
 
@@ -94,10 +94,10 @@ export default function VerifyEmail() {
                 <CheckCircle2 className="h-16 w-16 text-green-600" />
                 <div className="text-center">
                   <h3 className="text-lg font-semibold mb-2">
-                    {t('emailVerified') || "Email Verified!"}
+                    {t('emailVerifiedTitle')}
                   </h3>
                   <p className="text-sm">
-                    {t('emailVerifiedDesc') || "Your email has been successfully verified. You can now sign in to your account."}
+                    {t('emailVerifiedDesc')}
                   </p>
                 </div>
               </div>
@@ -106,7 +106,7 @@ export default function VerifyEmail() {
                 onClick={() => router.push(`/${locale}/auth/signin`)}
                 className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/25"
               >
-                {t('goToSignIn') || "Go to Sign In"}
+                {t('goToSignIn')}
               </Button>
             </div>
           )}
@@ -117,7 +117,7 @@ export default function VerifyEmail() {
                 <X className="h-16 w-16" />
                 <div className="text-center">
                   <h3 className="text-lg font-semibold mb-2">
-                    {t('verificationFailed') || "Verification Failed"}
+                    {t('emailVerifyFailedTitle')}
                   </h3>
                   <p className="text-sm">{error}</p>
                 </div>
@@ -128,14 +128,14 @@ export default function VerifyEmail() {
                   onClick={() => router.push(`/${locale}/auth/signin`)}
                   className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/25"
                 >
-                  {t('goToSignIn') || "Go to Sign In"}
+                  {t('goToSignIn')}
                 </Button>
                 <Button
                   onClick={() => router.push(`/${locale}`)}
                   variant="outline"
                   className="w-full h-12 text-base font-semibold"
                 >
-                  {t('backToHome') || "Back to Home"}
+                  {t('backToHome')}
                 </Button>
               </div>
             </div>
@@ -146,10 +146,10 @@ export default function VerifyEmail() {
               <AlertCircle className="h-16 w-16" />
               <div className="text-center">
                 <h3 className="text-lg font-semibold mb-2">
-                  {t('noVerificationToken') || "No Verification Token"}
+                  {t('noVerificationToken')}
                 </h3>
                 <p className="text-sm">
-                  {t('noVerificationTokenDesc') || "No verification token provided. Please use the link from your email."}
+                  {t('noVerificationTokenDesc')}
                 </p>
               </div>
             </div>

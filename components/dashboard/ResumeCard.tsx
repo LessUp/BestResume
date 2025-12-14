@@ -45,8 +45,8 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
     } catch (error) {
       console.error("Failed to delete resume", error);
       toast({
-        title: "Error",
-        description: "Failed to delete resume. Please try again.",
+        title: t('error'),
+        description: t('resumeDeleteFailed'),
         variant: "destructive",
       });
     } finally {
@@ -70,8 +70,8 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
     } catch (error) {
       console.error("Failed to duplicate resume", error);
       toast({
-        title: "Error",
-        description: "Failed to duplicate resume. Please try again.",
+        title: t('error'),
+        description: t('resumeDuplicateFailed'),
         variant: "destructive",
       });
     } finally {
@@ -84,7 +84,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
       <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-700 flex items-center justify-center h-full min-h-[200px]">
         <div className="flex items-center gap-3 text-gray-500">
           <div className="h-5 w-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
-          <span>删除中...</span>
+          <span>{t('deleting')}</span>
         </div>
       </div>
     );

@@ -26,7 +26,7 @@ export default function ResetPassword() {
 
   useEffect(() => {
     if (!token) {
-      setError(t('invalidResetLink') || "Invalid reset link");
+      setError(t('invalidResetLink'));
     }
   }, [token, t]);
 
@@ -35,17 +35,17 @@ export default function ResetPassword() {
     setError("");
 
     if (!token) {
-      setError(t('invalidResetLink') || "Invalid reset link");
+      setError(t('invalidResetLink'));
       return;
     }
 
     if (newPassword.length < 8) {
-      setError(t('passwordTooShort') || "Password must be at least 8 characters");
+      setError(t('passwordTooShort'));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError(t('passwordsDoNotMatch') || "Passwords do not match");
+      setError(t('passwordMismatch'));
       return;
     }
 
@@ -57,9 +57,8 @@ export default function ResetPassword() {
       setTimeout(() => {
         router.push(`/${locale}/auth/signin`);
       }, 2000);
-    } catch (err: any) {
-      // LocalizedError already has the localized message
-      setError(err.message || t('resetFailed') || "Failed to reset password");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('resetFailed'));
       setLoading(false);
     }
   };
@@ -84,10 +83,10 @@ export default function ResetPassword() {
           <div className="space-y-8">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-                {t('resetYourPassword') || "Reset Your Password"}
+                {t('resetPasswordTitle')}
               </h1>
               <p className="text-xl text-blue-100 leading-relaxed">
-                {t('resetPasswordDesc') || "Choose a new password for your account"}
+                {t('resetPasswordDesc')}
               </p>
             </div>
           </div>
@@ -104,21 +103,21 @@ export default function ResetPassword() {
           <div className="lg:hidden">
             <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
               <ArrowLeft className="h-5 w-5" />
-              <span>{t('backToHome') || "Back to Home"}</span>
+              <span>{t('backToHome')}</span>
             </Link>
           </div>
 
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-gray-900">{t('resetPassword') || "Reset Password"}</h2>
+            <h2 className="text-3xl font-bold text-gray-900">{t('resetPasswordTitle')}</h2>
             <p className="mt-3 text-gray-600">
-              {t('enterNewPassword') || "Enter your new password below"}
+              {t('enterNewPassword')}
             </p>
           </div>
 
           {success && (
             <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm flex items-start gap-3 animate-fade-in">
               <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5 text-green-600" />
-              <span>{t('passwordResetSuccess') || "Password reset successful! Redirecting to sign in..."}</span>
+              <span>{t('resetPasswordSuccess')}</span>
             </div>
           )}
 
@@ -132,7 +131,7 @@ export default function ResetPassword() {
           {!token && (
             <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-yellow-700 text-sm flex items-start gap-3">
               <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-              <span>{t('noResetToken') || "No reset token provided. Please use the link from your email."}</span>
+              <span>{t('noResetToken')}</span>
             </div>
           )}
 
@@ -140,7 +139,7 @@ export default function ResetPassword() {
             <div className="space-y-4">
               <div>
                 <Label htmlFor="newPassword" className="text-gray-700 font-medium">
-                  {t('newPassword') || "New Password"}
+                  {t('newPassword')}
                 </Label>
                 <div className="relative mt-2">
                   <Input
@@ -150,7 +149,7 @@ export default function ResetPassword() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     className="h-12 pr-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder={t('passwordPlaceholder') || "Enter your password"}
+                    placeholder={t('passwordPlaceholder')}
                     disabled={!token || success}
                   />
                   <button
@@ -165,7 +164,7 @@ export default function ResetPassword() {
 
               <div>
                 <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">
-                  {t('confirmPassword') || "Confirm Password"}
+                  {t('confirmPassword')}
                 </Label>
                 <div className="relative mt-2">
                   <Input
@@ -175,7 +174,7 @@ export default function ResetPassword() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className="h-12 pr-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder={t('confirmPasswordPlaceholder') || "Confirm your password"}
+                    placeholder={t('confirmPasswordPlaceholder')}
                     disabled={!token || success}
                   />
                   <button
@@ -197,17 +196,17 @@ export default function ResetPassword() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  {t('resetting') || "Resetting..."}
+                  {t('resetting')}
                 </span>
               ) : (
-                t('resetPassword') || "Reset Password"
+                t('resetPasswordButton')
               )}
             </Button>
           </form>
 
           <div className="text-center">
             <Link href={`/${locale}/auth/signin`} className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors">
-              {t('backToSignIn') || "Back to Sign In"}
+              {t('backToSignIn')}
             </Link>
           </div>
         </div>
