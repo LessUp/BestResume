@@ -32,7 +32,9 @@
 
 ### 环境变量
 
-将 `.env.example` 复制为 `.env.local`，并填写必要变量（不要提交 `.env.local`）：
+将 `.env.example` 复制为 `.env`，并填写必要变量（不要提交 `.env`）。
+
+> 说明：Prisma CLI 默认读取 `.env`；Next.js 也会读取 `.env`。如需本地覆盖，可再使用 `.env.local`。
 
 - `DATABASE_URL`：Supabase **Transaction pooler（6543）**，并追加 `pgbouncer=true`
 - `DIRECT_URL`：Supabase **Session pooler（5432）**（用于 Prisma migrations）
