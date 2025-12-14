@@ -18,6 +18,10 @@ export type ErrorMessageKey =
     | "passwordMismatch"
     | "updateFailed"
     | "deleteFailed"
+    | "resumeNotFoundOrUnauthorized"
+    | "resumeSaveFailed"
+    | "resumeDeleteFailed"
+    | "resumeDuplicateFailed"
     | "unknownError";
 
 type Locale = "zh" | "en";
@@ -38,6 +42,10 @@ const errorMessages: Record<Locale, Record<ErrorMessageKey, string>> = {
         passwordMismatch: "两次输入的密码不一致",
         updateFailed: "更新失败",
         deleteFailed: "删除失败",
+        resumeNotFoundOrUnauthorized: "简历不存在或无权访问",
+        resumeSaveFailed: "保存简历失败，请稍后重试。",
+        resumeDeleteFailed: "删除简历失败，请稍后重试。",
+        resumeDuplicateFailed: "复制简历失败，请稍后重试。",
         unknownError: "发生未知错误",
     },
     en: {
@@ -55,6 +63,10 @@ const errorMessages: Record<Locale, Record<ErrorMessageKey, string>> = {
         passwordMismatch: "Passwords do not match",
         updateFailed: "Update failed",
         deleteFailed: "Delete failed",
+        resumeNotFoundOrUnauthorized: "Resume not found or unauthorized",
+        resumeSaveFailed: "Failed to save resume. Please try again.",
+        resumeDeleteFailed: "Failed to delete resume. Please try again.",
+        resumeDuplicateFailed: "Failed to duplicate resume. Please try again.",
         unknownError: "An unknown error occurred",
     },
 };

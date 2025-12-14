@@ -68,7 +68,7 @@ export default function EditorClient({ initialData, resumeId, userId, locale, in
       
       const dbId = (resumeId === 'new' || resumeId === 'demo') ? undefined : resumeId;
       
-      const result = await saveResume(resumeData, title, dbId);
+      const result = await saveResume(resumeData, title, dbId, locale);
       
       if (result.success) {
         setLastSavedData(JSON.stringify(resumeData));
@@ -85,9 +85,10 @@ export default function EditorClient({ initialData, resumeId, userId, locale, in
       }
     } catch (error) {
       console.error("Failed to save:", error);
+      const description = error instanceof Error ? error.message : tEditor('autoSaveFailedDescription');
       toast({
         title: tEditor('autoSaveFailedTitle'),
-        description: tEditor('autoSaveFailedDescription'),
+        description,
         variant: "destructive",
       });
     } finally {

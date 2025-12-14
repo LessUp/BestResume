@@ -2,45 +2,50 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { LocalizedError } from "@/lib/errors";
 import { ResumeData } from "@/types/resume";
 import { revalidatePath } from "next/cache";
 
-export async function saveResume(data: ResumeData, title: string, id?: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized");
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) throw new Error("User not found");
-
-  const content = JSON.stringify(data);
-
-  if (id) {
-    // Update existing resume
-    // Verify ownership
-    const existing = await prisma.resume.findUnique({
-      where: { id },
-    });
-
-    if (!existing || existing.userId !== user.id) {
-      throw new Error("Resume not found or unauthorized");
+export async function saveResume(
+  data: ResumeData,
+  title: string,
+  id?: string,
+  locale: string = "en"
+) {
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
     }
 
-    await prisma.resume.update({
-      where: { id },
-      data: {
-        content,
-        title,
-      },
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
     });
-    revalidatePath('/[locale]/dashboard', 'page');
-    return { success: true, id };
-  } else {
-    // Create new resume
+
+    if (!user) throw new LocalizedError("userNotFound", locale);
+
+    const content = JSON.stringify(data);
+
+    if (id) {
+      const existing = await prisma.resume.findUnique({
+        where: { id },
+      });
+
+      if (!existing || existing.userId !== user.id) {
+        throw new LocalizedError("resumeNotFoundOrUnauthorized", locale);
+      }
+
+      await prisma.resume.update({
+        where: { id },
+        data: {
+          content,
+          title,
+        },
+      });
+      revalidatePath('/[locale]/dashboard', 'page');
+      return { success: true, id };
+    }
+
     const newResume = await prisma.resume.create({
       data: {
         userId: user.id,
@@ -50,6 +55,10 @@ export async function saveResume(data: ResumeData, title: string, id?: string) {
     });
     revalidatePath('/[locale]/dashboard', 'page');
     return { success: true, id: newResume.id };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("saveResume failed", error);
+    throw new LocalizedError("resumeSaveFailed", locale);
   }
 }
 
@@ -101,64 +110,76 @@ export async function getResume(id: string) {
   };
 }
 
-export async function deleteResume(id: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized");
+export async function deleteResume(id: string, locale: string = "en") {
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) throw new LocalizedError("userNotFound", locale);
+
+    const existing = await prisma.resume.findUnique({
+      where: { id },
+    });
+
+    if (!existing || existing.userId !== user.id) {
+      throw new LocalizedError("resumeNotFoundOrUnauthorized", locale);
+    }
+
+    await prisma.resume.delete({
+      where: { id },
+    });
+
+    revalidatePath('/[locale]/dashboard', 'page');
+    return { success: true };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("deleteResume failed", error);
+    throw new LocalizedError("resumeDeleteFailed", locale);
   }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) throw new Error("User not found");
-
-  const existing = await prisma.resume.findUnique({
-    where: { id },
-  });
-
-  if (!existing || existing.userId !== user.id) {
-    throw new Error("Resume not found or unauthorized");
-  }
-
-  await prisma.resume.delete({
-    where: { id },
-  });
-
-  revalidatePath('/[locale]/dashboard', 'page');
-  return { success: true };
 }
 
-export async function duplicateResume(id: string) {
-  const session = await auth();
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized");
+export async function duplicateResume(id: string, locale: string = "en") {
+  try {
+    const session = await auth();
+    if (!session?.user?.email) {
+      throw new LocalizedError("unauthorized", locale);
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) throw new LocalizedError("userNotFound", locale);
+
+    const existing = await prisma.resume.findUnique({
+      where: { id },
+    });
+
+    if (!existing || existing.userId !== user.id) {
+      throw new LocalizedError("resumeNotFoundOrUnauthorized", locale);
+    }
+
+    const newTitle = `${existing.title} (Copy)`;
+
+    const newResume = await prisma.resume.create({
+      data: {
+        userId: user.id,
+        title: newTitle,
+        content: existing.content,
+      },
+    });
+
+    revalidatePath('/[locale]/dashboard', 'page');
+    return { success: true, id: newResume.id };
+  } catch (error) {
+    if (error instanceof LocalizedError) throw error;
+    console.error("duplicateResume failed", error);
+    throw new LocalizedError("resumeDuplicateFailed", locale);
   }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) throw new Error("User not found");
-
-  const existing = await prisma.resume.findUnique({
-    where: { id },
-  });
-
-  if (!existing || existing.userId !== user.id) {
-    throw new Error("Resume not found or unauthorized");
-  }
-
-  const newTitle = `${existing.title} (Copy)`;
-
-  const newResume = await prisma.resume.create({
-    data: {
-      userId: user.id,
-      title: newTitle,
-      content: existing.content,
-    },
-  });
-
-  revalidatePath('/[locale]/dashboard', 'page');
-  return { success: true, id: newResume.id };
 }

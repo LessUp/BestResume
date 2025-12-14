@@ -35,7 +35,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
 
     setIsDeleting(true);
     try {
-      await deleteResume(resume.id);
+      await deleteResume(resume.id, locale);
       toast({
         title: t('resumeDeleted'),
         description: t('success'),
@@ -44,9 +44,10 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
       router.refresh();
     } catch (error) {
       console.error("Failed to delete resume", error);
+      const description = error instanceof Error ? error.message : t('resumeDeleteFailed');
       toast({
         title: t('error'),
-        description: t('resumeDeleteFailed'),
+        description,
         variant: "destructive",
       });
     } finally {
@@ -60,7 +61,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
 
     setIsDuplicating(true);
     try {
-      await duplicateResume(resume.id);
+      await duplicateResume(resume.id, locale);
       toast({
         title: t('resumeDuplicated'),
         description: t('success'),
@@ -69,9 +70,10 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({ resume, locale }) => {
       router.refresh();
     } catch (error) {
       console.error("Failed to duplicate resume", error);
+      const description = error instanceof Error ? error.message : t('resumeDuplicateFailed');
       toast({
         title: t('error'),
-        description: t('resumeDuplicateFailed'),
+        description,
         variant: "destructive",
       });
     } finally {

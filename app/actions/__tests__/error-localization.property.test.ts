@@ -25,6 +25,10 @@ describe('Error Localization Property Tests', () => {
                         'passwordMismatch',
                         'updateFailed',
                         'deleteFailed',
+                        'resumeNotFoundOrUnauthorized',
+                        'resumeSaveFailed',
+                        'resumeDeleteFailed',
+                        'resumeDuplicateFailed',
                         'unknownError'
                     ),
                     locale: fc.constantFrom('en', 'zh', 'zh-CN', 'zh-TW', 'en-US', 'en-GB'),
@@ -111,7 +115,11 @@ describe('Error Localization Property Tests', () => {
                     'expiredToken',
                     'emailExists',
                     'passwordTooShort',
-                    'userNotFound'
+                    'userNotFound',
+                    'resumeNotFoundOrUnauthorized',
+                    'resumeSaveFailed',
+                    'resumeDeleteFailed',
+                    'resumeDuplicateFailed'
                 ),
                 (messageKey) => {
                     // Get messages in both locales
