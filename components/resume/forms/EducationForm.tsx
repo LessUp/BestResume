@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 import { ResumeData } from '@/types/resume';
+import { useTranslations } from 'next-intl';
 
 interface EducationItemProps {
   edu: ResumeData['education'][0];
@@ -16,6 +17,7 @@ interface EducationItemProps {
 const EducationItem = ({ edu, index, updateEducation, removeEducation }: EducationItemProps) => {
   const [localEdu, setLocalEdu] = useState(edu);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const t = useTranslations('Resume.forms');
 
   useEffect(() => {
     setLocalEdu(edu);
@@ -46,51 +48,51 @@ const EducationItem = ({ edu, index, updateEducation, removeEducation }: Educati
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Institution</Label>
+          <Label>{t('institution')}</Label>
           <Input 
             value={localEdu.institution} 
             onChange={(e) => handleChange('institution', e.target.value)} 
-            placeholder="University of Technology" 
+            placeholder={t('institutionPlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>Degree / Study Type</Label>
+          <Label>{t('studyType')}</Label>
           <Input 
             value={localEdu.studyType} 
             onChange={(e) => handleChange('studyType', e.target.value)} 
-            placeholder="Bachelor's" 
+            placeholder={t('studyTypePlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>Area of Study</Label>
+          <Label>{t('area')}</Label>
           <Input 
             value={localEdu.area} 
             onChange={(e) => handleChange('area', e.target.value)} 
-            placeholder="Computer Science" 
+            placeholder={t('areaPlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>GPA / Score</Label>
+          <Label>{t('score')}</Label>
           <Input 
             value={localEdu.score} 
             onChange={(e) => handleChange('score', e.target.value)} 
-            placeholder="3.8/4.0" 
+            placeholder={t('scorePlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>Start Date</Label>
+          <Label>{t('startDate')}</Label>
           <Input 
             value={localEdu.startDate} 
             onChange={(e) => handleChange('startDate', e.target.value)} 
-            placeholder="YYYY-MM" 
+            placeholder={t('startDatePlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>End Date</Label>
+          <Label>{t('endDate')}</Label>
           <Input 
             value={localEdu.endDate} 
             onChange={(e) => handleChange('endDate', e.target.value)} 
-            placeholder="YYYY-MM" 
+            placeholder={t('endDatePlaceholder')} 
           />
         </div>
       </div>
@@ -99,6 +101,7 @@ const EducationItem = ({ edu, index, updateEducation, removeEducation }: Educati
 };
 
 export const EducationForm = () => {
+  const t = useTranslations('Resume.forms');
   const education = useResumeStore((state) => state.resumeData.education);
   const addEducation = useResumeStore((state) => state.addEducation);
   const updateEducation = useResumeStore((state) => state.updateEducation);
@@ -116,15 +119,15 @@ export const EducationForm = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-         <h2 className="text-lg font-semibold">Education</h2>
+         <h2 className="text-lg font-semibold">{t('educationTitle')}</h2>
          <Button onClick={addEducation} size="sm" className="gap-2">
-           <Plus className="h-4 w-4" /> Add Education
+           <Plus className="h-4 w-4" /> {t('addEducation')}
          </Button>
       </div>
 
       {education.length === 0 && (
         <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-lg">
-          No education added yet.
+          {t('emptyEducation')}
         </div>
       )}
 

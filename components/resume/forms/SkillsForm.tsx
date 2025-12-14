@@ -1,11 +1,13 @@
 import React from 'react';
 import { useResumeStore } from '@/lib/store';
+import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const SkillsForm = () => {
+  const t = useTranslations('Resume.forms');
   const skills = useResumeStore((state) => state.resumeData.skills);
   const addSkill = useResumeStore((state) => state.addSkill);
   const updateSkill = useResumeStore((state) => state.updateSkill);
@@ -14,15 +16,15 @@ export const SkillsForm = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-         <h2 className="text-lg font-semibold">Skills</h2>
+         <h2 className="text-lg font-semibold">{t('skillsTitle')}</h2>
          <Button onClick={addSkill} size="sm" className="gap-2">
-           <Plus className="h-4 w-4" /> Add Skill Category
+           <Plus className="h-4 w-4" /> {t('addSkillCategory')}
          </Button>
       </div>
 
       {skills.length === 0 && (
         <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-lg">
-          No skills added yet.
+          {t('emptySkills')}
         </div>
       )}
 
@@ -39,19 +41,19 @@ export const SkillsForm = () => {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Category Name</Label>
+              <Label>{t('skillCategory')}</Label>
               <Input 
                 value={skill.name} 
                 onChange={(e) => updateSkill(index, { name: e.target.value })} 
-                placeholder="Languages / Frameworks / Tools" 
+                placeholder={t('skillCategoryPlaceholder')} 
               />
             </div>
             <div className="space-y-2">
-              <Label>Skills (Comma separated)</Label>
+              <Label>{t('skillKeywords')}</Label>
               <Input 
                 value={skill.keywords.join(', ')} 
                 onChange={(e) => updateSkill(index, { keywords: e.target.value.split(',').map(s => s.trim()) })} 
-                placeholder="React, TypeScript, Node.js" 
+                placeholder={t('skillKeywordsPlaceholder')} 
               />
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResumeData } from '@/types/resume';
+import { useTranslations } from 'next-intl';
 
 interface TemplateProps {
   basics: ResumeData['basics'];
@@ -10,6 +11,8 @@ interface TemplateProps {
 }
 
 export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
+  const t = useTranslations('Resume.templates');
+
   return (
     <div className="flex min-h-[297mm] bg-white text-gray-800 font-sans print:h-full">
       {/* Sidebar */}
@@ -31,7 +34,7 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
 
         {skills.length > 0 && (
           <div className="pt-6 border-t border-gray-700">
-            <h3 className="text-lg font-bold uppercase mb-4 text-blue-400 tracking-widest">Skills</h3>
+            <h3 className="text-lg font-bold uppercase mb-4 text-blue-400 tracking-widest">{t('skills')}</h3>
             <div className="space-y-4">
               {skills.map((skill, i) => (
                 <div key={i}>
@@ -49,12 +52,12 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
         
         {education.length > 0 && (
            <div className="pt-6 border-t border-gray-700">
-            <h3 className="text-lg font-bold uppercase mb-4 text-blue-400 tracking-widest">Education</h3>
+            <h3 className="text-lg font-bold uppercase mb-4 text-blue-400 tracking-widest">{t('education')}</h3>
             <div className="space-y-4">
               {education.map((edu, i) => (
                 <div key={i}>
                   <div className="font-bold">{edu.institution}</div>
-                  <div className="text-sm text-gray-400">{edu.studyType} in {edu.area}</div>
+                  <div className="text-sm text-gray-400">{t('degreeInArea', { studyType: edu.studyType, area: edu.area })}</div>
                   <div className="text-xs text-gray-500">{edu.startDate} - {edu.endDate}</div>
                 </div>
               ))}
@@ -67,14 +70,14 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
       <main className="w-2/3 p-8 bg-white">
         {basics.summary && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-slate-800 uppercase border-b-4 border-blue-500 pb-2 mb-4 inline-block">Profile</h2>
+            <h2 className="text-2xl font-bold text-slate-800 uppercase border-b-4 border-blue-500 pb-2 mb-4 inline-block">{t('profile')}</h2>
             <p className="text-gray-600 leading-relaxed text-sm">{basics.summary}</p>
           </section>
         )}
 
         {work.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-slate-800 uppercase border-b-4 border-blue-500 pb-2 mb-6 inline-block">Experience</h2>
+            <h2 className="text-2xl font-bold text-slate-800 uppercase border-b-4 border-blue-500 pb-2 mb-6 inline-block">{t('experience')}</h2>
             <div className="space-y-6">
               {work.map((job, i) => (
                 <div key={i} className="relative pl-4 border-l-2 border-gray-200">
@@ -96,13 +99,13 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
 
         {projects.length > 0 && (
           <section className="mb-8">
-             <h2 className="text-2xl font-bold text-slate-800 uppercase border-b-4 border-blue-500 pb-2 mb-6 inline-block">Projects</h2>
+             <h2 className="text-2xl font-bold text-slate-800 uppercase border-b-4 border-blue-500 pb-2 mb-6 inline-block">{t('projects')}</h2>
              <div className="grid grid-cols-1 gap-4">
                {projects.map((project, i) => (
                  <div key={i} className="bg-gray-50 p-4 rounded-lg border border-gray-100 print:bg-gray-50">
                     <div className="flex justify-between items-center mb-2">
                        <h3 className="font-bold text-gray-800">{project.name}</h3>
-                       {project.url && <a href={project.url} className="text-xs text-blue-500 hover:underline">Link ↗</a>}
+                       {project.url && <a href={project.url} className="text-xs text-blue-500 hover:underline">{t('link')} ↗</a>}
                     </div>
                     <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{project.description}</p>
                     <div className="flex flex-wrap gap-1">

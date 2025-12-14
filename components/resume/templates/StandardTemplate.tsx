@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResumeData } from '@/types/resume';
+import { useTranslations } from 'next-intl';
 
 interface TemplateProps {
   basics: ResumeData['basics'];
@@ -10,6 +11,8 @@ interface TemplateProps {
 }
 
 export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
+  const t = useTranslations('Resume.templates');
+
   return (
     <div className="p-8 bg-white text-left text-gray-900 min-h-[297mm] shadow-md font-serif print:shadow-none print:p-0">
       {/* Header */}
@@ -27,7 +30,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
       {/* Summary */}
       {basics.summary && (
         <section className="mb-6">
-          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">Professional Summary</h2>
+          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">{t('professionalSummary')}</h2>
           <p className="text-gray-700 leading-relaxed text-sm">{basics.summary}</p>
         </section>
       )}
@@ -35,7 +38,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
       {/* Experience */}
       {work.length > 0 && (
         <section className="mb-6">
-          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">Experience</h2>
+          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">{t('experience')}</h2>
           <div className="space-y-4">
             {work.map((job, index) => (
               <div key={job.id || index}>
@@ -63,7 +66,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
       {/* Education */}
       {education.length > 0 && (
         <section className="mb-6">
-          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">Education</h2>
+          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">{t('education')}</h2>
           <div className="space-y-4">
             {education.map((edu, index) => (
               <div key={edu.id || index}>
@@ -74,9 +77,9 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
                   </span>
                 </div>
                 <div className="text-md text-gray-700">
-                  {edu.studyType} in {edu.area}
+                  {t('degreeInArea', { studyType: edu.studyType, area: edu.area })}
                 </div>
-                {edu.score && <div className="text-sm text-gray-500">GPA: {edu.score}</div>}
+                {edu.score && <div className="text-sm text-gray-500">{t('gpa')}: {edu.score}</div>}
               </div>
             ))}
           </div>
@@ -86,7 +89,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
       {/* Projects */}
       {projects.length > 0 && (
         <section className="mb-6">
-          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">Projects</h2>
+          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">{t('projects')}</h2>
           <div className="space-y-4">
             {projects.map((project, index) => (
               <div key={project.id || index}>
@@ -100,7 +103,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
                 <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{project.description}</p>
                 {project.keywords && project.keywords.length > 0 && (
                   <div className="text-sm text-gray-500">
-                    Technologies: {project.keywords.join(", ")}
+                    {t('technologies')}: {project.keywords.join(", ")}
                   </div>
                 )}
               </div>
@@ -112,7 +115,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
       {/* Skills */}
       {skills.length > 0 && (
         <section className="mb-6">
-          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">Skills</h2>
+          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">{t('skills')}</h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, index) => (
               <div key={skill.id || index} className="mb-2">

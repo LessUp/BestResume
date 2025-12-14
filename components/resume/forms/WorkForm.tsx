@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 import { ResumeData } from '@/types/resume';
+import { useTranslations } from 'next-intl';
 
 interface WorkItemProps {
   job: ResumeData['work'][0];
@@ -17,6 +18,7 @@ interface WorkItemProps {
 const WorkItem = ({ job, index, updateWork, removeWork }: WorkItemProps) => {
   const [localJob, setLocalJob] = useState(job);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const t = useTranslations('Resume.forms');
 
   useEffect(() => {
     setLocalJob(job);
@@ -47,44 +49,44 @@ const WorkItem = ({ job, index, updateWork, removeWork }: WorkItemProps) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Company Name</Label>
+          <Label>{t('companyName')}</Label>
           <Input 
             value={localJob.name} 
             onChange={(e) => handleChange('name', e.target.value)} 
-            placeholder="Google" 
+            placeholder={t('companyNamePlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>Job Title</Label>
+          <Label>{t('position')}</Label>
           <Input 
             value={localJob.position} 
             onChange={(e) => handleChange('position', e.target.value)} 
-            placeholder="Senior Software Engineer" 
+            placeholder={t('positionPlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>Start Date</Label>
+          <Label>{t('startDate')}</Label>
           <Input 
             value={localJob.startDate} 
             onChange={(e) => handleChange('startDate', e.target.value)} 
-            placeholder="YYYY-MM" 
+            placeholder={t('startDatePlaceholder')} 
           />
         </div>
         <div className="space-y-2">
-          <Label>End Date</Label>
+          <Label>{t('endDate')}</Label>
           <Input 
             value={localJob.endDate} 
             onChange={(e) => handleChange('endDate', e.target.value)} 
-            placeholder="Present / YYYY-MM" 
+            placeholder={t('endDatePlaceholderPresent')} 
           />
         </div>
       </div>
       <div className="space-y-2">
-        <Label>Summary</Label>
+        <Label>{t('workSummary')}</Label>
         <Textarea 
           value={localJob.summary} 
           onChange={(e) => handleChange('summary', e.target.value)} 
-          placeholder="Describe your responsibilities and achievements... (e.g. Led a team of 5 developers...)" 
+          placeholder={t('workSummaryPlaceholder')} 
           className="h-24"
         />
       </div>
@@ -93,6 +95,7 @@ const WorkItem = ({ job, index, updateWork, removeWork }: WorkItemProps) => {
 };
 
 export const WorkForm = () => {
+  const t = useTranslations('Resume.forms');
   const work = useResumeStore((state) => state.resumeData.work);
   const addWork = useResumeStore((state) => state.addWork);
   const updateWork = useResumeStore((state) => state.updateWork);
@@ -110,15 +113,15 @@ export const WorkForm = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-         <h2 className="text-lg font-semibold">Work Experience</h2>
+         <h2 className="text-lg font-semibold">{t('workTitle')}</h2>
          <Button onClick={addWork} size="sm" className="gap-2">
-           <Plus className="h-4 w-4" /> Add Position
+           <Plus className="h-4 w-4" /> {t('addPosition')}
          </Button>
       </div>
 
       {work.length === 0 && (
         <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-lg">
-          No work experience added yet.
+          {t('emptyWork')}
         </div>
       )}
 

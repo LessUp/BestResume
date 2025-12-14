@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResumeData } from '@/types/resume';
+import { useTranslations } from 'next-intl';
 
 interface TemplateProps {
   basics: ResumeData['basics'];
@@ -10,6 +11,8 @@ interface TemplateProps {
 }
 
 export const MinimalTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
+  const t = useTranslations('Resume.templates');
+
   return (
     <div className="p-12 bg-white text-gray-900 min-h-[297mm] font-sans tracking-wide print:p-0">
       {/* Header */}
@@ -34,7 +37,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = React.memo(({ basics, wo
         {/* Experience */}
         {work.length > 0 && (
           <section>
-            <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">Experience</h2>
+            <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">{t('experience')}</h2>
             <div className="space-y-8">
               {work.map((job, index) => (
                 <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -58,13 +61,13 @@ export const MinimalTemplate: React.FC<TemplateProps> = React.memo(({ basics, wo
         {/* Education */}
          {education.length > 0 && (
           <section>
-            <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">Education</h2>
+            <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">{t('education')}</h2>
             <div className="space-y-4">
               {education.map((edu, index) => (
                 <div key={index} className="flex justify-between items-end max-w-2xl mx-auto w-full">
                   <div>
                     <div className="font-bold text-sm">{edu.institution}</div>
-                    <div className="text-xs text-gray-500">{edu.studyType} in {edu.area}</div>
+                    <div className="text-xs text-gray-500">{t('degreeInArea', { studyType: edu.studyType, area: edu.area })}</div>
                   </div>
                   <div className="text-xs text-gray-400">{edu.startDate} - {edu.endDate}</div>
                 </div>
@@ -77,7 +80,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = React.memo(({ basics, wo
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {skills.length > 0 && (
              <section>
-                <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">Skills</h2>
+                <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">{t('skills')}</h2>
                 <div className="text-center">
                   {skills.map((skill, index) => (
                     <div key={index} className="mb-3">
@@ -91,7 +94,7 @@ export const MinimalTemplate: React.FC<TemplateProps> = React.memo(({ basics, wo
 
            {projects.length > 0 && (
              <section>
-                <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">Projects</h2>
+                <h2 className="text-center text-sm font-bold uppercase tracking-widest border-b border-gray-200 pb-2 mb-6 text-gray-800">{t('projects')}</h2>
                  <div className="space-y-4">
                   {projects.map((project, index) => (
                     <div key={index} className="text-center">
