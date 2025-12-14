@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useResumeStore } from '@/lib/store';
 import { ResumeData } from '@/types/resume';
+import { useTranslations } from 'next-intl';
 import { BasicsForm } from './forms/BasicsForm';
 import { WorkForm } from './forms/WorkForm';
 import { EducationForm } from './forms/EducationForm';
@@ -20,6 +21,7 @@ interface ResumeEditorProps {
 export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobilePreviewOpen = false, initialTemplateId }) => {
   const [activeSection, setActiveSection] = useState('basics'); // Default to basics
   const { setResumeData, setTemplateId } = useResumeStore();
+  const t = useTranslations('Editor');
 
   useEffect(() => {
     if (initialData) {
@@ -34,52 +36,52 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
        {/* Sidebar Navigation */}
        <aside className={`w-full lg:w-64 flex-shrink-0 print:hidden ${mobilePreviewOpen ? 'hidden lg:block' : 'block'}`}>
          <div className="bg-white rounded-lg shadow-sm p-4 space-y-2 sticky top-4">
-            <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">Design</h3>
+            <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">{t('sidebarDesign')}</h3>
             <Button 
               variant={activeSection === 'templates' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('templates')}
             >
-              <LayoutTemplate className="mr-2 h-4 w-4" /> Templates
+              <LayoutTemplate className="mr-2 h-4 w-4" /> {t('sidebarTemplates')}
             </Button>
 
             <div className="h-4"></div> {/* Spacer */}
 
-            <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">Content</h3>
+            <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">{t('sidebarContent')}</h3>
             <Button 
               variant={activeSection === 'basics' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('basics')}
             >
-              <User className="mr-2 h-4 w-4" /> Personal
+              <User className="mr-2 h-4 w-4" /> {t('sectionPersonal')}
             </Button>
             <Button 
               variant={activeSection === 'work' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('work')}
             >
-              <Briefcase className="mr-2 h-4 w-4" /> Experience
+              <Briefcase className="mr-2 h-4 w-4" /> {t('sectionExperience')}
             </Button>
             <Button 
               variant={activeSection === 'education' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('education')}
             >
-              <GraduationCap className="mr-2 h-4 w-4" /> Education
+              <GraduationCap className="mr-2 h-4 w-4" /> {t('sectionEducation')}
             </Button>
             <Button 
               variant={activeSection === 'skills' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('skills')}
             >
-              <Layers className="mr-2 h-4 w-4" /> Skills
+              <Layers className="mr-2 h-4 w-4" /> {t('sectionSkills')}
             </Button>
             <Button 
               variant={activeSection === 'projects' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('projects')}
             >
-              <FolderGit2 className="mr-2 h-4 w-4" /> Projects
+              <FolderGit2 className="mr-2 h-4 w-4" /> {t('sectionProjects')}
             </Button>
          </div>
        </aside>

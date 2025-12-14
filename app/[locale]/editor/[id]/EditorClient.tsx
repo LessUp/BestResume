@@ -62,9 +62,9 @@ export default function EditorClient({ initialData, resumeId, userId, locale, in
 
     setSaving(true);
     try {
-      const title = resumeData.basics.name 
-        ? `${resumeData.basics.name}'s Resume` 
-        : 'Untitled Resume';
+      const title = resumeData.basics.name
+        ? tEditor('defaultTitle', { name: resumeData.basics.name })
+        : tEditor('untitled');
       
       const dbId = (resumeId === 'new' || resumeId === 'demo') ? undefined : resumeId;
       

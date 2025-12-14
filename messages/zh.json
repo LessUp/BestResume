@@ -176,6 +176,10 @@
     "deleting": "删除中...",
     "resumeDeleteFailed": "删除简历失败，请稍后重试。",
     "resumeDuplicateFailed": "复制简历失败，请稍后重试。",
+    "selectPlaceholder": "请选择...",
+    "language": "语言",
+    "langZh": "中文",
+    "langEn": "EN",
     "cancel": "取消"
   },
   "Auth": {
@@ -266,7 +270,16 @@
     "resumeSavedTitle": "简历已保存",
     "resumeSavedDescription": "您的新简历已创建。",
     "autoSaveFailedTitle": "自动保存失败",
-    "autoSaveFailedDescription": "无法保存更改，请检查网络连接。"
+    "autoSaveFailedDescription": "无法保存更改，请检查网络连接。",
+    "defaultTitle": "{name} 的简历",
+    "sidebarDesign": "设计",
+    "sidebarTemplates": "模板",
+    "sidebarContent": "内容",
+    "sectionPersonal": "个人信息",
+    "sectionExperience": "工作经历",
+    "sectionEducation": "教育经历",
+    "sectionSkills": "技能",
+    "sectionProjects": "项目"
   },
   "Templates": {
     "title": "选择简历模板",
@@ -341,6 +354,8 @@
     "themeDark": "深色",
     "themeSystem": "跟随系统",
     "language": "语言",
+    "languageZh": "中文",
+    "languageEn": "English",
     "preferencesSaved": "偏好设置已保存",
     "currentPlan": "当前计划",
     "active": "生效中",

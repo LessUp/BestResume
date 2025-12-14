@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import {
   updateUserProfile,
@@ -461,7 +461,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                       <Label>{t('theme')}</Label>
                       <Select value={theme} onValueChange={setTheme}>
                         <SelectTrigger className="mt-1 w-full md:w-64">
-                          <SelectValue />
+                          {theme === 'light' ? t('themeLight') : theme === 'dark' ? t('themeDark') : t('themeSystem')}
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="light">{t('themeLight')}</SelectItem>
@@ -474,11 +474,11 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                       <Label>{t('language')}</Label>
                       <Select value={language} onValueChange={setLanguage}>
                         <SelectTrigger className="mt-1 w-full md:w-64">
-                          <SelectValue />
+                          {language === 'zh' ? t('languageZh') : t('languageEn')}
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="zh">中文</SelectItem>
-                          <SelectItem value="en">English</SelectItem>
+                          <SelectItem value="zh">{t('languageZh')}</SelectItem>
+                          <SelectItem value="en">{t('languageEn')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -510,7 +510,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {user?.membershipType || "Free"}
+                            {user?.membershipType || t('free')}
                           </span>
                           <Badge variant={user?.isMember ? "success" : "secondary"}>
                             {user?.isMember ? t('active') : t('free')}

@@ -176,6 +176,10 @@
     "deleting": "Deleting...",
     "resumeDeleteFailed": "Failed to delete resume. Please try again.",
     "resumeDuplicateFailed": "Failed to duplicate resume. Please try again.",
+    "selectPlaceholder": "Select...",
+    "language": "Language",
+    "langZh": "中文",
+    "langEn": "EN",
     "cancel": "Cancel"
   },
   "Auth": {
@@ -266,7 +270,16 @@
     "resumeSavedTitle": "Resume saved",
     "resumeSavedDescription": "Your new resume has been created.",
     "autoSaveFailedTitle": "Auto-save failed",
-    "autoSaveFailedDescription": "Could not save your changes. Please check your connection."
+    "autoSaveFailedDescription": "Could not save your changes. Please check your connection.",
+    "defaultTitle": "{name}''s Resume",
+    "sidebarDesign": "Design",
+    "sidebarTemplates": "Templates",
+    "sidebarContent": "Content",
+    "sectionPersonal": "Personal",
+    "sectionExperience": "Experience",
+    "sectionEducation": "Education",
+    "sectionSkills": "Skills",
+    "sectionProjects": "Projects"
   },
   "Templates": {
     "title": "Choose a template",
@@ -341,6 +354,8 @@
     "themeDark": "Dark",
     "themeSystem": "System",
     "language": "Language",
+    "languageZh": "中文",
+    "languageEn": "English",
     "preferencesSaved": "Preferences saved",
     "currentPlan": "Current Plan",
     "active": "Active",

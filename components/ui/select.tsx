@@ -48,7 +48,7 @@ export function Select({
   value = "",
   onValueChange = () => {},
   children,
-  placeholder = "选择...",
+  placeholder = "Select...",
   disabled,
 }: SelectProps) {
   const [open, setOpen] = React.useState(false);

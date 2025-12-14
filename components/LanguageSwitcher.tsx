@@ -1,11 +1,12 @@
 'use client';
 
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
 
 export default function LanguageSwitcher() {
   const locale = useLocale();
+  const t = useTranslations('Common');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -30,7 +31,7 @@ export default function LanguageSwitcher() {
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-gray-500 hidden sm:inline">
-        {locale === 'zh' ? '语言' : 'Language'}
+        {t('language')}
       </span>
       <div className="flex items-center bg-gray-100 rounded-full p-1 border border-gray-200 shadow-sm">
         <button
@@ -42,7 +43,7 @@ export default function LanguageSwitcher() {
                     : "text-gray-500 hover:text-gray-900"
             )}
         >
-            中文
+            {t('langZh')}
         </button>
         <button
             onClick={() => switchLanguage('en')}
@@ -53,7 +54,7 @@ export default function LanguageSwitcher() {
                     : "text-gray-500 hover:text-gray-900"
             )}
         >
-            EN
+            {t('langEn')}
         </button>
       </div>
     </div>
