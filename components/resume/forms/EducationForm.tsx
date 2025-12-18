@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useResumeStore } from '@/lib/store';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
 import { ResumeData } from '@/types/resume';
@@ -63,6 +64,14 @@ const EducationItem = ({ edu, index, updateEducation, removeEducation }: Educati
             placeholder={t('studyTypePlaceholder')} 
           />
         </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label>{t('educationUrl')}</Label>
+          <Input
+            value={localEdu.url ?? ''}
+            onChange={(e) => handleChange('url', e.target.value)}
+            placeholder={t('educationUrlPlaceholder')}
+          />
+        </div>
         <div className="space-y-2">
           <Label>{t('area')}</Label>
           <Input 
@@ -95,6 +104,24 @@ const EducationItem = ({ edu, index, updateEducation, removeEducation }: Educati
             placeholder={t('endDatePlaceholder')} 
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t('courses')}</Label>
+        <Textarea
+          value={(localEdu.courses ?? []).join('\n')}
+          onChange={(e) =>
+            handleChange(
+              'courses',
+              e.target.value
+                .split('\n')
+                .map((s) => s.trim())
+                .filter(Boolean)
+            )
+          }
+          placeholder={t('coursesPlaceholder')}
+          className="h-24"
+        />
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ export const ResumePreview = () => {
   const education = useResumeStore(state => state.resumeData.education);
   const skills = useResumeStore(state => state.resumeData.skills);
   const projects = useResumeStore(state => state.resumeData.projects);
+  const languages = useResumeStore(state => state.resumeData.languages);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -45,7 +46,7 @@ export const ResumePreview = () => {
   }, []);
 
   const renderTemplate = () => {
-    const props = { basics, work, education, skills, projects };
+    const props = { basics, work, education, skills, projects, languages };
     
     switch (templateId) {
       case 'modern':

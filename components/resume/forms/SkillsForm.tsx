@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { Plus, Trash2 } from 'lucide-react';
 
 export const SkillsForm = () => {
@@ -40,19 +41,51 @@ export const SkillsForm = () => {
           </Button>
 
           <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>{t('skillCategory')}</Label>
-              <Input 
-                value={skill.name} 
-                onChange={(e) => updateSkill(index, { name: e.target.value })} 
-                placeholder={t('skillCategoryPlaceholder')} 
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>{t('skillCategory')}</Label>
+                <Input 
+                  value={skill.name} 
+                  onChange={(e) => updateSkill(index, { name: e.target.value })} 
+                  placeholder={t('skillCategoryPlaceholder')} 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>{t('skillLevel')}</Label>
+                <Select
+                  value={skill.level ?? 'Intermediate'}
+                  onValueChange={(value) => updateSkill(index, { level: value })}
+                >
+                  <SelectTrigger className="mt-1 w-full">
+                    {skill.level === 'Beginner'
+                      ? t('skillLevelBeginner')
+                      : skill.level === 'Advanced'
+                        ? t('skillLevelAdvanced')
+                        : skill.level === 'Expert'
+                          ? t('skillLevelExpert')
+                          : t('skillLevelIntermediate')}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Beginner">{t('skillLevelBeginner')}</SelectItem>
+                    <SelectItem value="Intermediate">{t('skillLevelIntermediate')}</SelectItem>
+                    <SelectItem value="Advanced">{t('skillLevelAdvanced')}</SelectItem>
+                    <SelectItem value="Expert">{t('skillLevelExpert')}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-2">
               <Label>{t('skillKeywords')}</Label>
               <Input 
-                value={skill.keywords.join(', ')} 
-                onChange={(e) => updateSkill(index, { keywords: e.target.value.split(',').map(s => s.trim()) })} 
+                value={(skill.keywords ?? []).join(', ')} 
+                onChange={(e) =>
+                  updateSkill(index, {
+                    keywords: e.target.value
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter(Boolean),
+                  })
+                }
                 placeholder={t('skillKeywordsPlaceholder')} 
               />
             </div>

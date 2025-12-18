@@ -8,9 +8,10 @@ interface TemplateProps {
   education: ResumeData['education'];
   skills: ResumeData['skills'];
   projects: ResumeData['projects'];
+  languages: ResumeData['languages'];
 }
 
-export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
+export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects, languages }) => {
   const t = useTranslations('Resume.templates');
 
   return (
@@ -30,6 +31,20 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
            {basics.phone && <div className="flex items-center gap-2"><span className="w-4">☎</span> {basics.phone}</div>}
            {basics.url && <div className="flex items-center gap-2"><span className="w-4">🌐</span> {basics.url}</div>}
            {basics.location.city && <div className="flex items-center gap-2"><span className="w-4">📍</span> {basics.location.city}, {basics.location.countryCode}</div>}
+           {basics.profiles &&
+             basics.profiles.map((profile, i) => {
+               const label = profile.url
+                 ? profile.url
+                 : `${profile.network}${profile.username ? `: ${profile.username}` : ''}`;
+
+               if (!label.trim()) return null;
+
+               return (
+                 <div key={`${profile.network}-${profile.username}-${i}`} className="flex items-center gap-2">
+                   <span className="w-4">🔗</span> {label}
+                 </div>
+               );
+             })}
         </div>
 
         {skills.length > 0 && (
@@ -38,7 +53,10 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
             <div className="space-y-4">
               {skills.map((skill, i) => (
                 <div key={i}>
-                  <div className="font-semibold mb-1">{skill.name}</div>
+                  <div className="font-semibold mb-1">
+                    {skill.name}
+                    {skill.level ? <span className="ml-2 text-xs text-blue-300">{skill.level}</span> : null}
+                  </div>
                   <div className="flex flex-wrap gap-1">
                      {skill.keywords.map((k, j) => (
                        <span key={j} className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-300 print:bg-gray-800 print:text-gray-300">{k}</span>
@@ -59,6 +77,26 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
                   <div className="font-bold">{edu.institution}</div>
                   <div className="text-sm text-gray-400">{t('degreeInArea', { studyType: edu.studyType, area: edu.area })}</div>
                   <div className="text-xs text-gray-500">{edu.startDate} - {edu.endDate}</div>
+                  {edu.url && <div className="text-xs text-blue-300 break-words">{edu.url}</div>}
+                  {edu.courses && edu.courses.length > 0 && (
+                    <div className="text-xs text-gray-500">
+                      {t('courses')}: {edu.courses.join(', ')}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {languages.length > 0 && (
+          <div className="pt-6 border-t border-gray-700">
+            <h3 className="text-lg font-bold uppercase mb-4 text-blue-400 tracking-widest">{t('languages')}</h3>
+            <div className="space-y-2 text-sm text-gray-300">
+              {languages.map((language, i) => (
+                <div key={language.id || i}>
+                  {language.language}
+                  {language.fluency ? <span className="text-xs text-gray-500"> {`- ${language.fluency}`}</span> : null}
                 </div>
               ))}
             </div>
@@ -87,10 +125,13 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
                     <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded print:text-blue-600">{job.startDate} - {job.endDate}</span>
                   </div>
                   <div className="text-md font-medium text-gray-500 mb-2">{job.name}</div>
+                  {job.url && <div className="text-xs text-blue-600 mb-2 break-words">{job.url}</div>}
                   <p className="text-gray-600 text-sm mb-2 whitespace-pre-wrap">{job.summary}</p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                     {job.highlights.map((hl, k) => <li key={k}>{hl}</li>)}
-                  </ul>
+                  {job.highlights && job.highlights.length > 0 && (
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      {job.highlights.map((hl, k) => <li key={k}>{hl}</li>)}
+                    </ul>
+                  )}
                 </div>
               ))}
             </div>
@@ -107,7 +148,19 @@ export const ModernTemplate: React.FC<TemplateProps> = React.memo(({ basics, wor
                        <h3 className="font-bold text-gray-800">{project.name}</h3>
                        {project.url && <a href={project.url} className="text-xs text-blue-500 hover:underline">{t('link')} ↗</a>}
                     </div>
+                    {project.roles && project.roles.length > 0 && (
+                      <div className="text-xs text-gray-500 mb-2">
+                        {t('roles')}: {project.roles.join(', ')}
+                      </div>
+                    )}
                     <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{project.description}</p>
+                    {project.highlights && project.highlights.length > 0 && (
+                      <ul className="list-disc list-inside text-xs text-gray-500 space-y-1 mb-2">
+                        {project.highlights.map((hl, k) => (
+                          <li key={k}>{hl}</li>
+                        ))}
+                      </ul>
+                    )}
                     <div className="flex flex-wrap gap-1">
                       {project.keywords.map((k, j) => (
                         <span key={j} className="text-xs text-gray-500 bg-white border border-gray-200 px-1.5 py-0.5 rounded">{k}</span>

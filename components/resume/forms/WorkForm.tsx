@@ -64,6 +64,14 @@ const WorkItem = ({ job, index, updateWork, removeWork }: WorkItemProps) => {
             placeholder={t('positionPlaceholder')} 
           />
         </div>
+        <div className="space-y-2 md:col-span-2">
+          <Label>{t('workUrl')}</Label>
+          <Input
+            value={localJob.url ?? ''}
+            onChange={(e) => handleChange('url', e.target.value)}
+            placeholder={t('workUrlPlaceholder')}
+          />
+        </div>
         <div className="space-y-2">
           <Label>{t('startDate')}</Label>
           <Input 
@@ -87,6 +95,23 @@ const WorkItem = ({ job, index, updateWork, removeWork }: WorkItemProps) => {
           value={localJob.summary} 
           onChange={(e) => handleChange('summary', e.target.value)} 
           placeholder={t('workSummaryPlaceholder')} 
+          className="h-24"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>{t('workHighlights')}</Label>
+        <Textarea
+          value={(localJob.highlights ?? []).join('\n')}
+          onChange={(e) =>
+            handleChange(
+              'highlights',
+              e.target.value
+                .split('\n')
+                .map((s) => s.trim())
+                .filter(Boolean)
+            )
+          }
+          placeholder={t('workHighlightsPlaceholder')}
           className="h-24"
         />
       </div>

@@ -7,10 +7,11 @@ import { WorkForm } from './forms/WorkForm';
 import { EducationForm } from './forms/EducationForm';
 import { SkillsForm } from './forms/SkillsForm';
 import { ProjectsForm } from './forms/ProjectsForm';
+import { LanguagesForm } from './forms/LanguagesForm';
 import { TemplateSelector } from './forms/TemplateSelector';
 import { ResumePreview } from './ResumePreview';
 import { Button } from '@/components/ui/button';
-import { User, Briefcase, GraduationCap, Layers, FolderGit2, LayoutTemplate } from 'lucide-react';
+import { User, Briefcase, GraduationCap, Layers, FolderGit2, LayoutTemplate, Globe } from 'lucide-react';
 
 interface ResumeEditorProps {
   initialData?: ResumeData;
@@ -77,6 +78,13 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
               <Layers className="mr-2 h-4 w-4" /> {t('sectionSkills')}
             </Button>
             <Button 
+              variant={activeSection === 'languages' ? 'default' : 'ghost'} 
+              className="w-full justify-start" 
+              onClick={() => setActiveSection('languages')}
+            >
+              <Globe className="mr-2 h-4 w-4" /> {t('sectionLanguages')}
+            </Button>
+            <Button 
               variant={activeSection === 'projects' ? 'default' : 'ghost'} 
               className="w-full justify-start" 
               onClick={() => setActiveSection('projects')}
@@ -93,6 +101,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
           {activeSection === 'work' && <WorkForm />}
           {activeSection === 'education' && <EducationForm />}
           {activeSection === 'skills' && <SkillsForm />}
+          {activeSection === 'languages' && <LanguagesForm />}
           {activeSection === 'projects' && <ProjectsForm />}
        </div>
 

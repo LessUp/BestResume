@@ -59,7 +59,7 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
         <div className="space-y-2">
           <Label>{t('projectUrl')}</Label>
           <Input 
-            value={localProject.url} 
+            value={localProject.url ?? ''} 
             onChange={(e) => handleChange('url', e.target.value)} 
             placeholder={t('projectUrlPlaceholder')} 
           />
@@ -85,10 +85,36 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
       <div className="space-y-2">
          <Label>{t('technologies')}</Label>
          <Input 
-           value={localProject.keywords.join(', ')} 
-           onChange={(e) => handleChange('keywords', e.target.value.split(',').map(s => s.trim()))} 
+           value={(localProject.keywords ?? []).join(', ')} 
+           onChange={(e) =>
+             handleChange(
+               'keywords',
+               e.target.value
+                 .split(',')
+                 .map((s) => s.trim())
+                 .filter(Boolean)
+             )
+           }
            placeholder={t('technologiesPlaceholder')} 
          />
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t('projectRoles')}</Label>
+        <Textarea
+          value={(localProject.roles ?? []).join('\n')}
+          onChange={(e) =>
+            handleChange(
+              'roles',
+              e.target.value
+                .split('\n')
+                .map((s) => s.trim())
+                .filter(Boolean)
+            )
+          }
+          placeholder={t('projectRolesPlaceholder')}
+          className="h-20"
+        />
       </div>
 
       <div className="space-y-2">
@@ -97,6 +123,24 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
           value={localProject.description} 
           onChange={(e) => handleChange('description', e.target.value)} 
           placeholder={t('projectDescriptionPlaceholder')} 
+          className="h-24"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t('projectHighlights')}</Label>
+        <Textarea
+          value={(localProject.highlights ?? []).join('\n')}
+          onChange={(e) =>
+            handleChange(
+              'highlights',
+              e.target.value
+                .split('\n')
+                .map((s) => s.trim())
+                .filter(Boolean)
+            )
+          }
+          placeholder={t('projectHighlightsPlaceholder')}
           className="h-24"
         />
       </div>

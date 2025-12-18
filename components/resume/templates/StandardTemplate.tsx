@@ -8,9 +8,10 @@ interface TemplateProps {
   education: ResumeData['education'];
   skills: ResumeData['skills'];
   projects: ResumeData['projects'];
+  languages: ResumeData['languages'];
 }
 
-export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects }) => {
+export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, work, education, skills, projects, languages }) => {
   const t = useTranslations('Resume.templates');
 
   return (
@@ -24,6 +25,25 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
           {basics.phone && <span>{basics.phone}</span>}
           {basics.url && <span>{basics.url}</span>}
           {basics.location.city && <span>{basics.location.city}, {basics.location.countryCode}</span>}
+          {basics.profiles &&
+            basics.profiles.map((profile, i) => {
+              if (profile.url) {
+                return (
+                  <span key={`${profile.network}-${profile.username}-${i}`}>{profile.url}</span>
+                );
+              }
+
+              if (profile.network || profile.username) {
+                return (
+                  <span key={`${profile.network}-${profile.username}-${i}`}>
+                    {profile.network}
+                    {profile.username ? `: ${profile.username}` : ''}
+                  </span>
+                );
+              }
+
+              return null;
+            })}
         </div>
       </header>
 
@@ -49,6 +69,7 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
                   </span>
                 </div>
                 <div className="text-md font-semibold text-gray-700 mb-1">{job.name}</div>
+                {job.url && <div className="text-sm text-blue-600 mb-1">{job.url}</div>}
                 <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{job.summary}</p>
                 {job.highlights && job.highlights.length > 0 && (
                   <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
@@ -76,10 +97,16 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
                     {edu.startDate} - {edu.endDate}
                   </span>
                 </div>
+                {edu.url && <div className="text-sm text-blue-600">{edu.url}</div>}
                 <div className="text-md text-gray-700">
                   {t('degreeInArea', { studyType: edu.studyType, area: edu.area })}
                 </div>
                 {edu.score && <div className="text-sm text-gray-500">{t('gpa')}: {edu.score}</div>}
+                {edu.courses && edu.courses.length > 0 && (
+                  <div className="text-sm text-gray-500">
+                    {t('courses')}: {edu.courses.join(', ')}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -100,7 +127,19 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
                   </span>
                 </div>
                 {project.url && <div className="text-sm text-blue-600 mb-1">{project.url}</div>}
+                {project.roles && project.roles.length > 0 && (
+                  <div className="text-sm text-gray-500 mb-1">
+                    {t('roles')}: {project.roles.join(', ')}
+                  </div>
+                )}
                 <p className="text-sm text-gray-600 mb-2 whitespace-pre-wrap">{project.description}</p>
+                {project.highlights && project.highlights.length > 0 && (
+                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1 mb-2">
+                    {project.highlights.map((hl, i) => (
+                      <li key={i}>{hl}</li>
+                    ))}
+                  </ul>
+                )}
                 {project.keywords && project.keywords.length > 0 && (
                   <div className="text-sm text-gray-500">
                     {t('technologies')}: {project.keywords.join(", ")}
@@ -119,8 +158,25 @@ export const StandardTemplate: React.FC<TemplateProps> = React.memo(({ basics, w
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, index) => (
               <div key={skill.id || index} className="mb-2">
-                <span className="font-bold mr-2">{skill.name}:</span>
+                <span className="font-bold mr-2">
+                  {skill.name}
+                  {skill.level ? ` (${skill.level})` : ''}:
+                </span>
                 <span className="text-gray-600">{skill.keywords.join(", ")}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {languages.length > 0 && (
+        <section className="mb-6">
+          <h2 className="text-xl font-bold border-b border-gray-300 mb-3 uppercase">{t('languages')}</h2>
+          <div className="space-y-1 text-sm text-gray-600">
+            {languages.map((language, index) => (
+              <div key={language.id || index}>
+                {language.language}
+                {language.fluency ? ` - ${language.fluency}` : ''}
               </div>
             ))}
           </div>

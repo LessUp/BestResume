@@ -279,6 +279,7 @@
     "sectionExperience": "Experience",
     "sectionEducation": "Education",
     "sectionSkills": "Skills",
+    "sectionLanguages": "Languages",
     "sectionProjects": "Projects"
   },
   "Resume": {
@@ -297,6 +298,28 @@
       "summary": "Professional Summary",
       "summaryPlaceholder": "Brief summary of your professional background...",
 
+      "locationTitle": "Location",
+      "address": "Address",
+      "addressPlaceholder": "Street address",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "12345",
+      "city": "City",
+      "cityPlaceholder": "San Francisco",
+      "region": "Region",
+      "regionPlaceholder": "CA",
+      "countryCode": "Country Code",
+      "countryCodePlaceholder": "US",
+
+      "profilesTitle": "Profiles",
+      "addProfile": "Add Profile",
+      "emptyProfiles": "No profiles added yet.",
+      "profileNetwork": "Network",
+      "profileNetworkPlaceholder": "LinkedIn / GitHub",
+      "profileUsername": "Username",
+      "profileUsernamePlaceholder": "johndoe",
+      "profileUrl": "URL",
+      "profileUrlPlaceholder": "https://...",
+
       "workTitle": "Work Experience",
       "addPosition": "Add Position",
       "emptyWork": "No work experience added yet.",
@@ -312,6 +335,11 @@
       "workSummary": "Summary",
       "workSummaryPlaceholder": "Describe your responsibilities and achievements... (e.g. Led a team of 5 developers...)",
 
+      "workUrl": "Company / Position URL",
+      "workUrlPlaceholder": "https://company.com",
+      "workHighlights": "Highlights (one per line)",
+      "workHighlightsPlaceholder": "e.g. Led a team of 5 developers...",
+
       "educationTitle": "Education",
       "addEducation": "Add Education",
       "emptyEducation": "No education added yet.",
@@ -324,6 +352,11 @@
       "score": "GPA / Score",
       "scorePlaceholder": "3.8/4.0",
 
+      "educationUrl": "Institution URL",
+      "educationUrlPlaceholder": "https://university.edu",
+      "courses": "Courses (one per line)",
+      "coursesPlaceholder": "e.g. Data Structures",
+
       "skillsTitle": "Skills",
       "addSkillCategory": "Add Skill Category",
       "emptySkills": "No skills added yet.",
@@ -331,6 +364,12 @@
       "skillCategoryPlaceholder": "Languages / Frameworks / Tools",
       "skillKeywords": "Skills (Comma separated)",
       "skillKeywordsPlaceholder": "React, TypeScript, Node.js",
+
+      "skillLevel": "Level",
+      "skillLevelBeginner": "Beginner",
+      "skillLevelIntermediate": "Intermediate",
+      "skillLevelAdvanced": "Advanced",
+      "skillLevelExpert": "Expert",
 
       "projectsTitle": "Projects",
       "addProject": "Add Project",
@@ -342,7 +381,20 @@
       "technologies": "Technologies (Comma separated)",
       "technologiesPlaceholder": "React, Node.js, AWS",
       "projectDescription": "Description",
-      "projectDescriptionPlaceholder": "Describe the project and your role... (e.g. Built a full-stack application using Next.js...)"
+      "projectDescriptionPlaceholder": "Describe the project and your role... (e.g. Built a full-stack application using Next.js...)",
+
+      "projectRoles": "Roles (one per line)",
+      "projectRolesPlaceholder": "e.g. Tech Lead",
+      "projectHighlights": "Highlights (one per line)",
+      "projectHighlightsPlaceholder": "e.g. Reduced latency by 30%...",
+
+      "languagesTitle": "Languages",
+      "addLanguage": "Add Language",
+      "emptyLanguages": "No languages added yet.",
+      "languageName": "Language",
+      "languageNamePlaceholder": "English",
+      "languageFluency": "Fluency",
+      "languageFluencyPlaceholder": "Native / Fluent"
     },
     "templates": {
       "professionalSummary": "Professional Summary",
@@ -354,7 +406,10 @@
       "technologies": "Technologies",
       "gpa": "GPA",
       "link": "Link",
-      "degreeInArea": "{studyType} in {area}"
+      "degreeInArea": "{studyType} in {area}",
+      "courses": "Courses",
+      "roles": "Roles",
+      "languages": "Languages"
     }
   },
   "Templates": {

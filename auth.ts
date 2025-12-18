@@ -4,14 +4,36 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import { getRequestContext } from '@/lib/request-context';
-import { RateLimiter } from '@/lib/rate-limit';
+import { RateLimiter, UpstashRateLimiter } from '@/lib/rate-limit';
 
 // Create rate limiter instance
-const loginRateLimiter = new RateLimiter({
-  maxAttempts: parseInt(process.env.MAX_LOGIN_ATTEMPTS || '5'),
-  windowMs: parseInt(process.env.LOGIN_WINDOW_MS || '900000'), // 15 minutes default
-  blockDurationMs: parseInt(process.env.LOGIN_BLOCK_DURATION_MS || '900000'), // 15 minutes default
-});
+const loginRateLimiter = (() => {
+  const config = {
+    maxAttempts: parseInt(process.env.MAX_LOGIN_ATTEMPTS || '5'),
+    windowMs: parseInt(process.env.LOGIN_WINDOW_MS || '900000'),
+    blockDurationMs: parseInt(process.env.LOGIN_BLOCK_DURATION_MS || '900000'),
+  };
+
+  try {
+    const hasUpstashUrl =
+      !!process.env.UPSTASH_REDIS_REST_URL ||
+      !!process.env.UPSTASH_KV_REST_API_URL ||
+      !!process.env.KV_REST_API_URL;
+
+    const hasUpstashToken =
+      !!process.env.UPSTASH_REDIS_REST_TOKEN ||
+      !!process.env.UPSTASH_KV_REST_API_TOKEN ||
+      !!process.env.KV_REST_API_TOKEN;
+
+    if (hasUpstashUrl && hasUpstashToken) {
+      return new UpstashRateLimiter({ ...config, prefix: 'bestresume:login' });
+    }
+  } catch (err) {
+    console.warn('Upstash rate limiter init failed, falling back to in-memory:', err);
+  }
+
+  return new RateLimiter(config);
+})();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -51,7 +73,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           await loginRateLimiter.recordAttempt(identifier, false);
 
           // Log failed login attempt
-          const attemptCount = loginRateLimiter.getAttemptCount(identifier);
+          const attemptCount = await Promise.resolve(loginRateLimiter.getAttemptCount(identifier));
           const isHighRisk = attemptCount >= 3;
 
           if (user) {
@@ -80,7 +102,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           await loginRateLimiter.recordAttempt(identifier, false);
 
           // Log failed login attempt with high-risk marker
-          const attemptCount = loginRateLimiter.getAttemptCount(identifier);
+          const attemptCount = await Promise.resolve(loginRateLimiter.getAttemptCount(identifier));
           const isHighRisk = attemptCount >= 3;
 
           await prisma.activityLog.create({

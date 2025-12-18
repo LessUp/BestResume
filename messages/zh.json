@@ -279,6 +279,7 @@
     "sectionExperience": "工作经历",
     "sectionEducation": "教育经历",
     "sectionSkills": "技能",
+    "sectionLanguages": "语言",
     "sectionProjects": "项目"
   },
   "Resume": {
@@ -297,6 +298,28 @@
       "summary": "个人简介",
       "summaryPlaceholder": "简要介绍你的职业背景与核心优势...",
 
+      "locationTitle": "所在地",
+      "address": "地址",
+      "addressPlaceholder": "街道地址",
+      "postalCode": "邮编",
+      "postalCodePlaceholder": "100000",
+      "city": "城市",
+      "cityPlaceholder": "北京",
+      "region": "地区/省份",
+      "regionPlaceholder": "北京",
+      "countryCode": "国家代码",
+      "countryCodePlaceholder": "CN",
+
+      "profilesTitle": "社交账号",
+      "addProfile": "添加社交账号",
+      "emptyProfiles": "暂无社交账号",
+      "profileNetwork": "平台",
+      "profileNetworkPlaceholder": "LinkedIn / GitHub",
+      "profileUsername": "用户名",
+      "profileUsernamePlaceholder": "zhangsan",
+      "profileUrl": "链接",
+      "profileUrlPlaceholder": "https://...",
+
       "workTitle": "工作经历",
       "addPosition": "添加职位",
       "emptyWork": "暂无工作经历",
@@ -312,6 +335,11 @@
       "workSummary": "职责/成果",
       "workSummaryPlaceholder": "描述你的职责与成果……（例如：带领 5 人团队完成……）",
 
+      "workUrl": "公司/职位链接",
+      "workUrlPlaceholder": "https://company.com",
+      "workHighlights": "亮点（每行一条）",
+      "workHighlightsPlaceholder": "例如：带领 5 人团队完成……",
+
       "educationTitle": "教育经历",
       "addEducation": "添加教育经历",
       "emptyEducation": "暂无教育经历",
@@ -324,6 +352,11 @@
       "score": "GPA/成绩",
       "scorePlaceholder": "3.8/4.0",
 
+      "educationUrl": "学校/机构链接",
+      "educationUrlPlaceholder": "https://university.edu",
+      "courses": "课程（每行一条）",
+      "coursesPlaceholder": "例如：数据结构",
+
       "skillsTitle": "技能",
       "addSkillCategory": "添加技能分类",
       "emptySkills": "暂无技能",
@@ -331,6 +364,12 @@
       "skillCategoryPlaceholder": "语言 / 框架 / 工具",
       "skillKeywords": "技能（逗号分隔）",
       "skillKeywordsPlaceholder": "React, TypeScript, Node.js",
+
+      "skillLevel": "熟练度",
+      "skillLevelBeginner": "入门",
+      "skillLevelIntermediate": "熟练",
+      "skillLevelAdvanced": "高级",
+      "skillLevelExpert": "专家",
 
       "projectsTitle": "项目经历",
       "addProject": "添加项目",
@@ -342,7 +381,20 @@
       "technologies": "技术栈（逗号分隔）",
       "technologiesPlaceholder": "React, Node.js, AWS",
       "projectDescription": "项目描述",
-      "projectDescriptionPlaceholder": "描述项目与个人贡献……（例如：使用 Next.js 构建全栈应用……）"
+      "projectDescriptionPlaceholder": "描述项目与个人贡献……（例如：使用 Next.js 构建全栈应用……）",
+
+      "projectRoles": "角色（每行一条）",
+      "projectRolesPlaceholder": "例如：技术负责人",
+      "projectHighlights": "亮点（每行一条）",
+      "projectHighlightsPlaceholder": "例如：将延迟降低 30%...",
+
+      "languagesTitle": "语言",
+      "addLanguage": "添加语言",
+      "emptyLanguages": "暂无语言",
+      "languageName": "语言",
+      "languageNamePlaceholder": "英语",
+      "languageFluency": "熟练度",
+      "languageFluencyPlaceholder": "母语 / 流利"
     },
     "templates": {
       "professionalSummary": "个人简介",
@@ -354,7 +406,10 @@
       "technologies": "技术栈",
       "gpa": "GPA",
       "link": "链接",
-      "degreeInArea": "{studyType} · {area}"
+      "degreeInArea": "{studyType} · {area}",
+      "courses": "课程",
+      "roles": "角色",
+      "languages": "语言"
     }
   },
   "Templates": {
