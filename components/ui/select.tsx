@@ -72,9 +72,13 @@ export function Select({
       <div ref={ref} className="relative">
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child) && child.type === SelectTrigger) {
-            return React.cloneElement(child as React.ReactElement<SelectTriggerProps>, {
-              ...child.props,
-              className: cn(child.props.className, disabled && "opacity-50 cursor-not-allowed"),
+            const trigger = child as React.ReactElement<SelectTriggerProps>;
+            return React.cloneElement(trigger, {
+              ...trigger.props,
+              className: cn(
+                trigger.props.className,
+                disabled && "opacity-50 cursor-not-allowed"
+              ),
             });
           }
           return child;

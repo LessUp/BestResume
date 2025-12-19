@@ -4,18 +4,21 @@ import EditorClient from "./EditorClient";
 import { ResumeData } from "@/types/resume";
 
 interface EditorPageProps {
-  params: { locale: string; id: string };
-  searchParams?: { template?: string | string[] };
+  params: Promise<{ locale: string; id: string }>;
+  searchParams?: Promise<{ template?: string | string[] }>;
 }
 
 export default async function EditorPage({ params, searchParams }: EditorPageProps) {
   const session = await auth();
+  const { locale, id } = await params;
+  const resolvedSearchParams = await searchParams;
 
   let initialData: ResumeData | undefined = undefined;
-  const initialTemplateId = typeof searchParams?.template === 'string' ? searchParams.template : undefined;
+  const initialTemplateId =
+    typeof resolvedSearchParams?.template === 'string' ? resolvedSearchParams.template : undefined;
 
-  if (params.id !== 'new' && params.id !== 'demo') {
-    const resume = await getResume(params.id);
+  if (id !== 'new' && id !== 'demo') {
+    const resume = await getResume(id);
     if (resume) {
       initialData = resume.data;
     }
@@ -24,9 +27,9 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
   return (
     <EditorClient
       initialData={initialData}
-      resumeId={params.id}
+      resumeId={id}
       userId={session?.user?.id}
-      locale={params.locale}
+      locale={locale}
       initialTemplateId={initialTemplateId}
     />
   );
