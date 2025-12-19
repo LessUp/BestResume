@@ -13,6 +13,9 @@
   - `components/ui/select.tsx`：修复 `React.cloneElement` 时对 `child.props` 的展开类型错误（`unknown` 不能被 spread），先将 `child` 缓存为明确 props 类型再展开
   - `package.json`：增加 `@types/nodemailer`，修复 `lib/email.ts` 引入 `nodemailer` 时缺少声明文件导致的构建失败
   - `tailwind.config.ts`：`darkMode` 从 `["class"]` 修正为 `"class"`，修复 Tailwind 配置类型校验失败导致的构建阻塞
+  - `middleware.ts` -> `proxy.ts`：按 Next.js 16 新文件约定迁移 `next-intl` 中间层，消除 `middleware` 弃用提示
+  - `package.json`：更新 `baseline-browser-mapping` 至 `^2.9.10`（devDependency）
+  - `package.json`：升级 `next` / `eslint-config-next` 至 `^16.0.6`（当前安装 Next.js 16.1.0），修复 Next 16.0.3 内置 browserslist 触发的 `baseline-browser-mapping` 过期提示
 
 - 为避免历史代码/测试用例阻塞 lint，将部分规则降级或关闭：
   - `@typescript-eslint/no-explicit-any`：降级为 warning
@@ -22,6 +25,8 @@
 
 ## 结果
 - `npm run lint` 可执行并通过（0 errors，仅 warnings）
+- `npm run build` 可执行并通过（Exit code 0）
+- `npm audit` 无漏洞（0 vulnerabilities）
 
 ## 后续
-- 需要通过 `npm ci`（或 `npm install`）补齐依赖后复跑 `npm run build`，确认构建不再因缺失 `nodemailer` 阻塞。
+- 暂无
