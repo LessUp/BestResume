@@ -33,14 +33,14 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
   }, [initialData, initialTemplateId, setResumeData, setTemplateId]);
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-6 p-6 bg-gray-50">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-6 p-6 bg-muted/30">
        {/* Sidebar Navigation */}
        <aside className={`w-full lg:w-64 flex-shrink-0 print:hidden ${mobilePreviewOpen ? 'hidden lg:block' : 'block'}`}>
-         <div className="bg-white rounded-lg shadow-sm p-4 space-y-2 sticky top-4">
-            <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">{t('sidebarDesign')}</h3>
+         <div className="bg-card rounded-lg border border-border shadow-sm p-4 space-y-1 sticky top-4">
+            <h3 className="font-semibold text-muted-foreground text-xs uppercase mb-3 px-2 tracking-wider">{t('sidebarDesign')}</h3>
             <Button 
-              variant={activeSection === 'templates' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'templates' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'templates' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('templates')}
             >
               <LayoutTemplate className="mr-2 h-4 w-4" /> {t('sidebarTemplates')}
@@ -48,45 +48,45 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
 
             <div className="h-4"></div> {/* Spacer */}
 
-            <h3 className="font-semibold text-gray-500 text-sm uppercase mb-4 px-2">{t('sidebarContent')}</h3>
+            <h3 className="font-semibold text-muted-foreground text-xs uppercase mb-3 px-2 tracking-wider">{t('sidebarContent')}</h3>
             <Button 
-              variant={activeSection === 'basics' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'basics' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'basics' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('basics')}
             >
               <User className="mr-2 h-4 w-4" /> {t('sectionPersonal')}
             </Button>
             <Button 
-              variant={activeSection === 'work' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'work' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'work' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('work')}
             >
               <Briefcase className="mr-2 h-4 w-4" /> {t('sectionExperience')}
             </Button>
             <Button 
-              variant={activeSection === 'education' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'education' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'education' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('education')}
             >
               <GraduationCap className="mr-2 h-4 w-4" /> {t('sectionEducation')}
             </Button>
             <Button 
-              variant={activeSection === 'skills' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'skills' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'skills' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('skills')}
             >
               <Layers className="mr-2 h-4 w-4" /> {t('sectionSkills')}
             </Button>
             <Button 
-              variant={activeSection === 'languages' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'languages' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'languages' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('languages')}
             >
               <Globe className="mr-2 h-4 w-4" /> {t('sectionLanguages')}
             </Button>
             <Button 
-              variant={activeSection === 'projects' ? 'default' : 'ghost'} 
-              className="w-full justify-start" 
+              variant={activeSection === 'projects' ? 'secondary' : 'ghost'} 
+              className={`w-full justify-start ${activeSection === 'projects' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
               onClick={() => setActiveSection('projects')}
             >
               <FolderGit2 className="mr-2 h-4 w-4" /> {t('sectionProjects')}
@@ -106,7 +106,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
        </div>
 
        {/* Preview Area */}
-       <div className={`flex-1 bg-gray-100/50 border-l overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
+       <div className={`flex-1 bg-muted/50 border-l border-border overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
           <ResumePreview />
        </div>
     </div>

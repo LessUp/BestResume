@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useLocale, useTranslations } from 'next-intl';
 import { registerUser } from "@/app/actions/auth";
-import { FileText, Eye, EyeOff, Check, X, ArrowLeft, Sparkles, Users, Shield, Zap } from "lucide-react";
+import { FileText, Eye, EyeOff, ArrowLeft, Check, X, Shield, Sparkles, Zap } from "lucide-react";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -18,8 +18,8 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const locale = useLocale();
   const router = useRouter();
+  const locale = useLocale();
   const t = useTranslations('Auth');
 
   const passwordChecks = {
@@ -50,7 +50,6 @@ export default function SignUp() {
       await registerUser({ email, password, name }, locale);
       router.push(`/${locale}/auth/signin?registered=true`);
     } catch (err) {
-      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('registrationFailed'));
     } finally {
       setLoading(false);
@@ -58,7 +57,7 @@ export default function SignUp() {
   };
 
   const PasswordCheck = ({ passed, text }: { passed: boolean; text: string }) => (
-    <div className={`flex items-center gap-2 text-sm transition-colors ${passed ? 'text-green-600' : 'text-gray-400'}`}>
+    <div className={`flex items-center gap-2 text-sm transition-colors ${passed ? 'text-green-600' : 'text-muted-foreground'}`}>
       {passed ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
       <span>{text}</span>
     </div>
@@ -73,82 +72,52 @@ export default function SignUp() {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
-          {/* Logo */}
-          <Link href={`/${locale}`} className="flex items-center gap-3 text-white">
-            <div className="h-11 w-11 bg-white/20 backdrop-blur rounded-xl flex items-center justify-center">
+      <div className="hidden lg:flex lg:w-1/2 bg-primary relative overflow-hidden items-center justify-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent_70%)]" />
+        <div className="relative z-10 p-12 text-primary-foreground max-w-lg">
+          <Link href={`/${locale}`} className="flex items-center gap-3 mb-12">
+            <div className="h-10 w-10 bg-primary-foreground/10 backdrop-blur rounded-lg flex items-center justify-center border border-primary-foreground/20">
               <FileText className="h-6 w-6" />
             </div>
             <span className="text-2xl font-bold">BestResume</span>
           </Link>
 
-          {/* Main Content */}
-          <div className="space-y-8">
-            <div>
-              <h1 className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-                {t('signupHeroTitle')}
-              </h1>
-              <p className="text-xl text-blue-100 leading-relaxed">
-                {t('signupHeroDesc')}
-              </p>
-            </div>
-
-            {/* Features */}
-            <div className="space-y-4">
-              {features.map((feature, i) => (
-                <div key={i} className="flex items-center gap-3 text-white/90">
-                  <div className="h-10 w-10 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center">
-                    <feature.icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-lg">{feature.text}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Social Proof */}
-            <div className="flex items-center gap-4 pt-4">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-10 w-10 rounded-full bg-gradient-to-br from-white/30 to-white/10 border-2 border-white/30" />
-                ))}
-              </div>
-              <div className="text-blue-100">
-                <span className="font-semibold text-white">10,000+</span> {t('trustedBy')}
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <p className="text-blue-200 text-sm">
-            © {new Date().getFullYear()} BestResume. All rights reserved.
+          <h1 className="text-4xl font-bold mb-6 leading-tight">
+            {t('signupHeroTitle')}
+          </h1>
+          <p className="text-primary-foreground/80 text-lg mb-12 leading-relaxed">
+            {t('signupHeroDesc')}
           </p>
+
+          <div className="space-y-6">
+            {features.map((feature, i) => (
+              <div key={i} className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-primary-foreground/10 flex items-center justify-center border border-primary-foreground/10">
+                  <feature.icon className="h-5 w-5" />
+                </div>
+                <span className="text-lg font-medium">{feature.text}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Right Panel - Form */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-gray-50">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:p-12 bg-muted/30">
         <div className="w-full max-w-md space-y-8">
           {/* Mobile Back Link */}
           <div className="lg:hidden">
-            <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-              <ArrowLeft className="h-5 w-5" />
-              <span>{t('backToHome')}</span>
+            <Link href={`/${locale}`} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-4 w-4" />
+              <span className="text-sm font-medium">{t('backToHome')}</span>
             </Link>
           </div>
 
-          {/* Header */}
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-gray-900">{t('createAccount')}</h2>
-            <p className="mt-3 text-gray-600">
+            <h2 className="text-3xl font-bold text-foreground tracking-tight">{t('createAccount')}</h2>
+            <p className="mt-2 text-muted-foreground">
               {t('alreadyHaveAccount')}{" "}
-              <Link href={`/${locale}/auth/signin`} className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+              <Link href={`/${locale}/auth/signin`} className="text-primary hover:underline font-medium">
                 {t('signIn')}
               </Link>
             </p>
@@ -156,7 +125,7 @@ export default function SignUp() {
 
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm flex items-start gap-3">
+            <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm flex items-start gap-3">
               <X className="h-5 w-5 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
@@ -165,21 +134,21 @@ export default function SignUp() {
           {/* Form */}
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="name" className="text-gray-700 font-medium">{t('name')}</Label>
+              <div className="space-y-2">
+                <Label htmlFor="name">{t('name')}</Label>
                 <Input
                   id="name"
                   type="text"
                   autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 h-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  className="h-11"
                   placeholder={t('namePlaceholder')}
                 />
               </div>
 
-              <div>
-                <Label htmlFor="email" className="text-gray-700 font-medium">{t('email')}</Label>
+              <div className="space-y-2">
+                <Label htmlFor="email">{t('email')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -187,14 +156,14 @@ export default function SignUp() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 h-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  className="h-11"
                   placeholder={t('emailPlaceholder')}
                 />
               </div>
 
-              <div>
-                <Label htmlFor="password" className="text-gray-700 font-medium">{t('password')}</Label>
-                <div className="relative mt-2">
+              <div className="space-y-2">
+                <Label htmlFor="password">{t('password')}</Label>
+                <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
@@ -202,20 +171,20 @@ export default function SignUp() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 pr-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="h-11 pr-10"
                     placeholder={t('passwordPlaceholder')}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
 
                 {password && (
-                  <div className="mt-3 p-4 bg-white rounded-xl border border-gray-100 space-y-2">
+                  <div className="p-4 bg-background rounded-lg border border-input space-y-2">
                     <PasswordCheck passed={passwordChecks.length} text={t('passwordLength')} />
                     <PasswordCheck passed={passwordChecks.hasLetter} text={t('passwordLetter')} />
                     <PasswordCheck passed={passwordChecks.hasNumber} text={t('passwordNumber')} />
@@ -223,8 +192,8 @@ export default function SignUp() {
                 )}
               </div>
 
-              <div>
-                <Label htmlFor="confirmPassword" className="text-gray-700 font-medium">{t('confirmPassword')}</Label>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">{t('confirmPassword')}</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -232,11 +201,11 @@ export default function SignUp() {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="mt-2 h-12 bg-white border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  className="h-11"
                   placeholder={t('confirmPasswordPlaceholder')}
                 />
                 {confirmPassword && !passwordChecks.match && (
-                  <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                  <p className="text-sm text-destructive flex items-center gap-1">
                     <X className="h-4 w-4" />
                     {t('passwordMismatch')}
                   </p>
@@ -247,11 +216,12 @@ export default function SignUp() {
             <Button
               type="submit"
               disabled={loading || !isPasswordStrong || !passwordChecks.match}
-              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-11 text-base shadow-sm"
+              size="lg"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                   {t('creating')}
                 </span>
               ) : (
@@ -259,11 +229,11 @@ export default function SignUp() {
               )}
             </Button>
 
-            <p className="text-xs text-center text-gray-500 leading-relaxed">
+            <p className="text-xs text-center text-muted-foreground leading-relaxed">
               {t('agreeToTerms')}{" "}
-              <Link href="#" className="text-blue-600 hover:underline">{t('termsOfService')}</Link>
+              <Link href="#" className="text-primary hover:underline">{t('termsOfService')}</Link>
               {" "}{t('and')}{" "}
-              <Link href="#" className="text-blue-600 hover:underline">{t('privacyPolicy')}</Link>
+              <Link href="#" className="text-primary hover:underline">{t('privacyPolicy')}</Link>
             </p>
           </form>
         </div>

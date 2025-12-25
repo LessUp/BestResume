@@ -97,7 +97,7 @@ export function DropdownMenuContent({
   return (
     <div
       className={cn(
-        "absolute top-full mt-2 z-50 min-w-[200px] overflow-hidden rounded-lg border border-gray-200 bg-white p-1 shadow-lg animate-in fade-in-0 zoom-in-95 dark:border-gray-800 dark:bg-gray-900",
+        "absolute top-full mt-2 z-50 min-w-[200px] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         alignmentClasses[align],
         className
       )}
@@ -118,10 +118,10 @@ export function DropdownMenuItem({
   return (
     <button
       className={cn(
-        "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
+        "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-accent-foreground",
         destructive
-          ? "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950"
-          : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800",
+          ? "text-destructive focus:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground"
+          : "",
         className
       )}
       onClick={() => {
@@ -137,12 +137,12 @@ export function DropdownMenuItem({
 
 export function DropdownMenuLabel({ children, className }: DropdownMenuLabelProps) {
   return (
-    <div className={cn("px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400", className)}>
+    <div className={cn("px-2 py-1.5 text-sm font-semibold", className)}>
       {children}
     </div>
   );
 }
 
 export function DropdownMenuSeparator({ className }: DropdownMenuSeparatorProps) {
-  return <div className={cn("my-1 h-px bg-gray-200 dark:bg-gray-800", className)} />;
+  return <div className={cn("-mx-1 my-1 h-px bg-muted", className)} />;
 }

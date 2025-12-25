@@ -95,13 +95,13 @@ export function DialogContent({ children, className }: DialogContentProps) {
       <div className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2">
         <div
           className={cn(
-            "w-full max-w-lg rounded-xl bg-white p-6 shadow-2xl animate-in fade-in-0 zoom-in-95 dark:bg-gray-900",
+            "w-full max-w-lg rounded-xl border border-border bg-background p-6 shadow-2xl animate-in fade-in-0 zoom-in-95",
             className
           )}
         >
           <button
             onClick={() => onOpenChange(false)}
-            className="absolute right-4 top-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           >
             <X className="h-4 w-4" />
           </button>
@@ -114,7 +114,7 @@ export function DialogContent({ children, className }: DialogContentProps) {
 
 export function DialogHeader({ children, className }: DialogHeaderProps) {
   return (
-    <div className={cn("mb-4 space-y-2", className)}>
+    <div className={cn("flex flex-col space-y-1.5 text-center sm:text-left", className)}>
       {children}
     </div>
   );
@@ -122,7 +122,7 @@ export function DialogHeader({ children, className }: DialogHeaderProps) {
 
 export function DialogTitle({ children, className }: DialogTitleProps) {
   return (
-    <h2 className={cn("text-lg font-semibold text-gray-900 dark:text-white", className)}>
+    <h2 className={cn("text-lg font-semibold leading-none tracking-tight", className)}>
       {children}
     </h2>
   );
@@ -130,7 +130,7 @@ export function DialogTitle({ children, className }: DialogTitleProps) {
 
 export function DialogDescription({ children, className }: DialogDescriptionProps) {
   return (
-    <p className={cn("text-sm text-gray-500 dark:text-gray-400", className)}>
+    <p className={cn("text-sm text-muted-foreground", className)}>
       {children}
     </p>
   );
@@ -138,7 +138,7 @@ export function DialogDescription({ children, className }: DialogDescriptionProp
 
 export function DialogFooter({ children, className }: DialogFooterProps) {
   return (
-    <div className={cn("mt-6 flex justify-end gap-3", className)}>
+    <div className={cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)}>
       {children}
     </div>
   );

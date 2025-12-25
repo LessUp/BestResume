@@ -96,9 +96,7 @@ export function SelectTrigger({ children, className }: SelectTriggerProps) {
       type="button"
       onClick={() => setOpen(!open)}
       className={cn(
-        "flex h-10 w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm",
-        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
-        "dark:border-gray-700 dark:bg-gray-900",
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
         className
       )}
     >
@@ -121,8 +119,7 @@ export function SelectContent({ children, className }: SelectContentProps) {
   return (
     <div
       className={cn(
-        "absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white py-1 shadow-lg",
-        "animate-in fade-in-0 zoom-in-95 dark:border-gray-700 dark:bg-gray-900",
+        "absolute top-full left-0 z-50 mt-1 w-full overflow-hidden rounded-md border border-border bg-popover text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95",
         className
       )}
     >
@@ -145,15 +142,15 @@ export function SelectItem({ value, children, className }: SelectItemProps) {
         setOpen(false);
       }}
       className={cn(
-        "flex w-full items-center justify-between px-3 py-2 text-sm transition-colors",
-        isSelected
-          ? "bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
-          : "hover:bg-gray-100 dark:hover:bg-gray-800",
+        "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        isSelected && "font-semibold",
         className
       )}
     >
-      {children}
-      {isSelected && <Check className="h-4 w-4" />}
+      <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
+        {isSelected && <Check className="h-4 w-4" />}
+      </span>
+      <span className="truncate pr-8">{children}</span>
     </button>
   );
 }

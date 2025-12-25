@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/auth";
+import { requireUser } from "@/lib/auth-helper";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
@@ -32,35 +32,36 @@ export interface UserProfile {
 
 // 获取当前用户资料
 export async function getCurrentUser(): Promise<UserProfile | null> {
-  const session = await auth();
-  if (!session?.user?.email) return null;
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      image: true,
-      emailVerified: true,
-      bio: true,
-      phone: true,
-      location: true,
-      website: true,
-      company: true,
-      jobTitle: true,
-      role: true,
-      theme: true,
-      language: true,
-      timezone: true,
-      isMember: true,
-      membershipType: true,
-      membershipExpiry: true,
-      createdAt: true,
-    },
-  });
-
-  return user;
+  try {
+    const user = await requireUser();
+    
+    // Convert to UserProfile type safely
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      emailVerified: user.emailVerified,
+      bio: user.bio,
+      phone: user.phone,
+      location: user.location,
+      website: user.website,
+      company: user.company,
+      jobTitle: user.jobTitle,
+      role: user.role,
+      theme: user.theme,
+      language: user.language,
+      timezone: user.timezone,
+      isMember: user.isMember,
+      membershipType: user.membershipType,
+      membershipExpiry: user.membershipExpiry,
+      createdAt: user.createdAt,
+    };
+  } catch (error) {
+    // Return null for initial load if unauthorized/not found, 
+    // rather than throwing error to client for this specific fetcher
+    return null;
+  }
 }
 
 // 更新用户资料
@@ -77,13 +78,10 @@ export async function updateUserProfile(
   locale: string = "en"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
+    const user = await requireUser(locale);
 
     await prisma.user.update({
-      where: { email: session.user.email },
+      where: { id: user.id },
       data: {
         name: data.name,
         bio: data.bio,
@@ -96,21 +94,16 @@ export async function updateUserProfile(
     });
 
     // 记录活动日志
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+    const context = await getRequestContext();
+    await prisma.activityLog.create({
+      data: {
+        userId: user.id,
+        action: "UPDATE_PROFILE",
+        details: JSON.stringify(data),
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+      },
     });
-    if (user) {
-      const context = await getRequestContext();
-      await prisma.activityLog.create({
-        data: {
-          userId: user.id,
-          action: "UPDATE_PROFILE",
-          details: JSON.stringify(data),
-          ipAddress: context.ipAddress,
-          userAgent: context.userAgent,
-        },
-      });
-    }
 
     revalidatePath('/[locale]/settings', 'page');
     return { success: true };
@@ -131,13 +124,10 @@ export async function updateUserPreferences(
   locale: string = "en"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
+    const user = await requireUser(locale);
 
     await prisma.user.update({
-      where: { email: session.user.email },
+      where: { id: user.id },
       data: {
         theme: data.theme,
         language: data.language,
@@ -163,17 +153,10 @@ export async function changePassword(
   locale: string = "en"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
+    const user = await requireUser(locale);
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user || !user.password) {
-      throw new LocalizedError("userNotFound", locale);
+    if (!user.password) {
+      throw new LocalizedError("invalidPassword", locale); // Or appropriate error for no password set
     }
 
     // 验证当前密码
@@ -185,7 +168,7 @@ export async function changePassword(
     // 更新密码
     const hashedPassword = await bcrypt.hash(data.newPassword, 10);
     await prisma.user.update({
-      where: { email: session.user.email },
+      where: { id: user.id },
       data: { password: hashedPassword },
     });
 
@@ -211,13 +194,10 @@ export async function changePassword(
 // 更新头像
 export async function updateAvatar(imageUrl: string, locale: string = "en") {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
+    const user = await requireUser(locale);
 
     await prisma.user.update({
-      where: { email: session.user.email },
+      where: { id: user.id },
       data: { image: imageUrl },
     });
 
@@ -232,72 +212,57 @@ export async function updateAvatar(imageUrl: string, locale: string = "en") {
 
 // 获取用户统计数据
 export async function getUserStats() {
-  const session = await auth();
-  if (!session?.user?.email) return null;
+  try {
+    const user = await requireUser();
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
+    const [totalResumes, publishedResumes, draftResumes, totalViews, totalDownloads] =
+      await Promise.all([
+        prisma.resume.count({ where: { userId: user.id } }),
+        prisma.resume.count({ where: { userId: user.id, status: "published" } }),
+        prisma.resume.count({ where: { userId: user.id, status: "draft" } }),
+        prisma.resume.aggregate({
+          where: { userId: user.id },
+          _sum: { viewCount: true },
+        }),
+        prisma.resume.aggregate({
+          where: { userId: user.id },
+          _sum: { downloadCount: true },
+        }),
+      ]);
 
-  if (!user) return null;
-
-  const [totalResumes, publishedResumes, draftResumes, totalViews, totalDownloads] =
-    await Promise.all([
-      prisma.resume.count({ where: { userId: user.id } }),
-      prisma.resume.count({ where: { userId: user.id, status: "published" } }),
-      prisma.resume.count({ where: { userId: user.id, status: "draft" } }),
-      prisma.resume.aggregate({
-        where: { userId: user.id },
-        _sum: { viewCount: true },
-      }),
-      prisma.resume.aggregate({
-        where: { userId: user.id },
-        _sum: { downloadCount: true },
-      }),
-    ]);
-
-  return {
-    totalResumes,
-    publishedResumes,
-    draftResumes,
-    totalViews: totalViews._sum.viewCount || 0,
-    totalDownloads: totalDownloads._sum.downloadCount || 0,
-  };
+    return {
+      totalResumes,
+      publishedResumes,
+      draftResumes,
+      totalViews: totalViews._sum.viewCount || 0,
+      totalDownloads: totalDownloads._sum.downloadCount || 0,
+    };
+  } catch (error) {
+    return null;
+  }
 }
 
 // 获取用户活动日志
 export async function getUserActivityLogs(limit = 10) {
-  const session = await auth();
-  if (!session?.user?.email) return [];
+  try {
+    const user = await requireUser();
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
+    const logs = await prisma.activityLog.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+    });
 
-  if (!user) return [];
-
-  const logs = await prisma.activityLog.findMany({
-    where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
-    take: limit,
-  });
-
-  return logs;
+    return logs;
+  } catch (error) {
+    return [];
+  }
 }
 
 // 删除账号
 export async function deleteAccount(locale: string = "en") {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) throw new LocalizedError("userNotFound", locale);
+    const user = await requireUser(locale);
 
     // 删除用户及其所有相关数据（级联删除已在schema中定义）
     await prisma.user.delete({

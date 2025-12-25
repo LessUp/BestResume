@@ -8,6 +8,13 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -50,7 +57,24 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: [
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Noto Sans",
+          "Helvetica",
+          "Arial",
+          "sans-serif",
+          "Apple Color Emoji",
+          "Segoe UI Emoji",
+        ],
+      },
+      boxShadow: {
+        'xs': '0 1px 0 rgba(27, 31, 36, 0.04)',
+        'sm': '0 1px 0 rgba(27, 31, 36, 0.1)',
+        'md': '0 3px 6px rgba(140, 149, 159, 0.15)',
+        'lg': '0 8px 24px rgba(140, 149, 159, 0.2)',
+        'xl': '0 12px 28px rgba(140, 149, 159, 0.3)',
       },
       animation: {
         "fade-in": "fade-in 0.5s ease-out forwards",

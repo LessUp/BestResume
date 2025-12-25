@@ -285,6 +285,8 @@
   "Resume": {
     "forms": {
       "basicsTitle": "基本信息",
+      "image": "头像链接",
+      "imagePlaceholder": "https://example.com/photo.jpg",
       "fullName": "姓名",
       "fullNamePlaceholder": "张三",
       "jobTitle": "职位",

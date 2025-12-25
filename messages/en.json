@@ -284,7 +284,9 @@
   },
   "Resume": {
     "forms": {
-      "basicsTitle": "Basic Information",
+      "basicsTitle": "Basic Info",
+      "image": "Profile Image URL",
+      "imagePlaceholder": "https://example.com/photo.jpg",
       "fullName": "Full Name",
       "fullNamePlaceholder": "John Doe",
       "jobTitle": "Job Title",

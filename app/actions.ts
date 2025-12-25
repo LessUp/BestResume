@@ -1,10 +1,10 @@
 "use server";
 
-import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { LocalizedError } from "@/lib/errors";
 import { ResumeData } from "@/types/resume";
 import { revalidatePath } from "next/cache";
+import { requireUser } from "@/lib/auth-helper";
 
 export async function saveResume(
   data: ResumeData,
@@ -13,16 +13,7 @@ export async function saveResume(
   locale: string = "en"
 ) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) throw new LocalizedError("userNotFound", locale);
+    const user = await requireUser(locale);
 
     const content = JSON.stringify(data);
 
@@ -63,65 +54,53 @@ export async function saveResume(
 }
 
 export async function getResumes() {
-  const session = await auth();
-  if (!session?.user?.email) return [];
+  try {
+    // We use a simplified version of requireUser here (or just check session)
+    // because getResumes usually returns empty array if not logged in, rather than throwing
+    const user = await requireUser(); 
+    
+    const resumes = await prisma.resume.findMany({
+      where: { userId: user.id },
+      orderBy: { updatedAt: 'desc' },
+      select: {
+        id: true,
+        title: true,
+        updatedAt: true,
+        // We don't select content here to save bandwidth on listing
+      }
+    });
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) return [];
-
-  const resumes = await prisma.resume.findMany({
-    where: { userId: user.id },
-    orderBy: { updatedAt: 'desc' },
-    select: {
-      id: true,
-      title: true,
-      updatedAt: true,
-      // We don't select content here to save bandwidth on listing
-    }
-  });
-
-  return resumes;
+    return resumes;
+  } catch (error) {
+    // If not authorized or user not found, return empty list
+    return [];
+  }
 }
 
 export async function getResume(id: string) {
-  const session = await auth();
-  if (!session?.user?.email) return null;
+  try {
+    const user = await requireUser();
 
-  const resume = await prisma.resume.findUnique({
-    where: { id },
-  });
+    const resume = await prisma.resume.findUnique({
+      where: { id },
+    });
 
-  // Simple ownership check via email lookup -> user id
-  // A more optimized way would be to store userId in session
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email }
-  });
+    if (!resume || resume.userId !== user.id) {
+      return null;
+    }
 
-  if (!resume || !user || resume.userId !== user.id) {
+    return {
+      ...resume,
+      data: JSON.parse(resume.content) as ResumeData
+    };
+  } catch (error) {
     return null;
   }
-
-  return {
-    ...resume,
-    data: JSON.parse(resume.content) as ResumeData
-  };
 }
 
 export async function deleteResume(id: string, locale: string = "en") {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) throw new LocalizedError("userNotFound", locale);
+    const user = await requireUser(locale);
 
     const existing = await prisma.resume.findUnique({
       where: { id },
@@ -146,16 +125,7 @@ export async function deleteResume(id: string, locale: string = "en") {
 
 export async function duplicateResume(id: string, locale: string = "en") {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
-      throw new LocalizedError("unauthorized", locale);
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) throw new LocalizedError("userNotFound", locale);
+    const user = await requireUser(locale);
 
     const existing = await prisma.resume.findUnique({
       where: { id },

@@ -37,7 +37,7 @@ const WorkItem = ({ job, index, updateWork, removeWork }: WorkItemProps) => {
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow-sm space-y-4 relative group">
+    <div className="p-4 border border-border rounded-lg bg-card shadow-sm space-y-4 relative group">
       <Button 
         variant="destructive" 
         size="icon" 
@@ -145,7 +145,7 @@ export const WorkForm = () => {
       </div>
 
       {work.length === 0 && (
-        <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-lg">
+        <div className="text-center py-8 text-muted-foreground border-2 border-dashed border-border rounded-lg">
           {t('emptyWork')}
         </div>
       )}

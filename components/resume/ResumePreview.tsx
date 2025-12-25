@@ -62,7 +62,7 @@ export const ResumePreview = () => {
   return (
     <div 
       ref={containerRef}
-      className="h-full w-full bg-gray-100/50 flex justify-center overflow-y-auto overflow-x-hidden scrollbar-hide print:bg-white print:block print:overflow-visible"
+      className="h-full w-full bg-muted/30 flex justify-center overflow-y-auto overflow-x-hidden scrollbar-hide print:bg-white print:block print:overflow-visible"
     >
       <div 
         style={{ 
@@ -73,7 +73,7 @@ export const ResumePreview = () => {
         className="origin-top transition-transform duration-100 ease-out print:scale-100 print:m-0 print:w-full"
       >
         <div 
-          className="w-[210mm] min-h-[297mm] bg-white shadow-2xl print:shadow-none"
+          className="w-[210mm] min-h-[297mm] bg-white shadow-xl print:shadow-none"
         >
           {renderTemplate()}
         </div>

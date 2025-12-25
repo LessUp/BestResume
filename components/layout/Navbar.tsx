@@ -50,16 +50,16 @@ export function Navbar({ user, locale }: NavbarProps) {
   const isActive = (href: string) => pathname === href;
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-8">
-            <Link href={`/${locale}`} className="flex items-center gap-2.5">
-              <div className="h-9 w-9 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
-                <FileText className="h-5 w-5" />
+            <Link href={`/${locale}`} className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
+              <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-sm">
+                <FileText className="h-4 w-4" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+              <span className="text-lg font-semibold tracking-tight">
                 BestResume
               </span>
             </Link>
@@ -70,10 +70,10 @@ export function Navbar({ user, locale }: NavbarProps) {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive(item.href)
-                      ? "bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
-                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                      ? "text-foreground bg-accent"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                   }`}
                 >
                   <item.icon className="h-4 w-4" />
@@ -89,8 +89,8 @@ export function Navbar({ user, locale }: NavbarProps) {
               <>
                 {/* Create Button */}
                 <Link href={`/${locale}/editor/new`} className="hidden sm:block">
-                  <Button size="sm" className="gap-2">
-                    <Plus className="h-4 w-4" />
+                  <Button size="sm" className="gap-2 h-8">
+                    <Plus className="h-3.5 w-3.5" />
                     {t('newResume')}
                   </Button>
                 </Link>
@@ -100,9 +100,8 @@ export function Navbar({ user, locale }: NavbarProps) {
                 {/* User Menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                      <Avatar src={user.image} alt={user.name || ""} size="sm" />
-                      <ChevronDown className="h-4 w-4 text-gray-400 hidden sm:block" />
+                    <button className="flex items-center gap-2 p-1 rounded-full hover:bg-accent transition-colors border border-transparent hover:border-border">
+                      <Avatar src={user.image} alt={user.name || ""} size="sm" className="h-8 w-8" />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">

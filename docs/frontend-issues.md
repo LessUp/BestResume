@@ -20,12 +20,14 @@
  - **状态**：已修复
  - **说明**：已用响应式 Tailwind 类替换固定像素偏移，减少窄屏遮挡/裁剪风险。
  
- ## 待处理（当前遗留问题）
- 
  ### Auth 页面 i18n key 不一致
- - **现象**：`reset-password` / `verify-email` 页面使用了 `messages/*.json` 中不存在的 key，导致 fallback 或显示默认英文文案。
- - **建议**：统一所有页面使用的 key，并补齐 `messages/en.json`、`messages/zh.json`。
+ - **状态**：已修复 (2025-12-25)
+ - **说明**：`reset-password` / `verify-email` / `forgot-password` 等所有 Auth 页面已重构，统一使用 `messages/*.json` 中的 `Auth` 命名空间，并补齐了中英文文案。
  
  ### 编辑器侧边栏与部分 toast 文案硬编码
- - **现象**：`components/resume/ResumeEditor.tsx`、`components/dashboard/ResumeCard.tsx`、`app/[locale]/auth/signin/page.tsx` 等存在硬编码中英文。
- - **建议**：统一收敛到 `messages/*.json`（例如 `Editor`/`Common` 分组），避免混用。
+ - **状态**：已修复 (2025-12-25)
+ - **说明**：`ResumeEditor`、`ResumeCard`、`SettingsClient` 等组件已完全接入 `next-intl`，移除了所有硬编码文本。
+
+ ## 待处理（当前遗留问题）
+ 
+ - 暂无。所有主要前端重构任务已完成（含 Server Components 改造、中间件修复、Server Actions 统一等）。

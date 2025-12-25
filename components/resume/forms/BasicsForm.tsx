@@ -50,7 +50,7 @@ const ProfileItem = ({ profile, index, updateProfile, removeProfile }: ProfileIt
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow-sm space-y-4 relative group">
+    <div className="p-4 border border-border rounded-lg bg-card shadow-sm space-y-4 relative group">
       <Button
         variant="destructive"
         size="icon"
@@ -158,9 +158,19 @@ export const BasicsForm = () => {
   }, []);
 
   return (
-    <div className="space-y-4 p-4 border rounded-lg bg-white shadow-sm">
+    <div className="space-y-4 p-4 border border-border rounded-lg bg-card shadow-sm">
       <h2 className="text-lg font-semibold">{t('basicsTitle')}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="image">{t('image')}</Label>
+          <Input 
+            id="image" 
+            name="image" 
+            value={formData.image || ''} 
+            onChange={handleChange} 
+            placeholder={t('imagePlaceholder')} 
+          />
+        </div>
         <div className="space-y-2">
           <Label htmlFor="name">{t('fullName')}</Label>
           <Input 
@@ -214,7 +224,7 @@ export const BasicsForm = () => {
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-gray-900">{t('locationTitle')}</h3>
+        <h3 className="text-sm font-medium text-foreground">{t('locationTitle')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2 md:col-span-2">
             <Label htmlFor="location_address">{t('address')}</Label>
@@ -266,7 +276,7 @@ export const BasicsForm = () => {
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-gray-900">{t('profilesTitle')}</h3>
+          <h3 className="text-sm font-medium text-foreground">{t('profilesTitle')}</h3>
           <Button onClick={addProfile} size="sm" className="gap-2">
             <Plus className="h-4 w-4" />
             {t('addProfile')}
@@ -274,7 +284,7 @@ export const BasicsForm = () => {
         </div>
 
         {basics.profiles.length === 0 && (
-          <div className="text-center py-6 text-gray-500 border-2 border-dashed rounded-lg">
+          <div className="text-center py-6 text-muted-foreground border-2 border-dashed border-border rounded-lg">
             {t('emptyProfiles')}
           </div>
         )}

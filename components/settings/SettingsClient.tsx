@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button";
@@ -9,12 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Navbar } from "@/components/layout/Navbar";
+import { cn } from "@/lib/utils";
 import {
   updateUserProfile,
   updateUserPreferences,
@@ -26,16 +24,12 @@ import {
   User,
   Shield,
   Settings,
-  Bell,
   CreditCard,
-  ArrowLeft,
   Camera,
   Save,
   Eye,
   EyeOff,
   AlertTriangle,
-  LogOut,
-  FileText,
   Check
 } from "lucide-react";
 
@@ -54,11 +48,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
   // Profile form state
   const [name, setName] = useState(user?.name || "");
   const [bio, setBio] = useState(user?.bio || "");
-  const [phone, setPhone] = useState(user?.phone || "");
-  const [location, setLocation] = useState(user?.location || "");
   const [website, setWebsite] = useState(user?.website || "");
-  const [company, setCompany] = useState(user?.company || "");
-  const [jobTitle, setJobTitle] = useState(user?.jobTitle || "");
 
   // Password form state
   const [currentPassword, setCurrentPassword] = useState("");
@@ -79,11 +69,10 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
     setError("");
     setSuccess("");
     try {
-      await updateUserProfile({ name, bio, phone, location, website, company, jobTitle }, locale);
+      await updateUserProfile({ name, bio, website }, locale);
       setSuccess(t('profileSaved'));
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('saveFailed'));
     } finally {
       setSaving(false);
@@ -111,7 +100,6 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
       setConfirmPassword("");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('passwordChangeFailed'));
     } finally {
       setSaving(false);
@@ -127,7 +115,6 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
       setSuccess(t('preferencesSaved'));
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('saveFailed'));
     } finally {
       setSaving(false);
@@ -142,7 +129,6 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
       await deleteAccount(locale);
       await signOut({ callbackUrl: `/${locale}` });
     } catch (err) {
-      // LocalizedError already has the localized message
       setError(err instanceof Error ? err.message : t('deleteFailed'));
       setSaving(false);
     }
@@ -156,85 +142,43 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link
-              href={`/${locale}/dashboard`}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <span className="hidden sm:inline">{t('backToDashboard')}</span>
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href={`/${locale}`} className="flex items-center gap-2">
-              <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
-                <FileText className="h-4 w-4" />
-              </div>
-              <span className="font-bold text-gray-900 dark:text-white hidden sm:inline">BestResume</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-muted/30">
+      <Navbar user={user} locale={locale} />
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
-          <aside className="lg:w-64 flex-shrink-0">
-            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 sticky top-24">
-              {/* User Info */}
-              <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200 dark:border-gray-800">
-                <Avatar src={user?.image} alt={user?.name || ""} size="lg" />
-                <div className="min-w-0">
-                  <h3 className="font-semibold text-gray-900 dark:text-white truncate">{user?.name}</h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
-                </div>
-              </div>
-
-              {/* Navigation */}
-              <nav className="space-y-1">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab.id
-                      ? "bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400"
-                      : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-                      }`}
-                  >
-                    <tab.icon className="h-4 w-4" />
-                    {tab.label}
-                  </button>
-                ))}
-              </nav>
-
-              {/* Sign Out */}
-              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <aside className="w-full lg:w-64 flex-shrink-0">
+            <nav className="space-y-1">
+              {tabs.map((tab) => (
                 <button
-                  onClick={() => signOut({ callbackUrl: `/${locale}` })}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    activeTab === tab.id
+                      ? "bg-card text-primary shadow-sm border border-border"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
                 >
-                  <LogOut className="h-4 w-4" />
-                  {t('signOut')}
+                  <tab.icon className={cn("h-4 w-4", activeTab === tab.id ? "text-primary" : "text-muted-foreground")} />
+                  {tab.label}
                 </button>
-              </div>
-            </div>
+              ))}
+            </nav>
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1 min-w-0">
+          <main className="flex-1 space-y-6">
             {/* Success/Error Messages */}
             {success && (
-              <div className="mb-6 p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3">
+              <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-600" />
-                <span className="text-green-700 dark:text-green-400">{success}</span>
+                <span className="text-green-700 dark:text-green-400 text-sm font-medium">{success}</span>
               </div>
             )}
             {error && (
-              <div className="mb-6 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400">
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm font-medium">
                 {error}
               </div>
             )}
@@ -243,35 +187,29 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
             {activeTab === "profile" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('profile')}</h2>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1">{t('profileDesc')}</p>
+                  <h2 className="text-2xl font-bold text-foreground">{t('profile')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('profileDesc')}</p>
                 </div>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>{t('avatar')}</CardTitle>
-                    <CardDescription>{t('avatarDesc')}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-6">
-                      <Avatar src={user?.image} alt={user?.name || ""} size="xl" />
-                      <div className="space-y-2">
-                        <Button variant="outline" size="sm">
-                          <Camera className="h-4 w-4 mr-2" />
-                          {t('changeAvatar')}
-                        </Button>
-                        <p className="text-xs text-gray-500">{t('avatarHint')}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t('personalInfo')}</CardTitle>
-                    <CardDescription>{t('personalInfoDesc')}</CardDescription>
+                    <CardTitle>{t('basicInfo')}</CardTitle>
+                    <CardDescription>{t('basicInfoDesc')}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-xl font-bold overflow-hidden">
+                        {user?.image ? (
+                          <img src={user.image} alt={user.name || ""} className="h-full w-full object-cover" />
+                        ) : (
+                          user?.name?.slice(0, 2).toUpperCase() || "U"
+                        )}
+                      </div>
+                      <Button variant="outline" size="sm">
+                        <Camera className="h-4 w-4 mr-2" />
+                        {t('changeAvatar')}
+                      </Button>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="name">{t('fullName')}</Label>
@@ -288,44 +226,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                           id="email"
                           value={user?.email || ""}
                           disabled
-                          className="mt-1 bg-gray-50"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">{t('phone')}</Label>
-                        <Input
-                          id="phone"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="location">{t('location')}</Label>
-                        <Input
-                          id="location"
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                          className="mt-1"
-                          placeholder={t('locationPlaceholder')}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="company">{t('company')}</Label>
-                        <Input
-                          id="company"
-                          value={company}
-                          onChange={(e) => setCompany(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="jobTitle">{t('jobTitle')}</Label>
-                        <Input
-                          id="jobTitle"
-                          value={jobTitle}
-                          onChange={(e) => setJobTitle(e.target.value)}
-                          className="mt-1"
+                          className="mt-1 bg-muted/50"
                         />
                       </div>
                     </div>
@@ -365,8 +266,8 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
             {activeTab === "security" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('security')}</h2>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1">{t('securityDesc')}</p>
+                  <h2 className="text-2xl font-bold text-foreground">{t('security')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('securityDesc')}</p>
                 </div>
 
                 <Card>
@@ -388,7 +289,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                         <button
                           type="button"
                           onClick={() => setShowPasswords(!showPasswords)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                         >
                           {showPasswords ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
@@ -424,15 +325,15 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                   </CardContent>
                 </Card>
 
-                <Card className="border-red-200 dark:border-red-800">
+                <Card className="border-destructive/30">
                   <CardHeader>
-                    <CardTitle className="text-red-600">{t('dangerZone')}</CardTitle>
+                    <CardTitle className="text-destructive">{t('dangerZone')}</CardTitle>
                     <CardDescription>{t('dangerZoneDesc')}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Button
                       variant="outline"
-                      className="text-red-600 border-red-200 hover:bg-red-50"
+                      className="text-destructive border-destructive/30 hover:bg-destructive/10"
                       onClick={() => setShowDeleteDialog(true)}
                     >
                       <AlertTriangle className="h-4 w-4 mr-2" />
@@ -447,8 +348,8 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
             {activeTab === "preferences" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('preferences')}</h2>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1">{t('preferencesDesc')}</p>
+                  <h2 className="text-2xl font-bold text-foreground">{t('preferences')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('preferencesDesc')}</p>
                 </div>
 
                 <Card>
@@ -497,8 +398,8 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
             {activeTab === "billing" && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('billing')}</h2>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1">{t('billingDesc')}</p>
+                  <h2 className="text-2xl font-bold text-foreground">{t('billing')}</h2>
+                  <p className="text-muted-foreground mt-1">{t('billingDesc')}</p>
                 </div>
 
                 <Card>
@@ -509,14 +410,14 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                          <span className="text-lg font-semibold text-foreground">
                             {user?.membershipType || t('free')}
                           </span>
-                          <Badge variant={user?.isMember ? "success" : "secondary"}>
+                          <Badge variant={user?.isMember ? "default" : "secondary"}>
                             {user?.isMember ? t('active') : t('free')}
                           </Badge>
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">{t('planDescription')}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{t('planDescription')}</p>
                       </div>
                       <Button variant="outline">{t('upgradePlan')}</Button>
                     </div>
@@ -532,7 +433,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-red-600 flex items-center gap-2">
+            <DialogTitle className="text-destructive flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
               {t('deleteAccountTitle')}
             </DialogTitle>
@@ -555,7 +456,7 @@ export function SettingsClient({ user, locale }: SettingsClientProps) {
             </Button>
             <Button
               variant="default"
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-destructive hover:bg-destructive/90"
               disabled={deleteConfirm !== "DELETE" || saving}
               onClick={handleDeleteAccount}
             >

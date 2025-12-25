@@ -112,27 +112,27 @@ export default function EditorClient({ initialData, resumeId, userId, locale, in
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="h-16 border-b bg-white px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 print:hidden shadow-sm">
+    <div className="min-h-screen flex flex-col bg-muted/30">
+      <header className="h-16 border-b border-border bg-background px-4 md:px-6 flex items-center justify-between sticky top-0 z-50 print:hidden shadow-sm">
         <div className="flex items-center gap-4">
           <Link href={`/${locale}/dashboard`}>
             <Button variant="ghost" size="icon" title={tEditor('backToDashboard')}>
-              <ArrowLeft className="h-5 w-5 text-gray-500" />
+              <ArrowLeft className="h-5 w-5 text-muted-foreground" />
             </Button>
           </Link>
           <div className="flex flex-col">
-            <div className="font-bold text-lg text-gray-900 leading-tight">
+            <div className="font-bold text-lg text-foreground leading-tight">
               {resumeData.basics.name || tEditor('untitled')}
             </div>
-            <div className="text-xs text-gray-500 flex items-center gap-2">
+            <div className="text-xs text-muted-foreground flex items-center gap-2">
                {saving ? (
-                 <span className="text-blue-600 flex items-center gap-1">
+                 <span className="text-primary flex items-center gap-1">
                    <Loader2 className="h-3 w-3 animate-spin" /> {tEditor('saving')}
                  </span>
                ) : isDirty ? (
-                 <span className="text-orange-600">{tEditor('unsavedChanges')}</span>
+                 <span className="text-orange-500">{tEditor('unsavedChanges')}</span>
                 ) : (
-                  <span className="text-green-600 flex items-center gap-1">
+                  <span className="text-green-600 dark:text-green-500 flex items-center gap-1">
                     <Check className="h-3 w-3" /> {tEditor('saved')}
                   </span>
                 )}

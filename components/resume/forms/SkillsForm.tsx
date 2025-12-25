@@ -24,13 +24,13 @@ export const SkillsForm = () => {
       </div>
 
       {skills.length === 0 && (
-        <div className="text-center py-8 text-gray-500 border-2 border-dashed rounded-lg">
+        <div className="text-center py-8 text-muted-foreground border-2 border-dashed border-border rounded-lg">
           {t('emptySkills')}
         </div>
       )}
 
       {skills.map((skill, index) => (
-        <div key={skill.id} className="p-4 border rounded-lg bg-white shadow-sm space-y-4 relative group">
+        <div key={skill.id} className="p-4 border border-border rounded-lg bg-card shadow-sm space-y-4 relative group">
           <Button 
             variant="destructive" 
             size="icon" 
