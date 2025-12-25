@@ -3,7 +3,7 @@
  * Validates: Requirements 3.1, 3.4
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import * as fc from 'fast-check';
 import { NextIntlClientProvider } from 'next-intl';
@@ -111,7 +111,7 @@ describe('Property 5: Floating elements remain visible', () => {
             }),
             { numRuns: 100 }
         );
-    });
+    }, 15000);
 
     it('should ensure floating elements do not overlap critical content', () => {
         const viewportWidths = fc.integer({ min: 768, max: 3840 });

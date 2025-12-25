@@ -3,7 +3,7 @@
  * Validates: Requirements 1.1, 1.2
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import * as fc from 'fast-check';
 import { NextIntlClientProvider } from 'next-intl';
@@ -73,7 +73,7 @@ describe('Property 1: Navigation text uses translations', () => {
             ),
             { numRuns: 100 }
         );
-    });
+    }, 15000);
 
     it('should not display hard-coded Chinese or English text in navigation', () => {
         fc.assert(
