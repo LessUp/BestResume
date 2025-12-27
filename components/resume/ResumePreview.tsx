@@ -62,20 +62,25 @@ export const ResumePreview = () => {
   return (
     <div 
       ref={containerRef}
-      className="h-full w-full bg-muted/30 flex justify-center overflow-y-auto overflow-x-hidden scrollbar-hide print:bg-white print:block print:overflow-visible"
+      className="h-full w-full bg-muted/20 flex justify-center overflow-y-auto overflow-x-hidden scrollbar-hide print:bg-white print:block print:overflow-visible"
     >
       <div 
         style={{ 
           transform: `scale(${scale})`,
-          marginBottom: `${(scale * 40)}px`,
-          marginTop: '2rem'
+          marginBottom: `${(scale * 80)}px`,
+          marginTop: '4rem'
         }}
-        className="origin-top transition-transform duration-100 ease-out print:scale-100 print:m-0 print:w-full"
+        className="origin-top transition-transform duration-300 ease-out print:scale-100 print:m-0 print:w-full"
       >
         <div 
-          className="w-[210mm] min-h-[297mm] bg-white shadow-xl print:shadow-none"
+          className="w-[210mm] min-h-[297mm] bg-white shadow-[0_30px_100px_-20px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_100px_-20px_rgba(0,0,0,0.5)] print:shadow-none relative"
         >
-          {renderTemplate()}
+          {/* Subtle Paper Texture Overlay */}
+          <div className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')] print:hidden" />
+          
+          <div className="relative z-10">
+            {renderTemplate()}
+          </div>
         </div>
       </div>
     </div>

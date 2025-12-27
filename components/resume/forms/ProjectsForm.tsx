@@ -37,44 +37,48 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
   };
 
   return (
-    <div className="p-4 border border-border rounded-lg bg-card shadow-sm space-y-4 relative group">
+    <div className="p-6 border border-border/50 rounded-[2rem] bg-card/50 backdrop-blur-sm shadow-sm space-y-6 relative group transition-all duration-300 hover:border-primary/30 hover:shadow-md">
       <Button 
-        variant="destructive" 
+        variant="ghost" 
         size="icon" 
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-destructive/10 hover:text-destructive rounded-full"
         onClick={() => removeProject(index)}
       >
         <Trash2 className="h-4 w-4" />
       </Button>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>{t('projectName')}</Label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2.5">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('projectName')}</Label>
           <Input 
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProject.name} 
             onChange={(e) => handleChange('name', e.target.value)} 
             placeholder={t('projectNamePlaceholder')} 
           />
         </div>
-        <div className="space-y-2">
-          <Label>{t('projectUrl')}</Label>
+        <div className="space-y-2.5">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('projectUrl')}</Label>
           <Input 
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProject.url ?? ''} 
             onChange={(e) => handleChange('url', e.target.value)} 
             placeholder={t('projectUrlPlaceholder')} 
           />
         </div>
-        <div className="space-y-2">
-          <Label>{t('startDate')}</Label>
+        <div className="space-y-2.5">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('startDate')}</Label>
           <Input 
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProject.startDate} 
             onChange={(e) => handleChange('startDate', e.target.value)} 
             placeholder={t('startDatePlaceholder')} 
           />
         </div>
-        <div className="space-y-2">
-          <Label>{t('endDate')}</Label>
+        <div className="space-y-2.5">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('endDate')}</Label>
           <Input 
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProject.endDate} 
             onChange={(e) => handleChange('endDate', e.target.value)} 
             placeholder={t('endDatePlaceholder')} 
@@ -82,9 +86,10 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
         </div>
       </div>
       
-      <div className="space-y-2">
-         <Label>{t('technologies')}</Label>
+      <div className="space-y-2.5">
+         <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('technologies')}</Label>
          <Input 
+           className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
            value={(localProject.keywords ?? []).join(', ')} 
            onChange={(e) =>
              handleChange(
@@ -99,8 +104,8 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
          />
       </div>
 
-      <div className="space-y-2">
-        <Label>{t('projectRoles')}</Label>
+      <div className="space-y-2.5">
+        <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('projectRoles')}</Label>
         <Textarea
           value={(localProject.roles ?? []).join('\n')}
           onChange={(e) =>
@@ -113,22 +118,22 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
             )
           }
           placeholder={t('projectRolesPlaceholder')}
-          className="h-20"
+          className="min-h-[80px] rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all resize-none p-4"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>{t('projectDescription')}</Label>
+      <div className="space-y-2.5">
+        <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('projectDescription')}</Label>
         <Textarea 
           value={localProject.description} 
           onChange={(e) => handleChange('description', e.target.value)} 
           placeholder={t('projectDescriptionPlaceholder')} 
-          className="h-24"
+          className="min-h-[100px] rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all resize-none p-4"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>{t('projectHighlights')}</Label>
+      <div className="space-y-2.5">
+        <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('projectHighlights')}</Label>
         <Textarea
           value={(localProject.highlights ?? []).join('\n')}
           onChange={(e) =>
@@ -141,7 +146,7 @@ const ProjectItem = ({ project, index, updateProject, removeProject }: ProjectIt
             )
           }
           placeholder={t('projectHighlightsPlaceholder')}
-          className="h-24"
+          className="min-h-[100px] rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all resize-none p-4"
         />
       </div>
     </div>
@@ -165,29 +170,45 @@ export const ProjectsForm = () => {
   }, [projects.length]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-         <h2 className="text-lg font-semibold">{t('projectsTitle')}</h2>
-         <Button onClick={addProject} size="sm" className="gap-2">
-           <Plus className="h-4 w-4" /> {t('addProject')}
-         </Button>
+    <div className="space-y-8">
+      <div className="flex justify-between items-center pb-2 border-b border-border/50">
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-1 bg-primary rounded-full" />
+          <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">{t('projectsTitle')}</h3>
+        </div>
+        <Button 
+          onClick={addProject} 
+          size="sm" 
+          variant="outline"
+          className="gap-2 rounded-full border-primary/20 hover:border-primary/50 hover:bg-primary/5 bg-background transition-all duration-300"
+        >
+          <Plus className="h-4 w-4" /> {t('addProject')}
+        </Button>
       </div>
 
       {projects.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground border-2 border-dashed border-border rounded-lg">
-          {t('emptyProjects')}
+        <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-muted/20 border-2 border-dashed border-border/50 rounded-[2rem] space-y-4">
+          <div className="p-4 bg-background rounded-full shadow-sm">
+            <Plus className="h-8 w-8 text-muted-foreground/50" />
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-muted-foreground">{t('emptyProjects')}</p>
+            <p className="text-xs text-muted-foreground/60">点击上方按钮添加你的项目经历</p>
+          </div>
         </div>
       )}
 
-      {projects.map((project, index) => (
-        <ProjectItem 
-          key={project.id} 
-          project={project} 
-          index={index} 
-          updateProject={updateProject} 
-          removeProject={removeProject} 
-        />
-      ))}
+      <div className="space-y-6">
+        {projects.map((project, index) => (
+          <ProjectItem 
+            key={project.id} 
+            project={project} 
+            index={index} 
+            updateProject={updateProject} 
+            removeProject={removeProject} 
+          />
+        ))}
+      </div>
       <div ref={bottomRef} />
     </div>
   );

@@ -1,14 +1,20 @@
+import { auth } from "@/auth";
 import createMiddleware from 'next-intl/middleware';
  
-export default createMiddleware({
+const intlMiddleware = createMiddleware({
   // A list of all locales that are supported
   locales: ['en', 'zh'],
  
   // Used when no locale matches
   defaultLocale: 'zh'
 });
+
+export default auth((req) => {
+  return intlMiddleware(req);
+});
  
 export const config = {
   // Match only internationalized pathnames
-  matcher: ['/', '/(zh|en)/:path*']
+  // Skip all internal paths (_next, assets, api)
+  matcher: ['/((?!api|_next|.*\\..*).*)']
 };

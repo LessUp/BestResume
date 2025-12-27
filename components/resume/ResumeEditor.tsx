@@ -33,82 +33,90 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({ initialData, mobileP
   }, [initialData, initialTemplateId, setResumeData, setTemplateId]);
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-6 p-6 bg-muted/30">
-       {/* Sidebar Navigation */}
-       <aside className={`w-full lg:w-64 flex-shrink-0 print:hidden ${mobilePreviewOpen ? 'hidden lg:block' : 'block'}`}>
-         <div className="bg-card rounded-lg border border-border shadow-sm p-4 space-y-1 sticky top-4">
-            <h3 className="font-semibold text-muted-foreground text-xs uppercase mb-3 px-2 tracking-wider">{t('sidebarDesign')}</h3>
-            <Button 
-              variant={activeSection === 'templates' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'templates' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('templates')}
-            >
-              <LayoutTemplate className="mr-2 h-4 w-4" /> {t('sidebarTemplates')}
-            </Button>
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] gap-0 bg-background overflow-hidden">
+      {/* Sidebar Navigation - Studio Style */}
+      <aside className={`w-full lg:w-72 flex-shrink-0 border-r border-border/50 bg-muted/20 backdrop-blur-xl print:hidden ${mobilePreviewOpen ? 'hidden lg:block' : 'block'}`}>
+        <div className="flex flex-col h-full p-6 space-y-8">
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-3">{t('sidebarDesign')}</h3>
+            <div className="space-y-1">
+              <Button
+                variant={activeSection === 'templates' ? 'secondary' : 'ghost'}
+                className={`w-full justify-between h-11 px-3 rounded-xl transition-all duration-300 ${activeSection === 'templates' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 font-bold' : 'text-muted-foreground hover:bg-primary/5 hover:text-primary'}`}
+                onClick={() => setActiveSection('templates')}
+              >
+                <div className="flex items-center">
+                  <LayoutTemplate className={`mr-3 h-4 w-4 ${activeSection === 'templates' ? 'animate-pulse' : ''}`} />
+                  {t('sidebarTemplates')}
+                </div>
+                {activeSection === 'templates' && <div className="h-1.5 w-1.5 rounded-full bg-primary-foreground" />}
+              </Button>
+            </div>
+          </div>
 
-            <div className="h-4"></div> {/* Spacer */}
+          <div className="space-y-4">
+            <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] px-3">{t('sidebarContent')}</h3>
+            <div className="space-y-1.5">
+              {[
+                { id: 'basics', icon: User, label: t('sectionPersonal') },
+                { id: 'work', icon: Briefcase, label: t('sectionExperience') },
+                { id: 'education', icon: GraduationCap, label: t('sectionEducation') },
+                { id: 'skills', icon: Layers, label: t('sectionSkills') },
+                { id: 'languages', icon: Globe, label: t('sectionLanguages') },
+                { id: 'projects', icon: FolderGit2, label: t('sectionProjects') },
+              ].map((item) => (
+                <Button
+                  key={item.id}
+                  variant={activeSection === item.id ? 'secondary' : 'ghost'}
+                  className={`w-full justify-between h-11 px-3 rounded-xl transition-all duration-300 ${activeSection === item.id ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 font-bold' : 'text-muted-foreground hover:bg-primary/5 hover:text-primary'}`}
+                  onClick={() => setActiveSection(item.id)}
+                >
+                  <div className="flex items-center">
+                    <item.icon className="mr-3 h-4 w-4" />
+                    {item.label}
+                  </div>
+                  {activeSection === item.id && <div className="h-1.5 w-1.5 rounded-full bg-primary-foreground" />}
+                </Button>
+              ))}
+            </div>
+          </div>
 
-            <h3 className="font-semibold text-muted-foreground text-xs uppercase mb-3 px-2 tracking-wider">{t('sidebarContent')}</h3>
-            <Button 
-              variant={activeSection === 'basics' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'basics' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('basics')}
-            >
-              <User className="mr-2 h-4 w-4" /> {t('sectionPersonal')}
-            </Button>
-            <Button 
-              variant={activeSection === 'work' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'work' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('work')}
-            >
-              <Briefcase className="mr-2 h-4 w-4" /> {t('sectionExperience')}
-            </Button>
-            <Button 
-              variant={activeSection === 'education' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'education' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('education')}
-            >
-              <GraduationCap className="mr-2 h-4 w-4" /> {t('sectionEducation')}
-            </Button>
-            <Button 
-              variant={activeSection === 'skills' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'skills' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('skills')}
-            >
-              <Layers className="mr-2 h-4 w-4" /> {t('sectionSkills')}
-            </Button>
-            <Button 
-              variant={activeSection === 'languages' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'languages' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('languages')}
-            >
-              <Globe className="mr-2 h-4 w-4" /> {t('sectionLanguages')}
-            </Button>
-            <Button 
-              variant={activeSection === 'projects' ? 'secondary' : 'ghost'} 
-              className={`w-full justify-start ${activeSection === 'projects' ? 'bg-secondary text-secondary-foreground font-medium' : 'text-muted-foreground'}`}
-              onClick={() => setActiveSection('projects')}
-            >
-              <FolderGit2 className="mr-2 h-4 w-4" /> {t('sectionProjects')}
-            </Button>
-         </div>
-       </aside>
+          {/* Studio Info / Tips */}
+          <div className="mt-auto p-4 rounded-2xl bg-primary/5 border border-primary/10">
+            <p className="text-[11px] text-primary font-bold leading-relaxed">
+              Pro Tip: Keep your bullet points concise and result-oriented.
+            </p>
+          </div>
+        </div>
+      </aside>
 
-       {/* Form Area */}
-       <div className={`flex-1 max-w-2xl overflow-y-auto pb-20 print:hidden ${mobilePreviewOpen ? 'hidden xl:block' : 'block'}`}>
-          {activeSection === 'templates' && <TemplateSelector />}
-          {activeSection === 'basics' && <BasicsForm />}
-          {activeSection === 'work' && <WorkForm />}
-          {activeSection === 'education' && <EducationForm />}
-          {activeSection === 'skills' && <SkillsForm />}
-          {activeSection === 'languages' && <LanguagesForm />}
-          {activeSection === 'projects' && <ProjectsForm />}
-       </div>
+      {/* Form Area - Focused Workspace */}
+      <div className={`flex-1 overflow-y-auto bg-background print:hidden ${mobilePreviewOpen ? 'hidden xl:block' : 'block'}`}>
+        <div className="max-w-3xl mx-auto px-8 py-12 pb-32">
+          <div className="mb-10 flex items-center gap-3">
+            <div className="h-10 w-1 bg-primary rounded-full" />
+            <h2 className="text-3xl font-black tracking-tighter text-foreground">
+              {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+            </h2>
+          </div>
 
-       {/* Preview Area */}
-       <div className={`flex-1 bg-muted/50 border-l border-border overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
-          <ResumePreview />
-       </div>
+          <div className="bg-card/50 backdrop-blur-sm rounded-3xl border border-border/50 p-8 shadow-sm">
+            {activeSection === 'templates' && <TemplateSelector />}
+            {activeSection === 'basics' && <BasicsForm />}
+            {activeSection === 'work' && <WorkForm />}
+            {activeSection === 'education' && <EducationForm />}
+            {activeSection === 'skills' && <SkillsForm />}
+            {activeSection === 'languages' && <LanguagesForm />}
+            {activeSection === 'projects' && <ProjectsForm />}
+          </div>
+        </div>
+      </div>
+
+      {/* Preview Area - Realistic Mockup */}
+      <div className={`flex-1 bg-muted/40 border-l border-border/50 overflow-hidden relative print:block print:bg-white print:border-none print:overflow-visible ${mobilePreviewOpen ? 'block' : 'hidden xl:block'}`}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary),transparent_100%)] opacity-[0.03] pointer-events-none" />
+        <ResumePreview />
+      </div>
     </div>
   );
 };

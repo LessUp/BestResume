@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Globe } from 'lucide-react';
 import { ResumeData } from '@/types/resume';
 
 interface ProfileItemProps {
@@ -50,36 +50,39 @@ const ProfileItem = ({ profile, index, updateProfile, removeProfile }: ProfileIt
   };
 
   return (
-    <div className="p-4 border border-border rounded-lg bg-card shadow-sm space-y-4 relative group">
+    <div className="p-6 border border-border/50 rounded-[2rem] bg-card/50 backdrop-blur-sm shadow-sm space-y-6 relative group transition-all duration-300 hover:border-primary/30 hover:shadow-md">
       <Button
-        variant="destructive"
+        variant="ghost"
         size="icon"
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-destructive/10 hover:text-destructive rounded-full"
         onClick={() => removeProfile(index)}
       >
         <Trash2 className="h-4 w-4" />
       </Button>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>{t('profileNetwork')}</Label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2.5">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('profileNetwork')}</Label>
           <Input
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProfile.network}
             onChange={(e) => handleChange('network', e.target.value)}
             placeholder={t('profileNetworkPlaceholder')}
           />
         </div>
-        <div className="space-y-2">
-          <Label>{t('profileUsername')}</Label>
+        <div className="space-y-2.5">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('profileUsername')}</Label>
           <Input
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProfile.username}
             onChange={(e) => handleChange('username', e.target.value)}
             placeholder={t('profileUsernamePlaceholder')}
           />
         </div>
-        <div className="space-y-2 md:col-span-2">
-          <Label>{t('profileUrl')}</Label>
+        <div className="space-y-2.5 md:col-span-2">
+          <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('profileUrl')}</Label>
           <Input
+            className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
             value={localProfile.url}
             onChange={(e) => handleChange('url', e.target.value)}
             placeholder={t('profileUrlPlaceholder')}
@@ -98,7 +101,7 @@ export const BasicsForm = () => {
   const updateProfile = useResumeStore((state) => state.updateProfile);
   const removeProfile = useResumeStore((state) => state.removeProfile);
   const t = useTranslations('Resume.forms');
-  
+
   // Local state for immediate feedback
   const [formData, setFormData] = useState(basics);
   const [locationData, setLocationData] = useState(basics.location);
@@ -113,10 +116,10 @@ export const BasicsForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     // Update local state immediately
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Debounce store update
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -129,21 +132,21 @@ export const BasicsForm = () => {
 
   const handleLocationChange =
     (field: keyof ResumeData['basics']['location']) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value } = e.target;
 
-      setLocationData((prev) => ({ ...prev, [field]: value }));
+        setLocationData((prev) => ({ ...prev, [field]: value }));
 
-      if (locationTimeoutRef.current) {
-        clearTimeout(locationTimeoutRef.current);
-      }
+        if (locationTimeoutRef.current) {
+          clearTimeout(locationTimeoutRef.current);
+        }
 
-      locationTimeoutRef.current = setTimeout(() => {
-        updateBasicsLocation({
-          [field]: value,
-        } as Partial<ResumeData['basics']['location']>);
-      }, 500);
-    };
+        locationTimeoutRef.current = setTimeout(() => {
+          updateBasicsLocation({
+            [field]: value,
+          } as Partial<ResumeData['basics']['location']>);
+        }, 500);
+      };
 
   // Cleanup timeout
   useEffect(() => {
@@ -158,159 +161,172 @@ export const BasicsForm = () => {
   }, []);
 
   return (
-    <div className="space-y-4 p-4 border border-border rounded-lg bg-card shadow-sm">
-      <h2 className="text-lg font-semibold">{t('basicsTitle')}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="image">{t('image')}</Label>
-          <Input 
-            id="image" 
-            name="image" 
-            value={formData.image || ''} 
-            onChange={handleChange} 
-            placeholder={t('imagePlaceholder')} 
-          />
+    <div className="space-y-12">
+      {/* Contact Information */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-2 pb-2 border-b border-border/50">
+          <div className="h-4 w-1 bg-primary rounded-full" />
+          <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">{t('basicsTitle')}</h3>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="name">{t('fullName')}</Label>
-          <Input 
-            id="name" 
-            name="name" 
-            value={formData.name} 
-            onChange={handleChange} 
-            placeholder={t('fullNamePlaceholder')} 
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="label">{t('jobTitle')}</Label>
-          <Input 
-            id="label" 
-            name="label" 
-            value={formData.label} 
-            onChange={handleChange} 
-            placeholder={t('jobTitlePlaceholder')} 
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">{t('email')}</Label>
-          <Input 
-            id="email" 
-            name="email" 
-            value={formData.email} 
-            onChange={handleChange} 
-            placeholder={t('emailPlaceholder')} 
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="phone">{t('phone')}</Label>
-          <Input 
-            id="phone" 
-            name="phone" 
-            value={formData.phone} 
-            onChange={handleChange} 
-            placeholder={t('phonePlaceholder')} 
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="url">{t('website')}</Label>
-          <Input 
-            id="url" 
-            name="url" 
-            value={formData.url} 
-            onChange={handleChange} 
-            placeholder={t('websitePlaceholder')} 
-          />
-        </div>
-      </div>
 
-      <div className="space-y-3">
-        <h3 className="text-sm font-medium text-foreground">{t('locationTitle')}</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="location_address">{t('address')}</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2.5">
+            <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('fullName')}</Label>
             <Input
-              id="location_address"
+              id="name"
+              name="name"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder={t('fullNamePlaceholder')}
+            />
+          </div>
+          <div className="space-y-2.5">
+            <Label htmlFor="label" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('jobTitle')}</Label>
+            <Input
+              id="label"
+              name="label"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
+              value={formData.label}
+              onChange={handleChange}
+              placeholder={t('jobTitlePlaceholder')}
+            />
+          </div>
+          <div className="space-y-2.5">
+            <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('email')}</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder={t('emailPlaceholder')}
+            />
+          </div>
+          <div className="space-y-2.5">
+            <Label htmlFor="phone" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('phone')}</Label>
+            <Input
+              id="phone"
+              name="phone"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder={t('phonePlaceholder')}
+            />
+          </div>
+          <div className="md:col-span-2 space-y-2.5">
+            <Label htmlFor="url" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('website')}</Label>
+            <Input
+              id="url"
+              name="url"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
+              value={formData.url || ''}
+              onChange={handleChange}
+              placeholder={t('websitePlaceholder')}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Location */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-2 pb-2 border-b border-border/50">
+          <div className="h-4 w-1 bg-primary rounded-full" />
+          <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Location</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="md:col-span-2 space-y-2.5">
+            <Label htmlFor="address" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('address')}</Label>
+            <Input
+              id="address"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
               value={locationData.address}
               onChange={handleLocationChange('address')}
               placeholder={t('addressPlaceholder')}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="location_postalCode">{t('postalCode')}</Label>
+          <div className="space-y-2.5">
+            <Label htmlFor="city" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('city')}</Label>
             <Input
-              id="location_postalCode"
-              value={locationData.postalCode}
-              onChange={handleLocationChange('postalCode')}
-              placeholder={t('postalCodePlaceholder')}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="location_city">{t('city')}</Label>
-            <Input
-              id="location_city"
+              id="city"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
               value={locationData.city}
               onChange={handleLocationChange('city')}
               placeholder={t('cityPlaceholder')}
             />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="location_region">{t('region')}</Label>
+          <div className="space-y-2.5">
+            <Label htmlFor="postalCode" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('postalCode')}</Label>
             <Input
-              id="location_region"
-              value={locationData.region}
-              onChange={handleLocationChange('region')}
-              placeholder={t('regionPlaceholder')}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="location_countryCode">{t('countryCode')}</Label>
-            <Input
-              id="location_countryCode"
-              value={locationData.countryCode}
-              onChange={handleLocationChange('countryCode')}
-              placeholder={t('countryCodePlaceholder')}
+              id="postalCode"
+              className="h-11 rounded-xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all"
+              value={locationData.postalCode}
+              onChange={handleLocationChange('postalCode')}
+              placeholder={t('postalCodePlaceholder')}
             />
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-foreground">{t('profilesTitle')}</h3>
-          <Button onClick={addProfile} size="sm" className="gap-2">
-            <Plus className="h-4 w-4" />
+      {/* Summary */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-2 pb-2 border-b border-border/50">
+          <div className="h-4 w-1 bg-primary rounded-full" />
+          <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">{t('summary')}</h3>
+        </div>
+
+        <div className="space-y-2.5">
+          <Label htmlFor="summary" className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">{t('summary')}</Label>
+          <Textarea
+            id="summary"
+            name="summary"
+            rows={5}
+            className="rounded-2xl bg-background border-border/50 focus:border-primary/50 focus:ring-primary/20 transition-all resize-none p-4"
+            value={formData.summary}
+            onChange={handleChange}
+            placeholder={t('summaryPlaceholder')}
+          />
+        </div>
+      </section>
+
+      {/* Profiles */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between pb-2 border-b border-border/50">
+          <div className="flex items-center gap-2">
+            <div className="h-4 w-1 bg-primary rounded-full" />
+            <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">{t('profilesTitle')}</h3>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 rounded-lg text-primary hover:bg-primary/10 font-bold px-3"
+            onClick={addProfile}
+          >
+            <Plus className="h-4 w-4 mr-2" />
             {t('addProfile')}
           </Button>
         </div>
 
-        {basics.profiles.length === 0 && (
-          <div className="text-center py-6 text-muted-foreground border-2 border-dashed border-border rounded-lg">
-            {t('emptyProfiles')}
-          </div>
-        )}
-
-        {basics.profiles.map((profile, index) => (
-          <ProfileItem
-            key={index}
-            profile={profile}
-            index={index}
-            updateProfile={updateProfile}
-            removeProfile={removeProfile}
-          />
-        ))}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="summary">{t('summary')}</Label>
-        <Textarea 
-          id="summary" 
-          name="summary" 
-          value={formData.summary} 
-          onChange={handleChange} 
-          placeholder={t('summaryPlaceholder')} 
-          className="h-32"
-        />
-      </div>
+        <div className="space-y-4">
+          {basics.profiles.map((profile, index) => (
+            <ProfileItem
+              key={index}
+              profile={profile}
+              index={index}
+              updateProfile={updateProfile}
+              removeProfile={removeProfile}
+            />
+          ))}
+          {basics.profiles.length === 0 && (
+            <div className="py-12 flex flex-col items-center justify-center border-2 border-dashed border-border/50 rounded-[2rem] text-muted-foreground/50">
+              <Globe className="h-12 w-12 mb-4 opacity-20" />
+              <p className="text-sm font-medium">No social profiles added yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 };
